@@ -44,6 +44,7 @@ def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug):
     pl.info('Searching for files...')
     for f in utilities.rglob(dir,'|'.join(format_regex), True, re.IGNORECASE):files.append(f)
     files=utilities.fixSeparators(files)
+
     #Sort the files according to the priority of the regex formats
     filelist={}
     for f in files:

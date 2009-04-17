@@ -131,7 +131,7 @@ class GetArgs:
         
         self.root = Tk()
         self.root.title('Metadata Transform')
-        self.root.withdraw()
+        #self.root.withdraw()
         last_dir = StringVar()
         last_dir.set('C:\\')
 
@@ -191,10 +191,10 @@ class GetArgs:
         imgXPos = (scrnWt / 2.0) - (imgWt / 2.0)
         imgYPos = (scrnHt / 2.0) - (imgHt / 2.0)
 
-        self.root.overrideredirect(1)
+        #self.root.overrideredirect(1)
         self.root.geometry('+%d+%d' % (imgXPos, imgYPos))
         
-        self.root.update()
+        #self.root.update()
         self.root.mainloop()
         
     def cmdOK(self):
