@@ -49,19 +49,7 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
         else:  #Couldn't open the FAST file
             rename=True
             gdalDataset=None
-        for band in bands:
-            if band[23]=='6':
-                num=band[23:25]
-                if band[24]=='1':nam='6l'
-                else:nam='6h'
-            else:num,nam=band[23],band[23]
-            bandnums.append(num)
-            if rename:
-                filelist.extend(glob.glob(os.path.join(p[0],'band%s*.*' % nam)))
-                if not os.path.exists(band) and os.path.exists('band%s.dat' % nam):os.rename('band%s.dat' % nam,band)
-            else:
-                filelist.append(os.path.join(p[0],band))
-            
+
         #If we've renamed the files from ACRES band*.dat to proper Fast format l7*.fst
         if not gdalDataset:gdalDataset = geometry.OpenDataset(f) #Try opening the renamed file again 
         if not gdalDataset:
@@ -99,6 +87,19 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
             self.metadata['units'] = spatialreferences.GetLinearUnitsName(self.metadata['srs'])
         self.metadata['filetype'] = gdalDataset.GetDriver().ShortName+'/'+gdalDataset.GetDriver().LongName
         
+        for band in bands:
+            if band[23]=='6':
+                num=band[23:25]
+                if band[24]=='1':nam='6l'
+                else:nam='6h'
+            else:num,nam=band[23],band[23]
+            bandnums.append(num)
+            if rename:
+                filelist.extend(glob.glob(os.path.join(p[0],'band%s*.*' % nam)))
+                if not os.path.exists(band) and os.path.exists('band%s.dat' % nam):os.rename('band%s.dat' % nam,band)
+            else:
+                filelist.append(os.path.join(p[0],band))
+            
         rb=gdalDataset.GetRasterBand(1)
         self.metadata['datatype']=gdal.GetDataTypeName(rb.DataType)
         self.metadata['nbits']=gdal.GetDataTypeSize(rb.DataType)

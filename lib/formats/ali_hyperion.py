@@ -1,5 +1,7 @@
 #Regular expression list of file formats
-format_regex=[r'\.[lm][1-4]r$']#EO1 ALI & Hyperion
+format_regex=[r'eo1.*\.[lm]1r$',     #EO1 ALI (L1R) & Hyperion
+              r'eo1.*_hdf\.l1g$',    #EO1 ALI (L1G) HDF
+              r'eo1.*_mtl\.tif$']    #EO1 ALI (L1G) TIFF
 
 #import base dataset module
 import __dataset__
@@ -22,83 +24,277 @@ except ImportError:
     
 class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
     def __init__(self,f):
-        """Read Metadata for recognised EO1 ALI & Hyperion images as GDAL doesn't"""
+        """Read Metadata for recognised EO1 ALI (L1G & L1R) & Hyperion (L1R) images as GDAL doesn't"""
         #http:#www.gdal.org/frmt_hdf4.html
         #Hyperion/ALI format
-        #http://eo1.usgs.gov/faq.php
+        #http://eo1.usgs.gov/userGuide/index.php
 
-        gdalDataset = geometry.OpenDataset(f)
-        driver=gdalDataset.GetDriver().ShortName
+        ##==========================================
+        ##TODO... extract stuff from FDGC metadata!
+        ##==========================================
 
-        f=gdalDataset.GetDescription()
-        filelist=glob.glob(os.path.splitext(f)[0]+'.*')
-        hdf_sd=gdalDataset.GetSubDatasets()
-        hdf_md=gdalDataset.GetMetadata()
-
-        if re.search(r'\.m[1-4]r$', f):self.metadata['sensor']='ALI'
-        else:self.metadata['sensor']='HYPERION'
+        self.metadata['satellite']='E01'
         
-        filelist.extend(glob.glob('%s\\%s_%s_*.hdf' % (os.path.dirname(f),os.path.basename(f)[10:14],os.path.basename(f)[14:17])))
+        if re.search(r'\.m[1-4]r$', f):
+            self.metadata['level']='L1R'
+            self.metadata['sensor']='ALI'
 
-        f=f[0:-2]+'1r'
-        self.metadata['filename']=os.path.split(f)[1]
-        self.metadata['filepath']=f
+            gdalDataset = geometry.OpenDataset(f)
+            self.metadata['filetype'] = '%s/%s (%s %s)' % (gdalDataset.GetDriver().ShortName,
+                                                           gdalDataset.GetDriver().LongName,
+                                                           self.metadata['sensor'],
+                                                           self.metadata['level'])
 
-        sd,sz = hdf_sd[0]
-        sd=geometry.OpenDataset(sd)
-        nbands=sd.RasterCount
-        ncols=sd.RasterXSize
-        if self.metadata['sensor']=='HYPERION':
-            nrows=sd.RasterYSize
-        else:
+            filelist=glob.glob(os.path.splitext(f)[0]+'.*')
+            filelist.extend(glob.glob('%s\\%s_%s_*.hdf' % (os.path.dirname(f),os.path.basename(f)[10:14],os.path.basename(f)[14:17])))
+
+            srs=osr.SpatialReference()
+            srs.ImportFromEPSG(4326)
+            self.metadata['srs']= srs.ExportToWkt()
+            self.metadata['epsg']= 4326
+            self.metadata['units']= 'deg'
+
+            hdf_sd=gdalDataset.GetSubDatasets()
+            hdf_md=gdalDataset.GetMetadata()
+            sd,sz = hdf_sd[0]
+            sd=geometry.OpenDataset(sd)
             sd_md=sd.GetMetadata()
-            nrows=int(sd_md['Number of along track pixels']) #sd.RasterXSize is incorrect
-            ncols=ncols*4-30 #Account for the four SCA strips and the overlap between SCA strips
-            if len(hdf_sd) == 6:#Includes pan band (3 sds each 
+            nbands=sd.RasterCount
+            ncols=str(sd.RasterXSize*4-30) #Account for the four SCA strips and the overlap between SCA strips
+            nrows=sd_md['Number of along track pixels'] #sd.RasterYSize is incorrect
+            if len(hdf_sd) == 6:#Includes pan band (3 sds each)
                 sd,sz = hdf_sd[3]
                 sd=geometry.OpenDataset(sd)
                 sd_md=sd.GetMetadata()
-                nbands='%s,%s' % (nbands, sd_md['Number of bands'])
-                ncols='%s,%s' % (ncols, int(sd_md['Number of cross track pixels'])*4-30) #Account for the four SCA strips and the overlap between SCA strips
-                nrows='%s,%s' % (nrows, sd_md['Number of along track pixels'])
+                #Make a csv list of cols, bands
+                ncols=[ncols for i in range(0,nbands)]
+                nrows=[nrows for i in range(0,nbands)]
+                #nbands='%s,%s' % (nbands, sd_md['Number of bands'])
+                nbands=nbands+int(sd_md['Number of bands'])
+                cols=str(int(sd_md['Number of cross track pixels'])*4-30)#Account for the four SCA strips and the overlap between SCA strips
+                rows=sd_md['Number of along track pixels']
+                ncols.extend([cols for i in range(0,sd.RasterCount)]) 
+                nrows.extend([rows for i in range(0,sd.RasterCount)])
+                ncols=','.join(ncols)
+                nrows=','.join(nrows)
+
+            met=os.path.splitext(f)[0]+'.met'
+            for line in open(met, 'r').readlines():
+                if line[0:16]=='Scene Request ID':
+                    line=line.strip().split()
+                    self.metadata['sceneid']=line[3]
+                if line[0:14]=='ALI Start Time':
+                    line=line.strip().split()
+                    hdf_md['ImageStartTime']=line[3]+line[4]
+                if line[0:8]=='PRODUCT_':
+                    line=line.strip()
+                    line=map(string.strip, line.split('='))
+                    if line[0]=='PRODUCT_UL_CORNER_LAT':uly=float(line[1])
+                    if line[0]=='PRODUCT_UL_CORNER_LON':ulx=float(line[1])
+                    if line[0]=='PRODUCT_UR_CORNER_LAT':ury=float(line[1])
+                    if line[0]=='PRODUCT_UR_CORNER_LON':urx=float(line[1])
+                    if line[0]=='PRODUCT_LR_CORNER_LAT':lry=float(line[1])
+                    if line[0]=='PRODUCT_LR_CORNER_LON':lrx=float(line[1])
+                    if line[0]=='PRODUCT_LL_CORNER_LAT':lly=float(line[1])
+                    if line[0]=='PRODUCT_LL_CORNER_LON':llx=float(line[1])
+            geoext=[[ulx,uly],[urx,ury],[lrx,lry],[llx,lly],[ulx,uly]]
+            prjext=geoext
+        elif re.search(r'eo1.*_mtl\.tif$', f):
+            self.metadata['level']='L1G'
+            self.metadata['sensor']='ALI'
+            self.metadata['sceneid']=self.metadata['filename'].split('_')[0]
+            self.metadata['filetype'] = 'GTiff/GeoTIFF (%s %s)' % (self.metadata['sensor'],self.metadata['level'])
+
+            filelist=glob.glob(os.path.dirname(f)+'/*')
+            ncols=[]
+            nrows=[]
+            nbands=0
+            for band in glob.glob(os.path.dirname(f)+'/eo1*_b*.tif'):
+                band=geometry.OpenDataset(band)
+                ncols.append(str(band.RasterXSize))
+                nrows.append(str(band.RasterYSize))
+                nbands+=1
+                #rb=sd.GetRasterBand(1)
+            ncols=','.join(ncols)
+            nrows=','.join(nrows)
+            met=f
+            md={}
+            for line in open(met, 'r'):
+                line=line.replace('"','')
+                line=[l.strip() for l in line.split('=')]
+                if line[0]=='END':         #end of the metadata file
+                    break
+                elif line[0]=='GROUP':     #start of a metadata group
+                    if line[1]!='L1_METADATA_FILE':
+                        group = line[1]
+                        md[group]={}
+                elif line[0]=='END_GROUP': #end of a metadata group
+                    pass
+                else:                     #metadata value
+                    md[group][line[0]]=line[1]
+
+            uly=float(md['PRODUCT_METADATA']['PRODUCT_UL_CORNER_LAT'])
+            ulx=float(md['PRODUCT_METADATA']['PRODUCT_UL_CORNER_LON'])
+            ury=float(md['PRODUCT_METADATA']['PRODUCT_UR_CORNER_LAT'])
+            urx=float(md['PRODUCT_METADATA']['PRODUCT_UR_CORNER_LON'])
+            lry=float(md['PRODUCT_METADATA']['PRODUCT_LR_CORNER_LAT'])
+            lrx=float(md['PRODUCT_METADATA']['PRODUCT_LR_CORNER_LON'])
+            lly=float(md['PRODUCT_METADATA']['PRODUCT_LL_CORNER_LAT'])
+            llx=float(md['PRODUCT_METADATA']['PRODUCT_LL_CORNER_LON'])
+            geoext=[[ulx,uly],[urx,ury],[lrx,lry],[llx,lly],[ulx,uly]]
+
+            uly=float(md['PRODUCT_METADATA']['PRODUCT_UL_CORNER_MAPY'])
+            ulx=float(md['PRODUCT_METADATA']['PRODUCT_UL_CORNER_MAPX'])
+            ury=float(md['PRODUCT_METADATA']['PRODUCT_UR_CORNER_MAPY'])
+            urx=float(md['PRODUCT_METADATA']['PRODUCT_UR_CORNER_MAPX'])
+            lry=float(md['PRODUCT_METADATA']['PRODUCT_LR_CORNER_MAPY'])
+            lrx=float(md['PRODUCT_METADATA']['PRODUCT_LR_CORNER_MAPX'])
+            lly=float(md['PRODUCT_METADATA']['PRODUCT_LL_CORNER_MAPY'])
+            llx=float(md['PRODUCT_METADATA']['PRODUCT_LL_CORNER_MAPX'])
+            prjext=[[ulx,uly],[urx,ury],[lrx,lry],[llx,lly],[ulx,uly]]
+            
+            self.metadata['imgdate']=md['PRODUCT_METADATA']['ACQUISITION_DATE']
+            self.metadata['resampling']=md['PROJECTION_PARAMETERS']['RESAMPLING_OPTION']
+            self.metadata['viewangle']=md['PRODUCT_PARAMETERS']['SENSOR_LOOK_ANGLE']
+            self.metadata['sunazimuth']=md['PRODUCT_PARAMETERS']['SUN_AZIMUTH']
+            self.metadata['sunelevation']=md['PRODUCT_PARAMETERS']['SUN_ELEVATION']
+
+            #EPSG:32601: WGS 84 / UTM zone 1N
+            #EPSG:32701: WGS 84 / UTM zone 1S
+            srs=osr.SpatialReference()
+            zone=int(md['UTM_PARAMETERS']['ZONE_NUMBER'])
+            if zone > 0:epsg=32600 + zone #North
+            else:       epsg=32700 - zone #South
+            srs.ImportFromEPSG(epsg)
+            self.metadata['units']= 'm'
+            self.metadata['srs']= srs.ExportToWkt()
+            
+        elif re.search(r'eo1.*_hdf\.l1g$', f):
+            self.metadata['level']='L1G'
+            self.metadata['sensor']='ALI'
+            self.metadata['sceneid']=self.metadata['filename'].split('_')[0]
+            filelist=glob.glob(os.path.dirname(f)+'/*')
+
+            gdalDataset = geometry.OpenDataset(f)
+            self.metadata['filetype'] = '%s/%s (%s %s)' % (gdalDataset.GetDriver().ShortName,
+                                                           gdalDataset.GetDriver().LongName,
+                                                           self.metadata['sensor'],
+                                                           self.metadata['level'])
+
+            hdf_sd=gdalDataset.GetSubDatasets()
+            hdf_md=gdalDataset.GetMetadata()
+            sd,sz = hdf_sd[0]
+            sd=geometry.OpenDataset(sd)
+            sd_md=sd.GetMetadata()
+            ncols=[]
+            nrows=[]
+            nbands=0
+            for sd,sz in hdf_sd:
+                sd=geometry.OpenDataset(sd)
+                ncols.append(str(sd.RasterXSize))
+                nrows.append(str(sd.RasterYSize))
+                nbands+=1
+            ncols=','.join(ncols)
+            nrows=','.join(nrows)
+            met=f.lower().replace('_hdf.l1g','_mtl.l1g')
+            md={}
+            for line in open(met, 'r'):
+                line=line.replace('"','')
+                line=[l.strip() for l in line.split('=')]
+                if line[0]=='END':         #end of the metadata file
+                    break
+                elif line[0]=='GROUP':     #start of a metadata group
+                    if line[1]!='L1_METADATA_FILE':
+                        group = line[1]
+                        md[group]={}
+                elif line[0]=='END_GROUP': #end of a metadata group
+                    pass
+                else:                     #metadata value
+                    md[group][line[0]]=line[1]
+
+            uly=float(md['PRODUCT_METADATA']['PRODUCT_UL_CORNER_LAT'])
+            ulx=float(md['PRODUCT_METADATA']['PRODUCT_UL_CORNER_LON'])
+            ury=float(md['PRODUCT_METADATA']['PRODUCT_UR_CORNER_LAT'])
+            urx=float(md['PRODUCT_METADATA']['PRODUCT_UR_CORNER_LON'])
+            lry=float(md['PRODUCT_METADATA']['PRODUCT_LR_CORNER_LAT'])
+            lrx=float(md['PRODUCT_METADATA']['PRODUCT_LR_CORNER_LON'])
+            lly=float(md['PRODUCT_METADATA']['PRODUCT_LL_CORNER_LAT'])
+            llx=float(md['PRODUCT_METADATA']['PRODUCT_LL_CORNER_LON'])
+            geoext=[[ulx,uly],[urx,ury],[lrx,lry],[llx,lly],[ulx,uly]]
+            prjext=geoext
+            
+            self.metadata['imgdate']=md['PRODUCT_METADATA']['ACQUISITION_DATE']
+            self.metadata['resampling']=md['PROJECTION_PARAMETERS']['RESAMPLING_OPTION']
+            self.metadata['viewangle']=md['PRODUCT_PARAMETERS']['SENSOR_LOOK_ANGLE']
+            self.metadata['sunazimuth']=md['PRODUCT_PARAMETERS']['SUN_AZIMUTH']
+            self.metadata['sunelevation']=md['PRODUCT_PARAMETERS']['SUN_ELEVATION']
+
+            #EPSG:32601: WGS 84 / UTM zone 1N
+            #EPSG:32701: WGS 84 / UTM zone 1S
+            srs=osr.SpatialReference()
+            zone=int(md['UTM_PARAMETERS']['ZONE_NUMBER'])
+            if zone > 0:epsg=32600 + zone #North
+            else:       epsg=32700 - zone #South
+            srs.ImportFromEPSG(epsg)
+            self.metadata['units']= 'm'
+            self.metadata['srs']= srs.ExportToWkt()
+            
+        else:
+            self.metadata['level']='L1R'
+            self.metadata['sensor']='HYPERION'
+            filelist=glob.glob(os.path.splitext(f)[0]+'.*')
+            filelist.extend(glob.glob('%s\\%s_%s_*.hdf' % (os.path.dirname(f),os.path.basename(f)[10:14],os.path.basename(f)[14:17])))
+
+            gdalDataset = geometry.OpenDataset(f)
+            self.metadata['filetype'] = '%s/%s (%s %s)' % (gdalDataset.GetDriver().ShortName,
+                                                           gdalDataset.GetDriver().LongName,
+                                                           self.metadata['sensor'],
+                                                           self.metadata['level'])
+            srs=osr.SpatialReference()
+            srs.ImportFromEPSG(4326)
+            self.metadata['srs']= srs.ExportToWkt()
+            self.metadata['epsg']= 4326
+            self.metadata['units']= 'deg'
+
+            hdf_sd=gdalDataset.GetSubDatasets()
+            hdf_md=gdalDataset.GetMetadata()
+            sd,sz = hdf_sd[0]
+            sd=geometry.OpenDataset(sd)
+            sd_md=sd.GetMetadata()
+            nbands=sd.RasterCount
+            ncols=sd.RasterXSize
+            nrows=sd.RasterYSize
+            met=os.path.splitext(f)[0]+'.met'
+            for line in open(met, 'r').readlines():
+                if line[0:16]=='Scene Request ID':
+                    line=line.strip().split()
+                    self.metadata['sceneid']=line[3]
+                if line[0:14]=='HYP Start Time':
+                    line=line.strip().split()
+                    imgdate=time.strptime(line[3]+line[4], '%Y%j')
+                    self.metadata['imgdate']=time.strftime('%Y-%m-%d',imgdate)#ISO 8601 
+                if line[0:8]=='PRODUCT_':
+                    line=line.strip()
+                    line=map(string.strip, line.split('='))
+                    if line[0]=='PRODUCT_UL_CORNER_LAT':uly=float(line[1])
+                    if line[0]=='PRODUCT_UL_CORNER_LON':ulx=float(line[1])
+                    if line[0]=='PRODUCT_UR_CORNER_LAT':ury=float(line[1])
+                    if line[0]=='PRODUCT_UR_CORNER_LON':urx=float(line[1])
+                    if line[0]=='PRODUCT_LR_CORNER_LAT':lry=float(line[1])
+                    if line[0]=='PRODUCT_LR_CORNER_LON':lrx=float(line[1])
+                    if line[0]=='PRODUCT_LL_CORNER_LAT':lly=float(line[1])
+                    if line[0]=='PRODUCT_LL_CORNER_LON':llx=float(line[1])
+            geoext=[[ulx,uly],[urx,ury],[lrx,lry],[llx,lly],[ulx,uly]]
+            prjext=geoext
 
         self.metadata['cols'] = ncols
         self.metadata['rows'] = nrows
         self.metadata['nbands'] = nbands
-        rb=sd.GetRasterBand(1)
-        
-        #self.metadata['datatype']=gdal.GetDataTypeName(rb.DataType)
-        #self.metadata['nbits']=gdal.GetDataTypeSize(rb.DataType)
-        #nodata=rb.GetNoDataValue()
-        #if nodata:self.metadata['nodata']=nodata
-        #else:
-        #    if self.metadata['datatype'][0:4] in ['Byte','UInt']: self.metadata['nodata']=0 #Unsigned, assume 0
-        #    else:self.metadata['nodata']=-2**(self.metadata['nbits']-1)                     #Signed, assume min value in data range
-        #GDAL reports Int15 instead of UInt16
         self.metadata['nbits'] = 16
-        self.metadata['datatype']='UInt16'
+        self.metadata['datatype']='Int16'
         self.metadata['nodata']=0
 
-        cellxy=[]
-        met=os.path.splitext(f)[0]+'.met'
-        for line in open(met, 'r').readlines():
-            if line[0:14]=='ALI Start Time':
-                line=line.strip().split()
-                hdf_md['ImageStartTime']=line[3]+line[4]
-            if line[0:8]=='PRODUCT_':
-                line=line.strip()
-                line=map(string.strip, line.split('='))
-                if line[0]=='PRODUCT_UL_CORNER_LAT':uly=float(line[1])
-                if line[0]=='PRODUCT_UL_CORNER_LON':ulx=float(line[1])
-                if line[0]=='PRODUCT_UR_CORNER_LAT':ury=float(line[1])
-                if line[0]=='PRODUCT_UR_CORNER_LON':urx=float(line[1])
-                if line[0]=='PRODUCT_LR_CORNER_LAT':lry=float(line[1])
-                if line[0]=='PRODUCT_LR_CORNER_LON':lrx=float(line[1])
-                if line[0]=='PRODUCT_LL_CORNER_LAT':lly=float(line[1])
-                if line[0]=='PRODUCT_LL_CORNER_LON':llx=float(line[1])
-
         #Geotransform
-        ext=[[ulx,uly],[urx,ury],[lrx,lry],[llx,lly],[ulx,uly]]
         ncols=map(int, str(ncols).split(','))
         nrows=map(int, str(nrows).split(','))
         cellx,celly=[],[]
@@ -106,10 +302,10 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
         while j < len(ncols):
             gcps=[];i=0
             lr=[[0,0],[ncols[j],0],[ncols[j],nrows[j]],[0,nrows[j]]]
-            while i < len(ext)-1: #don't need the last xy pair
+            while i < len(prjext)-1: #don't need the last xy pair
                 gcp=gdal.GCP()
                 gcp.GCPPixel,gcp.GCPLine=lr[i]
-                gcp.GCPX,gcp.GCPY=ext[i]
+                gcp.GCPX,gcp.GCPY=prjext[i]
                 gcp.Id=str(i)
                 gcps.append(gcp)
                 i+=1
@@ -122,27 +318,11 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
         self.metadata['cellx']=','.join(cellx)
         self.metadata['celly']=','.join(celly)
 
-        srs=osr.SpatialReference()
-        srs.ImportFromEPSG(4326)
-        self.metadata['srs']= srs.ExportToWkt()
-        self.metadata['epsg']= 4326
-        self.metadata['units']= 'deg'
+        self.metadata['UL']='%s,%s' % tuple(geoext[0])
+        self.metadata['UR']='%s,%s' % tuple(geoext[1])
+        self.metadata['LR']='%s,%s' % tuple(geoext[2])
+        self.metadata['LL']='%s,%s' % tuple(geoext[3])
         
-        self.metadata['UL']='%s,%s' % tuple(ext[0])
-        self.metadata['UR']='%s,%s' % tuple(ext[1])
-        self.metadata['LR']='%s,%s' % tuple(ext[2])
-        self.metadata['LL']='%s,%s' % tuple(ext[3])
-        
-        self.metadata['metadata']='\n'.join(['%s: %s' %(m,hdf_md[m]) for m in hdf_md])
-
-        self.metadata['satellite']='E01'
-        self.metadata['level']='L1R'
-        self.metadata['filetype'] = gdalDataset.GetDriver().ShortName+'/'+gdalDataset.GetDriver().LongName + ' (%s)' % self.metadata['sensor']
-        if self.metadata['sensor']=='ALI':self.metadata['sceneid'] = hdf_md['Scene_Id']
-        else:self.metadata['sceneid'] = hdf_md['Scene_ID']
-        
-        imgdate=time.strptime(hdf_md['ImageStartTime'][0:7], '%Y%j')
-        self.metadata['imgdate']=time.strftime('%Y-%m-%d',imgdate)#ISO 8601 
         self.metadata['rotation']=geometry.Rotation(geotransform)
         if abs(self.metadata['rotation']) < 1.0:
             self.metadata['orientation']='Map oriented'
@@ -153,4 +333,4 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
         self.metadata['filelist']=','.join(utilities.fixSeparators(filelist))
         self.metadata['compressionratio']=0
         self.metadata['compressiontype']='None'
-        self.extent=ext
+        self.extent=geoext

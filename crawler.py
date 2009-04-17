@@ -1,17 +1,3 @@
-##try:
-##    from osgeo import gdal
-##    from osgeo import gdalconst
-##    from osgeo import osr
-##    from osgeo import ogr
-##except ImportError:
-##    import gdal
-##    import gdalconst
-##    import osr
-##    import ogr
-##
-##import sys, os, re, struct, math, glob, string, time,shutil
-##import win32com.client, win32wnet
-
 import sys, os, re
 from Tkinter import *
 import tkFileDialog
@@ -20,7 +6,7 @@ from lib import progresslogger
 from lib import formats
 from lib import geometry
 from lib import utilities
-reload(formats)
+
 defaultgui=True #do we use the gui progress bar logger by default...?
 defaultdebug=False #do we use debug logging by default...?
 

@@ -36,7 +36,7 @@ __dataset__.Dataset()
         someformat.Dataset(__default__.Dataset)
             """custom format inherits from __default__.Dataset
                Use this when GDAL can read most of the images metadata, but you need to populate some other stuff as well
-               If you inherit from this, don't forget to call __default__.Dataset.__init__(f) explicitly as you class will override this method
+               If you inherit from this, don't forget to call __default__.Dataset.__init__(f) explicitly as your class will override this method
             """
             
             #populate appropriate metadata fields in the __init__ method

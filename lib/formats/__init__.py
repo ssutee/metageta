@@ -12,16 +12,15 @@ fields=__fields__.fields
 
 debug=0
 #Dynamically load all formats
-for _lib in _glob(_path.join(__path__[0],'*.py')):
+for _lib in _glob(_path.join(__path__[0],'[a-z]*.py')):
     _lib=_path.splitext(_path.basename(_lib))[0]
     try:
-      if _lib[0]!='_':
-        #import custom format and add to the list of formats
-        exec 'import %s' % _lib
-        __formats__[_lib]=eval(_lib)
-        #append module _format_regex & fields to lists
-        format_regex.extend([r for r in __formats__[_lib].format_regex if not r in format_regex])
-    except:pass
+      #import custom format and add to the list of formats
+      exec 'import %s' % _lib
+      __formats__[_lib]=eval(_lib)
+      #append module _format_regex & fields to lists
+      format_regex.extend([r for r in __formats__[_lib].format_regex if not r in format_regex])
+    except:pass #TODO... warnings.warn etc...
 
 #import generic formats (eg. GeoTiff, JP2, etc...)
 import __default__
@@ -66,5 +65,6 @@ def Open(f):
         errors.append(err)
 
     #Couldn't open file, raise the last error in the stack
+    #TODO... log the entire error stack
     if len(errors) > 0: raise errors[-1].__class__,'\n'.join(errors[-1].args)
     else:raise Exception, 'Unable to open %s' % f
