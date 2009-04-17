@@ -1,5 +1,5 @@
-from lib.xlutils import xlrd
-from lib.xlutils import xlwt
+from xlutils import xlrd
+from xlutils import xlwt
 import sys, os.path, os, re, struct, glob, shutil,traceback
 import win32com.client, win32wnet
 
