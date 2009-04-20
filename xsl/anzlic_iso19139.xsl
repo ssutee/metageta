@@ -191,7 +191,7 @@
   </xsl:template><!--default_custodian-->
   <xsl:template name="other_contact">
     <xsl:param name="contact"><xsl:value-of select="custodian"/></xsl:param> <!--default-->
-    <xsl:variable name="tokens" select="str:tokenize(string($node), '&#10;')"/>
+    <xsl:variable name="tokens" select="str:tokenize(string($contact), '&#10;')"/>
     <gmd:contact>
       <gmd:CI_ResponsibleParty>
         <gmd:organisationName>
@@ -865,12 +865,19 @@
                   <gco:CharacterString><xsl:value-of select="$tbands[$band]"/></gco:CharacterString>
                 </xsl:when>
                 <xsl:otherwise>
-                  <xsl:value-of select="$band"/>
+                  <gco:CharacterString><xsl:value-of select="$band"/></gco:CharacterString>
                 </xsl:otherwise>
               </xsl:choose>
             </gmd:descriptor>
             <gmd:bitsPerValue>
-              <gco:Integer><xsl:value-of select="floor($tnbits[$band])"/></gco:Integer>
+              <xsl:choose>
+                <xsl:when test="normalize-space($tnbits[$band])">
+                  <gco:Integer><xsl:value-of select="floor($tnbits[$band])"/></gco:Integer>
+                </xsl:when>
+                <xsl:otherwise>
+                  <gco:Integer><xsl:value-of select="floor($tnbits[1])"/></gco:Integer>
+                </xsl:otherwise>
+              </xsl:choose>
             </gmd:bitsPerValue>
           </gmd:MD_Band>
         </gmd:dimension>

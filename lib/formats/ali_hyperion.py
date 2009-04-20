@@ -155,9 +155,12 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
             
             self.metadata['imgdate']=md['PRODUCT_METADATA']['ACQUISITION_DATE']
             self.metadata['resampling']=md['PROJECTION_PARAMETERS']['RESAMPLING_OPTION']
-            self.metadata['viewangle']=md['PRODUCT_PARAMETERS']['SENSOR_LOOK_ANGLE']
-            self.metadata['sunazimuth']=md['PRODUCT_PARAMETERS']['SUN_AZIMUTH']
-            self.metadata['sunelevation']=md['PRODUCT_PARAMETERS']['SUN_ELEVATION']
+            try:self.metadata['viewangle']=float(md['PRODUCT_PARAMETERS']['SENSOR_LOOK_ANGLE'])
+            except:pass #Exception raised if value == 'UNAVAILABLE'
+            try:self.metadata['sunazimuth']=float(md['PRODUCT_PARAMETERS']['SUN_AZIMUTH'])
+            except:pass #Exception raised if value == 'UNAVAILABLE'
+            try:self.metadata['sunelevation']=float(md['PRODUCT_PARAMETERS']['SUN_ELEVATION'])
+            except:pass #Exception raised if value == 'UNAVAILABLE'
 
             #EPSG:32601: WGS 84 / UTM zone 1N
             #EPSG:32701: WGS 84 / UTM zone 1S
@@ -168,6 +171,7 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
             srs.ImportFromEPSG(epsg)
             self.metadata['units']= 'm'
             self.metadata['srs']= srs.ExportToWkt()
+            self.metadata['epsg']= str(epsg)
             
         elif re.search(r'eo1.*_hdf\.l1g$', f):
             self.metadata['level']='L1G'
@@ -225,9 +229,12 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
             
             self.metadata['imgdate']=md['PRODUCT_METADATA']['ACQUISITION_DATE']
             self.metadata['resampling']=md['PROJECTION_PARAMETERS']['RESAMPLING_OPTION']
-            self.metadata['viewangle']=md['PRODUCT_PARAMETERS']['SENSOR_LOOK_ANGLE']
-            self.metadata['sunazimuth']=md['PRODUCT_PARAMETERS']['SUN_AZIMUTH']
-            self.metadata['sunelevation']=md['PRODUCT_PARAMETERS']['SUN_ELEVATION']
+            try:self.metadata['viewangle']=float(md['PRODUCT_PARAMETERS']['SENSOR_LOOK_ANGLE'])
+            except:pass #Exception raised if value == 'UNAVAILABLE'
+            try:self.metadata['sunazimuth']=float(md['PRODUCT_PARAMETERS']['SUN_AZIMUTH'])
+            except:pass #Exception raised if value == 'UNAVAILABLE'
+            try:self.metadata['sunelevation']=float(md['PRODUCT_PARAMETERS']['SUN_ELEVATION'])
+            except:pass #Exception raised if value == 'UNAVAILABLE'
 
             #EPSG:32601: WGS 84 / UTM zone 1N
             #EPSG:32701: WGS 84 / UTM zone 1S
@@ -238,6 +245,7 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
             srs.ImportFromEPSG(epsg)
             self.metadata['units']= 'm'
             self.metadata['srs']= srs.ExportToWkt()
+            self.metadata['epsg']= str(epsg)
             
         else:
             self.metadata['level']='L1R'
