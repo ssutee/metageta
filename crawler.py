@@ -2,10 +2,10 @@ import sys, os, re
 from Tkinter import *
 import tkFileDialog
 
-from lib import progresslogger
-from lib import formats
-from lib import geometry
-from lib import utilities
+import progresslogger
+import formats
+import geometry
+import utilities
 
 defaultgui=True #do we use the gui progress bar logger by default...?
 defaultdebug=False #do we use debug logging by default...?

@@ -1,14 +1,13 @@
 #Regular expression list of file formats
 format_regex=[r'imag_[0-9]*\.dat$']#Landsat 5/SPOT 1-4 CCRS
 
-
 #import base dataset module
 import __dataset__
 
 # import other modules (use "_"  prefix to import privately)
 import sys, os, re, glob, time, math, string
-from lib import utilities
-from lib import geometry
+import utilities
+import geometry
 
 try:
     from osgeo import gdal

@@ -1,44 +1,27 @@
 #Imports
-import os,sys,StringIO,glob
-#from lib.splashscreen import SplashScreen
+import os,sys,glob
+#from splashscreen import SplashScreen
 #if len(sys.argv) == 1:SplashScreen(imagefile=r'C:\WorkSpace\qlk.gif', timeout=10)
 
 from Tkinter import *
 import tkFileDialog
 
-from Ft.Xml.Xslt import Transform
-from Ft.Xml import Parse
 from Ft.Xml import Domlette as Dom
-from lib import utilities
+import utilities
+import transforms
+reload(transforms)
 
 def main(xls,xsl,dir=''):
     for rec in utilities.ExcelReader(xls):
-        doc=Dom.implementation.createRootNode('file:///%s.xml'%rec['guid'])
-        docelement = doc.createElementNS(None, 'crawlresult')
-        for col in rec:
-            child=doc.createElementNS(None, col)
-            text=doc.createTextNode(str(rec[col]))
-            child.appendChild(text)
-            docelement.appendChild(child)
+        strxml=transforms.DictToXML(rec,'crawlresult')
+        if dir=='': #Output to image directory
+            result = transforms.Transform(strxml, xsl, '%s.xml'%rec['filepath'])
+        else: #Output to a single directory, use image filename and guid to ensure uniqueness.
+            result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,rec['filename'],rec['guid']))
 
-        doc.appendChild(docelement)
-        buf=StringIO.StringIO()
-        Dom.Print(doc,stream=buf)
-        if dir=='':
-            result = Transform(buf.getvalue(), xsl, output=open('%s.xml'%rec['filepath'], 'w'))
-        else:
-            result = Transform(buf.getvalue(), 'xsl/'+xsl, output=open('%s/%s%s.xml'%(dir,rec['filename'],rec['guid']), 'w'))
-        del buf
-
-def GetTransforms():
-    xslfiles={}
-    for f in glob.glob('xsl/*.xml'):
-        xml=Parse('file:%s'%f)
-        name = str(xml.xpath('string(/stylesheet/@name)'))
-        file = str(xml.xpath('string(/stylesheet/@file)'))
-        xslfiles[name]=file
-        #xslfiles.append({'name':name,'desc':desc,'file':file})
-    return xslfiles
+#========================================================================================================
+#Below is for the GUI if run without arguments
+#========================================================================================================
 class Command:
     """ A class we can use to avoid using the tricky "Lambda" expression.
     "Python and Tkinter Programming" by John Grayson, introduces this idiom."""
@@ -147,13 +130,12 @@ class GetArgs:
         lxsl=Label(self.root, text="XSL Stylesheet:")
         ldir=Label(self.root, text="Output directory:")
 
-        self.xslfiles=GetTransforms()
-        options=self.xslfiles.keys()
+        self.transforms=transforms.transforms.keys()
 
         # exls=Entry(self.root, textvariable=sxls)
         # exsl=DropList(self.root,options,sxsl)
         # edir=Entry(self.root, textvariable=sdir)
-        exsl=DropList(self.root,options,sxsl)
+        exsl=DropList(self.root,self.transforms,sxsl)
         exls=Entry(self.root, textvariable=sxls, width=exsl.width)
         edir=Entry(self.root, textvariable=sdir, width=exsl.width)
 
@@ -200,10 +182,7 @@ class GetArgs:
     def cmdOK(self):
         ok,args=True,{}
         for var in self.vars:
-            if var=='xsl':
-                arg=self.xslfiles[self.vars[var].get()]
-            else:
-                arg=self.vars[var].get()
+            arg=self.vars[var].get()
             if arg=='':ok=False
             else:args[var]=arg
         if ok:

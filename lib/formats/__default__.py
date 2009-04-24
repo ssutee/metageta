@@ -7,9 +7,9 @@ format_regex=[
 ]
 
 import sys, os, re, glob, time, math, string
-from lib import utilities
-from lib import geometry
-from lib import spatialreferences
+import utilities
+import geometry
+import spatialreferences
 import __dataset__
 
 import warnings,logging

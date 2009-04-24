@@ -8,3 +8,4 @@ pause
 call python.exe transform.py %*
 REM start "Crawler" /B pythonw.exe transform.py %*
 )
+pause

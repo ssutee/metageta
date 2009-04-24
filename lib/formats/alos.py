@@ -11,9 +11,9 @@ import __dataset__
 
 # import other modules (use "_"  prefix to import privately)
 import sys, os, re, glob, time, math, string
-from lib import utilities
-from lib import geometry
-from lib import spatialreferences
+import utilities
+import geometry
+import spatialreferences
 
 try:
     from osgeo import gdal

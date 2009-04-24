@@ -7,8 +7,8 @@ import __default__
 
 # import other modules
 import sys, os, re, glob, time, math, string
-from lib import utilities
-from lib import geometry
+import utilities
+import geometry
 import xml.dom.minidom as _xmldom
 
 try:

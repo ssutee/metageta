@@ -1,4 +1,4 @@
-from lib import utilities, uuid
+import utilities, uuid
 import os,time
 
 #Import fieldnames

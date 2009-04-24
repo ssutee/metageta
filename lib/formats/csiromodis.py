@@ -6,8 +6,8 @@ import __dataset__
 
 # import other modules (use "_"  prefix to import privately)
 import sys, os, re, glob, time, math, string
-from lib import utilities
-from lib import geometry
+import utilities
+import geometry
 
 try:
     from osgeo import gdal
