@@ -15,12 +15,11 @@ debug=0
 for _lib in _glob(_path.join(__path__[0],'[a-z]*.py')):
     _lib=_path.splitext(_path.basename(_lib))[0]
     try:
-      #import custom format and add to the list of formats
-      exec 'import %s' % _lib
-      __formats__[_lib]=eval(_lib)
-
-      #append module _format_regex & fields to lists
-      format_regex.extend([r for r in __formats__[_lib].format_regex if not r in format_regex])
+        #import custom format and add to the list of formats
+        __formats__[_lib]=__import__('%s.%s'%(__name__,_lib), fromlist=[__name__])
+        
+        #append module _format_regex & fields to lists
+        format_regex.extend([r for r in __formats__[_lib].format_regex if not r in format_regex])
     except:pass #TODO... warnings.warn etc...
 
 #import generic formats (eg. GeoTiff, JP2, etc...)
