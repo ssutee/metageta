@@ -38,11 +38,11 @@ for _f in _glob(_path.join(__path__[0],'*.xml')):
 #++++++++++++++++++++++++
 def Transform(inxmlstring,transform,outxmlfile):
     if _xslfiles.has_key(transform): #Is it a known XSL transform...?
-        xslfile = _path.join(__path__[0],_xslfiles[transform])
+        xslfile = _path.join(__path__[0],_xslfiles[transform]).replace('\\','/')
     elif _path.exists(transform):    #Have we been passed an XSL file path...?
-        xslfile=transform
+        xslfile=_path.abspath(transform).replace('\\','/')
     else: raise ValueError, 'Can not transform using %s!' % transform
-    result = _Transform(inxmlstring, xslfile, output=open(outxmlfile, 'w'))
+    result = _Transform(inxmlstring, 'file:///'+xslfile, output=open(outxmlfile, 'w'))
 
 def DictToXML(dic,root):
     doc=_Dom.implementation.createRootNode('file:///%s.xml'%root)
