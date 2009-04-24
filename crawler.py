@@ -6,7 +6,7 @@ import progresslogger
 import formats
 import geometry
 import utilities
-
+reload(formats)
 defaultgui=True #do we use the gui progress bar logger by default...?
 defaultdebug=False #do we use debug logging by default...?
 

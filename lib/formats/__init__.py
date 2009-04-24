@@ -16,10 +16,8 @@ for _lib in _glob(_path.join(__path__[0],'[a-z]*.py')):
     _lib=_path.splitext(_path.basename(_lib))[0]
     try:
       #import custom format and add to the list of formats
-      #exec 'import %s' % _lib
-      #__formats__[_lib]=eval(_lib)
-      _f,_fn,_desc=_imp.find_module(_lib)
-      __formats__[_lib]=_imp.load_module(_lib,_f,_fn,_desc)
+      exec 'import %s' % _lib
+      __formats__[_lib]=eval(_lib)
 
       #append module _format_regex & fields to lists
       format_regex.extend([r for r in __formats__[_lib].format_regex if not r in format_regex])
