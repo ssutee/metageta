@@ -6,7 +6,8 @@ import progresslogger
 import formats
 import geometry
 import utilities
-reload(formats)
+import crawler
+
 defaultgui=True #do we use the gui progress bar logger by default...?
 defaultdebug=False #do we use debug logging by default...?
 
@@ -21,6 +22,7 @@ def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug):
     if debug:
         level=progresslogger.DEBUG
         formats.debug=debug
+        crawler.debug=debug
     else:level=progresslogger.INFO
     pl = progresslogger.ProgressLogger('Metadata Crawler',logfile=log, logToConsole=True, logToFile=True, logToGUI=gui, level=level)
 
@@ -38,66 +40,45 @@ def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug):
     ExcelWriter=utilities.ExcelWriter(xls,format_fields.keys())
     ShapeWriter=geometry.ShapeWriter(shp,format_fields,overwrite=True)
 
-    cwd=os.curdir
-    files=[]
-
     pl.info('Searching for files...')
-    for f in utilities.rglob(dir,'|'.join(format_regex), True, re.IGNORECASE):files.append(f)
-    files=utilities.fixSeparators(files)
-
-    #Sort the files according to the priority of the regex formats
-    filelist={}
-    for f in files:
-        i=0
-        for r in format_regex:
-            if re.search(r,f,re.IGNORECASE):
-                if filelist.has_key(i):filelist[i].append(f)
-                else:filelist[i]=[f]
-            i+=1
-    i=0
-    files=[]
-    for r in format_regex:
-        if filelist.has_key(i):files.extend(filelist[i])
-        i+=1
-
-    i=0
-    while len(files) > 0:
-        f=files.pop(0)
+    Crawler=crawler.Crawler(dir)
+    #Loop thru dataset object returned by Crawler
+    count=0
+    for ds in Crawler:
         try:
-            ds=formats.Open(f)
             md=ds.metadata
             geom=ds.extent
-            
-            pl.info('Extracted metadata from %s' % md['filepath'])
-            for file in md['filelist'].split(','):
-                if file in files:files.remove(file)
-            md['filepath']=utilities.convertUNC(md['filepath'])
-            md['filelist']=','.join([unc for unc in utilities.convertUNC(md['filelist'].split(','))])
-
+            pl.info('Extracted metadata from %s' % Crawler.file)
             try:
-                pass
                 ExcelWriter.WriteRecord(md)
             except Exception,err:
-               pl.error('%s\n%s' % (f, utilities.ExceptionInfo()))
+               pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
                pl.debug(utilities.ExceptionInfo(int(debug)))
             try:
                 ShapeWriter.WriteRecord(geom,md)
             except Exception,err:
-                pl.error('%s\n%s' % (f, utilities.ExceptionInfo()))
+                pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
                 pl.debug(utilities.ExceptionInfo(int(debug)))
 
-            i+=1
-            pl.updateProgress(len(files)+i)
+            pl.updateProgress(newMax=Crawler.filecount)
         except Exception,err:
-           pl.error('%s\n%s' % (f, utilities.ExceptionInfo()))
-           pl.debug(utilities.ExceptionInfo(int(debug)))
-    if i == 0:
+            pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
+            pl.debug(utilities.ExceptionInfo(int(debug)))
+        count+=1
+
+    #Check for files that couldn't be opened
+    for file,err,dbg in Crawler.errors:
+       pl.error('%s\n%s' % (file, err))
+       pl.debug(dbg)
+
+    if Crawler.filecount == 0:
         pl.info("No data found")
     else:
         pl.info("Metadata extraction complete!")
 
+    pl.info("my count: %s, crawler count: %s"%(count,Crawler.filecount))
     del pl
-    #del ExcelWriter
+    del ExcelWriter
     del ShapeWriter
 
 #========================================================================================================

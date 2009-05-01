@@ -191,7 +191,7 @@
   </xsl:template><!--default_custodian-->
   <xsl:template name="other_contact">
     <xsl:param name="contact"><xsl:value-of select="custodian"/></xsl:param> <!--default-->
-    <xsl:variable name="tokens" select="str:tokenize(string($node), '&#10;')"/>
+    <xsl:variable name="tokens" select="str:tokenize(string($contact), '&#10;')"/>
     <gmd:contact>
       <gmd:CI_ResponsibleParty>
         <gmd:organisationName>
@@ -303,74 +303,74 @@
         <gmd:MD_ReferenceSystem>
           <gmd:referenceSystemIdentifier>
             <gmd:RS_Identifier>
-				<gmd:authority>
-				  <gmd:CI_Citation>
-					<xsl:variable name="rs_type">
-						<xsl:choose>
-						  <xsl:when test="not(normalize-space(epsg))">OGC</xsl:when>
-						  <xsl:when test="normalize-space(epsg) = '0'">OGC</xsl:when>
-						  <xsl:otherwise>EPSG</xsl:otherwise>
-						</xsl:choose>
-					</xsl:variable>
-					<gmd:title>
-					  <gco:CharacterString>
-						<xsl:choose>
-						  <xsl:when test="$rs_type='OGC'">
-							<xsl:value-of select="'OGC Well-known Text Representation of Spatial Reference Systems'"/>
-						  </xsl:when>
-						  <xsl:otherwise>
-							<xsl:value-of select="'EPSG Geodetic Parameter Dataset'"/>
-						  </xsl:otherwise>
-						</xsl:choose>
-					  </gco:CharacterString>
-					</gmd:title>
-					<gmd:date>
-					  <gmd:CI_Date>
-						<gmd:date>
-						  <xsl:choose>
-							<xsl:when test="$rs_type='OGC'">
-							  <gco:Date>2006-10-05</gco:Date>
-							</xsl:when>
-							<xsl:otherwise>
-							  <gco:Date>2007-07-16</gco:Date>
-							</xsl:otherwise>
-						  </xsl:choose>
-						</gmd:date>
-						<gmd:dateType>
-						  <gmd:CI_DateTypeCode>
-							<xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/Codelist/gmxCodelist.xml#CI_DateTypeCode</xsl:attribute>
-							<xsl:attribute name="codeListValue">revision</xsl:attribute>
-						  </gmd:CI_DateTypeCode>
-						</gmd:dateType>
-					  </gmd:CI_Date>
-					</gmd:date>
-					<gmd:edition>
-					  <xsl:choose>
-						<xsl:when test="$rs_type='OGC'">
-						  <gco:CharacterString>Version 1.20</gco:CharacterString>
-						</xsl:when>
-						<xsl:otherwise>
-						  <gco:CharacterString>Version 6.13</gco:CharacterString>
-						</xsl:otherwise>
-					  </xsl:choose>
-					</gmd:edition>
-				  </gmd:CI_Citation>
-				</gmd:authority>
-				<gmd:code>
+              <gmd:authority>
+                <gmd:CI_Citation>
+                <xsl:variable name="rs_type">
+                  <xsl:choose>
+                    <xsl:when test="not(normalize-space(epsg))">OGC</xsl:when>
+                    <xsl:when test="normalize-space(epsg) = '0'">OGC</xsl:when>
+                    <xsl:otherwise>EPSG</xsl:otherwise>
+                  </xsl:choose>
+                </xsl:variable>
+                <gmd:title>
                   <gco:CharacterString>
-					  <xsl:choose>
-						<xsl:when test="not(normalize-space(epsg))">
-						  <xsl:value-of select="srs"/>
-						</xsl:when>
-						<xsl:when test="normalize-space(epsg) = '0'">
-						  <xsl:value-of select="srs"/>
-						</xsl:when>
-						<xsl:otherwise>
-						  <xsl:value-of select="epsg"/>
-						</xsl:otherwise>
-					  </xsl:choose>
+                  <xsl:choose>
+                    <xsl:when test="$rs_type='OGC'">
+                    <xsl:value-of select="'OGC Well-known Text Representation of Spatial Reference Systems'"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                    <xsl:value-of select="'EPSG Geodetic Parameter Dataset'"/>
+                    </xsl:otherwise>
+                  </xsl:choose>
                   </gco:CharacterString>
-				</gmd:code>
+                </gmd:title>
+                <gmd:date>
+                  <gmd:CI_Date>
+                  <gmd:date>
+                    <xsl:choose>
+                    <xsl:when test="$rs_type='OGC'">
+                      <gco:Date>2006-10-05</gco:Date>
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <gco:Date>2007-07-16</gco:Date>
+                    </xsl:otherwise>
+                    </xsl:choose>
+                  </gmd:date>
+                  <gmd:dateType>
+                    <gmd:CI_DateTypeCode>
+                    <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/Codelist/gmxCodelist.xml#CI_DateTypeCode</xsl:attribute>
+                    <xsl:attribute name="codeListValue">revision</xsl:attribute>
+                    </gmd:CI_DateTypeCode>
+                  </gmd:dateType>
+                  </gmd:CI_Date>
+                </gmd:date>
+                <gmd:edition>
+                  <xsl:choose>
+                  <xsl:when test="$rs_type='OGC'">
+                    <gco:CharacterString>Version 1.20</gco:CharacterString>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <gco:CharacterString>Version 6.13</gco:CharacterString>
+                  </xsl:otherwise>
+                  </xsl:choose>
+                </gmd:edition>
+                </gmd:CI_Citation>
+              </gmd:authority>
+              <gmd:code>
+                <gco:CharacterString>
+                  <xsl:choose>
+                  <xsl:when test="not(normalize-space(epsg))">
+                    <xsl:value-of select="srs"/>
+                  </xsl:when>
+                  <xsl:when test="normalize-space(epsg) = '0'">
+                    <xsl:value-of select="srs"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="epsg"/>
+                  </xsl:otherwise>
+                  </xsl:choose>
+                </gco:CharacterString>
+              </gmd:code>
             </gmd:RS_Identifier>
           </gmd:referenceSystemIdentifier>
         </gmd:MD_ReferenceSystem>
@@ -510,33 +510,12 @@
               </gmd:version>
             </gmd:MD_Format>
           </gmd:resourceFormat>
-          <gmd:spatialResolution>
-            <gmd:MD_Resolution>
-              <gmd:distance>
-                <gco:Distance>
-                  <xsl:attribute name="uom"><xsl:value-of select="units"/></xsl:attribute>
-                  <xsl:value-of select="cellx"/>
-                </gco:Distance>
-              </gmd:distance>
-            </gmd:MD_Resolution>
-          </gmd:spatialResolution>
-          <gmd:spatialResolution>
-            <gmd:MD_Resolution>
-              <gmd:distance>
-                <gco:Distance>
-                  <xsl:attribute name="uom"><xsl:value-of select="units"/></xsl:attribute>
-                  <xsl:value-of select="celly"/>
-                </gco:Distance>
-              </gmd:distance>
-            </gmd:MD_Resolution>
-          </gmd:spatialResolution>
           <gmd:descriptiveKeywords>
             <gmd:MD_Keywords>
               <gmd:keyword>
                 <gco:CharacterString>imageryBaseMapsEarthCover</gco:CharacterString>
               </gmd:keyword>    
               <gmd:type>
-                <!-- Mapping table row 8 -->
                 <gmd:MD_KeywordTypeCode 
                     codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode"
                     codeListValue="discipline">
@@ -598,6 +577,28 @@
               </gmd:useLimitation>
             </gmd:MD_Constraints>
           </gmd:resourceConstraints>
+          <gmd:spatialResolution>
+            <gmd:MD_Resolution>
+              <gmd:distance>
+                <gco:Distance>
+                  <xsl:attribute name="uom"><xsl:value-of select="units"/></xsl:attribute>
+                  <xsl:value-of select="str:split(cellx,',')[1]"/>
+                  <!--xsl:value-of select="cellx"/--> <!--cellx can have multiple values (e.g. ASTER & ALI) so just pick the first 1-->
+                </gco:Distance>
+              </gmd:distance>
+            </gmd:MD_Resolution>
+          </gmd:spatialResolution>
+          <gmd:spatialResolution>
+            <gmd:MD_Resolution>
+              <gmd:distance>
+                <gco:Distance>
+                  <xsl:attribute name="uom"><xsl:value-of select="units"/></xsl:attribute>
+                  <xsl:value-of select="str:split(celly,',')[1]"/>
+                  <!--xsl:value-of select="celly"/--> <!--cellx can have multiple values (e.g. ASTER & ALI) so just pick the first 1-->
+                </gco:Distance>
+              </gmd:distance>
+            </gmd:MD_Resolution>
+          </gmd:spatialResolution>
           <gmd:language>
             <gco:CharacterString><xsl:value-of select="$language"/></gco:CharacterString>
           </gmd:language>
@@ -750,53 +751,6 @@
               </xsl:for-each>
             </gco:CharacterString>
           </gmd:supplementalInformation>
-          <!--
-          <gmd:supplementalInformation>
-            <gco:CharacterString>
-              <xsl:value-of select="'metadata:'"/><xsl:value-of select="metadata"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'bands:'"/><xsl:value-of select="bands"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'cellx:'"/><xsl:value-of select="cellx"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'celly:'"/><xsl:value-of select="celly"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'cloudcover:'"/><xsl:value-of select="cloudcover"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'cols:'"/><xsl:value-of select="cols"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'compressionratio:'"/><xsl:value-of select="compressionratio"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'compressiontype:'"/><xsl:value-of select="compressiontype"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'datatype:'"/><xsl:value-of select="datatype"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'datecreated:'"/><xsl:value-of select="datecreated"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'demcorrection:'"/><xsl:value-of select="demcorrection"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'filelist:'"/><xsl:value-of select="filelist"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'filename:'"/><xsl:value-of select="filename"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'filepath:'"/><xsl:value-of select="filepath"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'filesize:'"/><xsl:value-of select="filesize"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'filetype:'"/><xsl:value-of select="filetype"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'guid:'"/><xsl:value-of select="guid"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'imgdate:'"/><xsl:value-of select="imgdate"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'level:'"/><xsl:value-of select="level"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'metadatadate:'"/><xsl:value-of select="metadatadate"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'mode:'"/><xsl:value-of select="mode"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'nbands:'"/><xsl:value-of select="nbands"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'nbits:'"/><xsl:value-of select="nbits"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'nodata:'"/><xsl:value-of select="nodata"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'orbit:'"/><xsl:value-of select="orbit"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'orientation:'"/><xsl:value-of select="orientation"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'ownerid:'"/><xsl:value-of select="ownerid"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'ownername:'"/><xsl:value-of select="ownername"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'resampling:'"/><xsl:value-of select="resampling"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'rotation:'"/><xsl:value-of select="rotation"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'rows:'"/><xsl:value-of select="rows"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'satellite:'"/><xsl:value-of select="satellite"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'sceneid:'"/><xsl:value-of select="sceneid"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'sensor:'"/><xsl:value-of select="sensor"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'srs:'"/><xsl:value-of select="srs"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'sunazimuth:'"/><xsl:value-of select="sunazimuth"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'sunelevation:'"/><xsl:value-of select="sunelevation"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'viewangle:'"/><xsl:value-of select="viewangle"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'sensor:'"/><xsl:value-of select="targetratio"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'targetratio:'"/><xsl:value-of select="sensor"/><xsl:value-of select="'&#10;'"/>
-              <xsl:value-of select="'owner:'"/><xsl:value-of select="owner"/><xsl:value-of select="'&#10;'"/>
-            </gco:CharacterString>
-          </gmd:supplementalInformation>
--->
         </gmd:MD_DataIdentification>
       </gmd:identificationInfo>
   </xsl:template><!--identificationInfo--> 
@@ -903,17 +857,30 @@
     <!--xsl:param name="tcelly"/-->
     <!--xsl:param name="tdatatype"/-->
       <xsl:if test="$band &lt;= $count">
-        <!--gmd:dimension-->
+        <gmd:dimension>
           <gmd:MD_Band>
             <gmd:descriptor>
-              <gco:CharacterString><xsl:value-of select="$tbands[$band]"/></gco:CharacterString>
+              <xsl:choose>
+                <xsl:when test="normalize-space($tbands[$band])">
+                  <gco:CharacterString><xsl:value-of select="$tbands[$band]"/></gco:CharacterString>
+                </xsl:when>
+                <xsl:otherwise>
+                  <gco:CharacterString><xsl:value-of select="$band"/></gco:CharacterString>
+                </xsl:otherwise>
+              </xsl:choose>
             </gmd:descriptor>
             <gmd:bitsPerValue>
-              <gco:Integer><xsl:value-of select="$tnbits[$band]"/></gco:Integer>
+              <xsl:choose>
+                <xsl:when test="normalize-space($tnbits[$band])">
+                  <gco:Integer><xsl:value-of select="floor($tnbits[$band])"/></gco:Integer>
+                </xsl:when>
+                <xsl:otherwise>
+                  <gco:Integer><xsl:value-of select="floor($tnbits[1])"/></gco:Integer>
+                </xsl:otherwise>
+              </xsl:choose>
             </gmd:bitsPerValue>
           </gmd:MD_Band>
-          <band><xsl:value-of select="$band"/></band>
-        <!--/gmd:dimension-->
+        </gmd:dimension>
         <xsl:call-template name="bands">
           <xsl:with-param name="band" select="$band + 1"/>
           <xsl:with-param name="count" select="$count"/>

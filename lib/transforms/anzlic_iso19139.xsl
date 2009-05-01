@@ -1099,7 +1099,6 @@
               </gmd:result>
             </gmd:DQ_ConceptualConsistency>
           </gmd:report>
-
           <gmd:report>
             <gmd:DQ_NonQuantitativeAttributeAccuracy>
               <gmd:result>
@@ -1122,11 +1121,29 @@
               <gmd:statement>
                 <gco:CharacterString>LINEAGE</gco:CharacterString>
               </gmd:statement>
+              <xsl:variable name="tsteps">
+                <xsl:element name="demcorrection"><xsl:value-of select="demcorrection"/></xsl:element>
+                <xsl:element name="resampling"><xsl:value-of select="resampling"/></xsl:element>
+              </xsl:variable>
+              <xsl:for-each select="exsl:node-set($tsteps)/*">
+                <xsl:if test="normalize-space(.)">
+                  <processStep>
+                    <LI_ProcessStep>
+                      <xsl:attribute name="id"><xsl:value-of select="position()"/></xsl:attribute>
+                      <rationale>
+                        <gco:CharacterString><xsl:value-of select="local-name(.)"/></gco:CharacterString>
+                      </rationale>
+                      <description>
+                        <gco:CharacterString><xsl:value-of select="normalize-space(.)"/></gco:CharacterString>
+                      </description>
+                    </LI_ProcessStep>
+                  </processStep>
+                </xsl:if>
+              </xsl:for-each>
             </gmd:LI_Lineage>
           </gmd:lineage>
         </gmd:DQ_DataQuality>
       </gmd:dataQualityInfo>
-
   </xsl:template><!--dataQualityInfo-->
   <!--
   -->  
@@ -1179,4 +1196,6 @@
     </gmd:date>
   </xsl:template><!-- /name="UnknownDate" -->
 
+
+  
 </xsl:stylesheet>

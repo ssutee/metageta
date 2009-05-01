@@ -40,7 +40,7 @@ def Transform(inxmlstring,transform,outxmlfile):
     if _xslfiles.has_key(transform): #Is it a known XSL transform...?
         xslfile = _path.join(__path__[0],_xslfiles[transform]).replace('\\','/')
     elif _path.exists(transform):    #Have we been passed an XSL file path...?
-        xslfile=_path.abspath(transform).replace('\\','/')
+        xslfile=_path.abspath(transform).replace('\\','/') #Xslt.Transform doesn't like backslashes in absolute paths...
     else: raise ValueError, 'Can not transform using %s!' % transform
     result = _Transform(inxmlstring, 'file:///'+xslfile, output=open(outxmlfile, 'w'))
 

@@ -1,4 +1,5 @@
 format_regex=[
+    r'\.ers$',
     r'\.img$',
     r'\.ecw$',
     r'\.sid$',
