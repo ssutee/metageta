@@ -1,3 +1,13 @@
+"""
+Iterator for metadata crawling.
+  Example:
+  import crawler
+  Crawler=crawler.Crawler('Some directory to crawl')
+  #Loop thru dataset objects returned by Crawler
+  for dataset in Crawler:
+      metadata=dataset.metadata
+"""
+
 import utilities
 import formats
 import re
@@ -49,9 +59,6 @@ class Crawler:
             ds.metadata['filelist']=','.join([unc for unc in utilities.convertUNC(ds.metadata['filelist'].split(','))])
 
             #Fin!
-            if ds is None:
-                pass
-
             return ds
         except:
             #decrement the filecount and append to the errors list
@@ -62,7 +69,9 @@ class Crawler:
                         ))
 
             #Skip to the next file so we don't stop the iteration
-            self.next()
+            #Exceptions here will keep recursing until we find a
+            #file we can open or run out of files.
+            return self.next()
             
 
 

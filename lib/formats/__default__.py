@@ -1,3 +1,5 @@
+"""Metadata driver for generic imagery"""
+
 format_regex=[
     r'\.ers$',
     r'\.img$',

@@ -1,10 +1,12 @@
 @echo off
 call setenv.bat
 
-IF /I "%5"=="FALSE" (
 call python.exe runtransform.py %*
 pause
-) ELSE (
-start "Crawler" /B pythonw.exe runtransform.py %*
-)
-pause
+
+REM IF /I "%5"=="FALSE" (
+REM call python.exe runtransform.py %*
+REM pause
+REM ) ELSE (
+REM start "Crawler" /B python.exe runtransform.py %*
+REM )

@@ -1,3 +1,4 @@
+"""Metadata driver for ACRES Landsat FastL7A imagery"""
 #Regular expression list of file formats
 format_regex=[                                       #Landsat 7 FastL7A - Multispectral, Pan & Thermal
     r'header\.h(rf|pn|tm)$',                         #  - GA file names

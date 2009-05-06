@@ -1,3 +1,4 @@
+"""Metadata driver for CSIRO MODIS imagery"""
 #Regular expression list of file formats
 format_regex=[r'm[oyc]d\w{4,4}\.[0-9]{4,4}\.[0-9]{3,3}\.aust\.[0-9]{3,3}\.b[0-9]{2,2}\..*\.hdf.*'] #CSIRO MODIS
 

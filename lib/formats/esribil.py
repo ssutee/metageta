@@ -1,3 +1,4 @@
+"""Metadata driver for ESRI Bil imagery"""
 #list of file name regular expressions
 format_regex=[r'\.hdr$',r'\.bil$',r'\.flt$']
 

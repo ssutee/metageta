@@ -37,6 +37,7 @@ for _f in _glob(_path.join(__path__[0],'*.xml')):
 #Public methods    
 #++++++++++++++++++++++++
 def Transform(inxmlstring,transform,outxmlfile):
+    '''Transform a metadata record to XML using an XSL stylesheet'''
     if _xslfiles.has_key(transform): #Is it a known XSL transform...?
         xslfile = _path.join(__path__[0],_xslfiles[transform]).replace('\\','/')
     elif _path.exists(transform):    #Have we been passed an XSL file path...?
@@ -45,6 +46,7 @@ def Transform(inxmlstring,transform,outxmlfile):
     result = _Transform(inxmlstring, 'file:///'+xslfile, output=open(outxmlfile, 'w'))
 
 def DictToXML(dic,root):
+    '''Transform a metadata record to a flat XML string'''
     doc=_Dom.implementation.createRootNode('file:///%s.xml'%root)
     docelement = doc.createElementNS(None, root)
     for col in dic:
@@ -59,7 +61,7 @@ def DictToXML(dic,root):
     return buf.getvalue()
 
 def CreateMEF(outdir,xmlfile,uid,overviews=[]):
-    '''Generate Geonetwork "Metadata Exchange Format"'''
+    '''Generate Geonetwork "Metadata Exchange Format" from an ISO19139 XML record'''
     #Format specs @ http://www.fao.org/geonetwork/docs/ch17s02.html or http://trac.osgeo.org/geonetwork/wiki/MEF
     xmldir=_path.dirname(xmlfile)
     curdir=_path.abspath(_os.curdir)

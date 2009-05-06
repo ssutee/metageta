@@ -1,4 +1,5 @@
-"""Document the fields, data types and how to add another field..."""
+"""Dictionary of field names and data types"""
+
 fields={'bands'           :('string',50),
         'cellx'           :'float',
         'celly'           :'float',

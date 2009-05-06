@@ -1,3 +1,4 @@
+"""Metadata driver for ACRES ALOS AVNIR-2/PRISM/PALSAR imagery"""
 #Regular expression list of file formats
 format_regex=[
       r'IMG-[0-9]*-ALAV.*_U$', #ALOS AVNIR-2
@@ -28,7 +29,7 @@ except ImportError:
     
 class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
     def __init__(self,f):
-        """Read Metadata for an ACRES ALOS AVNIR-2/PRISM format image as GDAL doesn't"""
+        """Read Metadata for an ACRES ALOS AVNIR-2/PRISM/PALSAR format image as GDAL doesn't"""
 
         #Below is a little kludge. We used to check the gdal driver short name to
         #work out if the file was PALSAR or PRISM/AVNIR2 but gdal 1.6x now takes ~10min (and 1/2 Gb of RAM)

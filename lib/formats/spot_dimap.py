@@ -1,3 +1,5 @@
+"""Metadata driver for SPOT DIMAP imagery"""
+
 #Regular expression list of file formats
 format_regex=[r'metadata\.dim$'] #SPOT DIMAP
     

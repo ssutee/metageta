@@ -1,3 +1,4 @@
+"""Metadata driver for ECW imagery"""
 #list of file name regular expressions
 format_regex=[r'\.ecw$'] #Well duh...
 

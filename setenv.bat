@@ -2,7 +2,7 @@
 pushd %~dp0
 set CURDIR=%cd%
 popd
-:: used to use %PARDIR% but I changed the dir structure around.
+
 set OSGEO4W_ROOT=%CURDIR%\OSGeo4W
 set PYTHONHOME=%CURDIR%\Python25
 

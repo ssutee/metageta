@@ -100,28 +100,39 @@
     TOP LEVEL TEMPLATES
   -->
   <xsl:template name="contact">
-      <xsl:choose>
-          <xsl:when test="custodian">
-            <xsl:call-template name="other_contact">
-                <xsl:with-param name="contact" select="custodian"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <gmd:contact>
-              <xsl:call-template name="default_contact"/>
-            </gmd:contact>
-          </xsl:otherwise>
-      </xsl:choose><!--/gmd:contact-->
-      <xsl:if test="creator">
+    <xsl:choose>
+      <xsl:when test="custodian">
         <xsl:call-template name="other_contact">
-          <xsl:with-param name="contact" select="creator"/>
+          <xsl:with-param name="contact" select="custodian"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <gmd:contact>
+          <xsl:call-template name="default_contact"/>
+        </gmd:contact>
+      </xsl:otherwise>
+    </xsl:choose><!--/gmd:contact-->
+    <xsl:variable name="other_contacts"> <!-- Test for any other contacts-->
+      <!-- http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode -->
+      <xsl:element name="creator"><xsl:value-of select="creator"/></xsl:element>
+      <xsl:element name="owner"><xsl:value-of select="owner"/></xsl:element>
+      <xsl:element name="user"><xsl:value-of select="user"/></xsl:element>
+      <xsl:element name="resourceProvider"><xsl:value-of select="resourceProvider"/></xsl:element>
+      <xsl:element name="distributor"><xsl:value-of select="distributor"/></xsl:element>
+      <xsl:element name="originator"><xsl:value-of select="originator"/></xsl:element>
+      <xsl:element name="publisher"><xsl:value-of select="publisher"/></xsl:element>
+      <xsl:element name="pointOfContact"><xsl:value-of select="pointOfContact"/></xsl:element>
+      <xsl:element name="principalInvestigator"><xsl:value-of select="principalInvestigator"/></xsl:element>
+      <xsl:element name="processor"><xsl:value-of select="processor"/></xsl:element>
+      <xsl:element name="author"><xsl:value-of select="author"/></xsl:element>
+    </xsl:variable>
+    <xsl:for-each select="exsl:node-set($other_contacts)/*">
+      <xsl:if test="normalize-space(.)">
+        <xsl:call-template name="other_contact">
+          <xsl:with-param name="contact" select="."/>
         </xsl:call-template>
       </xsl:if>
-      <xsl:if test="owner">
-          <xsl:call-template name="other_contact">
-              <xsl:with-param name="contact" select="owner"/>
-          </xsl:call-template>
-      </xsl:if>
+    </xsl:for-each>
   </xsl:template><!--contact-->
   <xsl:template name="default_contact">
     <xsl:param name="contact"><xsl:value-of select="'custodian'"/></xsl:param> <!--default-->

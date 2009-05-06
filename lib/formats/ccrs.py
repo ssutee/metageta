@@ -1,3 +1,4 @@
+"""Metadata driver for ACRES Landsat CCRS/SPOT 1-4 imagery"""
 #Regular expression list of file formats
 format_regex=[r'imag_[0-9]*\.dat$']#Landsat 5/SPOT 1-4 CCRS
 

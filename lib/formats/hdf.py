@@ -1,3 +1,4 @@
+"""Metadata driver for ASTER imagery"""
 #Regular expression list of file formats
 format_regex=[r'.*\.hdf$'] #HDF inc. ASTER
 

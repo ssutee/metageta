@@ -1,3 +1,5 @@
+"""Image Metadata drivers"""
+
 from glob import glob as _glob
 import os.path as _path, re as _re, sys as _sys, imp as _imp
 import __fields__
@@ -27,8 +29,8 @@ import __default__
 #append module _format_regex to list of format regexes
 format_regex.extend([r for r in __default__.format_regex if not r in format_regex])
 
-#def GetMetadata(f):
 def Open(f):
+    '''Open an image with the appropriate driver'''
     errors=[] #error stack
 
     #Try custom formats

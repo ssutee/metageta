@@ -42,8 +42,7 @@ def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug):
 
     pl.info('Searching for files...')
     Crawler=crawler.Crawler(dir)
-    #Loop thru dataset object returned by Crawler
-    count=0
+    #Loop thru dataset objects returned by Crawler
     for ds in Crawler:
         try:
             md=ds.metadata
@@ -64,7 +63,6 @@ def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug):
         except Exception,err:
             pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
             pl.debug(utilities.ExceptionInfo(int(debug)))
-        count+=1
 
     #Check for files that couldn't be opened
     for file,err,dbg in Crawler.errors:
@@ -73,10 +71,10 @@ def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug):
 
     if Crawler.filecount == 0:
         pl.info("No data found")
+        pl.updateProgress(newMax=1) #Just so the progress meter hits 100%
     else:
         pl.info("Metadata extraction complete!")
 
-    pl.info("my count: %s, crawler count: %s"%(count,Crawler.filecount))
     del pl
     del ExcelWriter
     del ShapeWriter

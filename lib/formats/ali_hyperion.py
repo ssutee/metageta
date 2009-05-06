@@ -1,3 +1,4 @@
+"""Metadata driver for EO1 ALI (L1G & L1R) & Hyperion (L1R) images"""
 #Regular expression list of file formats
 format_regex=[r'eo1.*\.[lm]1r$',     #EO1 ALI (L1R) & Hyperion
               r'eo1.*_hdf\.l1g$',    #EO1 ALI (L1G) HDF

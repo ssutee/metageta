@@ -1,3 +1,4 @@
+"""Metadata driver for Digital Globe Quickbird imagery"""
 #Regular expression list of file formats
 format_regex=[r'[0-9][0-9][A-Z]{3,3}.*\.imd$']#Digital Globe Quickbird
 

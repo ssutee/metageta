@@ -1,3 +1,5 @@
+"""Base Dataset class"""
+
 import utilities, uuid
 import os,time
 
