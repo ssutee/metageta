@@ -1,10 +1,10 @@
-"""Metadata driver for ACRES ALOS AVNIR-2/PRISM/PALSAR imagery"""
-#Regular expression list of file formats
+'''Metadata driver for ACRES ALOS AVNIR-2/PRISM/PALSAR imagery'''
 format_regex=[
       r'IMG-[0-9]*-ALAV.*_U$', #ALOS AVNIR-2
       r'IMG-[HV][HV]-ALPSR.*UD$', #ALOS PALSAR
       r'IMG-ALPSM.*\_U[BFN]$' #ALOS PRISM
       ]
+'''Regular expression list of file formats'''
 
 
 #import base dataset module
@@ -27,9 +27,18 @@ except ImportError:
     import osr
     import ogr
     
-class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
+class Dataset(__dataset__.Dataset): 
+    '''Subclass of base Dataset class'''
     def __init__(self,f):
-        """Read Metadata for an ACRES ALOS AVNIR-2/PRISM/PALSAR format image as GDAL doesn't"""
+        '''Read Metadata for an ACRES ALOS AVNIR-2/PRISM/PALSAR format image as GDAL doesn't
+        PALSAR (supports Level 1.5 only, Level 1.0 not (yet?) implemented::
+            Format Description:
+            Level 1.0     - http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10287
+            Level 1.1/1.5 - http://www.eorc.jaxa.jp/ALOS/doc/fdata/PALSAR_x_Format_EK.pdf
+        ALOS AVNIR2/PRISM::
+            Format Description:
+            http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10285
+        '''
 
         #Below is a little kludge. We used to check the gdal driver short name to
         #work out if the file was PALSAR or PRISM/AVNIR2 but gdal 1.6x now takes ~10min (and 1/2 Gb of RAM)
@@ -57,14 +66,14 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
             self.metadata['sensor']='PALSAR'
             self.metadata['filetype'] ='CEOS/ALOS PALSAR CEOS Format'
             
-            """
+            '''
             volume file has 3-6 records, 360 bytes length:
             Record            Length
             =========================
             1 File descriptor 360 
             2 File pointer    360 (3-6 records = N+2 where N is number of polarization)
             3 Text            360
-            """
+            '''
             meta = open(vol,'rb').read()
 
             #File descriptor record
@@ -91,7 +100,7 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
             else: self.metadata['orientation']='Path oriented'
             orbit=prodspec[6]
             
-            """
+            '''
             leader file has >9 records of variable length:
             Record                    Length
             ============================================
@@ -104,7 +113,7 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
             7 Data quality summary    1620
             8 Calibration data        13212
             9 Facility related        Variable
-            """
+            '''
             meta = open(led,'rb').read()
 
             #File descriptor
@@ -190,14 +199,14 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
         else:        #ALOS AVNIR2/PRISM
             ##Format - http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10285
             
-            """
+            '''
             leader file has 5 records, each is 4680 bytes long:
             1. File descriptor record;
             2. Scene header record;
             3. Map projection (scene-related) ancillary record;
             4. Radiometric transformation ancillary record;
             5. Platform position ancillary record.
-            """
+            '''
             meta = open(led,'rb').read()
             recordlength = 4680
 

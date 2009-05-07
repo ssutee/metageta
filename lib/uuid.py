@@ -1,4 +1,4 @@
-r"""UUID objects (universally unique identifiers) according to RFC 4122.
+r'''UUID objects (universally unique identifiers) according to RFC 4122.
 
 This module provides immutable UUID objects (class UUID) and the functions
 uuid1(), uuid3(), uuid4(), uuid5() for generating version 1, 3, 4, and 5
@@ -8,7 +8,7 @@ If all you want is a unique ID, you should probably call uuid1() or uuid4().
 Note that uuid1() may compromise privacy since it creates a UUID containing
 the computer's network address.  uuid4() creates a random UUID.
 
-Typical usage:
+Typical usage::
 
     >>> import uuid
 
@@ -43,7 +43,7 @@ Typical usage:
     >>> uuid.UUID(bytes=x.bytes)
     UUID('00010203-0405-0607-0809-0a0b0c0d0e0f')
 
-This module works with Python 2.3 or higher."""
+This module works with Python 2.3 or higher.'''
 
 __author__ = 'Ka-Ping Yee <ping@zesty.ca>'
 __date__ = '$Date: 2006/06/12 23:15:40 $'.split()[1].replace('/', '-')
@@ -54,7 +54,7 @@ RESERVED_NCS, RFC_4122, RESERVED_MICROSOFT, RESERVED_FUTURE = [
     'reserved for Microsoft compatibility', 'reserved for future definition']
 
 class UUID(object):
-    """Instances of the UUID class represent UUIDs as specified in RFC 4122.
+    '''Instances of the UUID class represent UUIDs as specified in RFC 4122.
     UUID objects are immutable, hashable, and usable as dictionary keys.
     Converting a UUID to a string with str() yields something in the form
     '12345678-1234-1234-1234-123456789abc'.  The UUID constructor accepts
@@ -64,13 +64,13 @@ class UUID(object):
     48-bit values respectively) as an argument named 'fields', or a single
     128-bit integer as an argument named 'int'.
     
-    UUIDs have these read-only attributes:
+    UUIDs have these read-only attributes::
 
         bytes       the UUID as a 16-byte string
 
         fields      a tuple of the six integer fields of the UUID,
                     which are also available as six individual attributes
-                    and two derived attributes:
+                    and two derived attributes::
 
             time_low                the first 32 bits of the UUID
             time_mid                the next 16 bits of the UUID
@@ -93,11 +93,11 @@ class UUID(object):
 
         version     the UUID version number (1 through 5, meaningful only
                     when the variant is RFC_4122)
-    """
+    '''
 
     def __init__(self, hex=None, bytes=None, fields=None, int=None,
                        version=None):
-        r"""Create a UUID from either a string of 32 hexadecimal digits,
+        r'''Create a UUID from either a string of 32 hexadecimal digits,
         a string of 16 bytes as the 'bytes' argument, a tuple of six
         integers (32-bit time_low, 16-bit time_mid, 16-bit time_hi_version,
         8-bit clock_seq_hi_variant, 8-bit clock_seq_low, 48-bit node) as
@@ -117,7 +117,7 @@ class UUID(object):
         The 'version' argument is optional; if given, the resulting UUID
         will have its variant and version number set according to RFC 4122,
         overriding bits in the given 'hex', 'bytes', 'fields', or 'int'.
-        """
+        '''
 
         if [hex, bytes, fields, int].count(None) != 3:
             raise TypeError('need just one of hex, bytes, fields, or int')
@@ -273,7 +273,7 @@ class UUID(object):
     version = property(get_version)
 
 def _ifconfig_getnode():
-    """Get the hardware address on Unix by running ifconfig."""
+    '''Get the hardware address on Unix by running ifconfig.'''
     import os
     for dir in ['', '/sbin/', '/usr/sbin']:
         try:
@@ -287,7 +287,7 @@ def _ifconfig_getnode():
                     return int(words[i + 1].replace(':', ''), 16)
 
 def _ipconfig_getnode():
-    """Get the hardware address on Windows by running ipconfig.exe."""
+    '''Get the hardware address on Windows by running ipconfig.exe.'''
     import os, re
     dirs = ['', r'c:\windows\system32', r'c:\winnt\system32']
     try:
@@ -308,8 +308,8 @@ def _ipconfig_getnode():
                 return int(value.replace('-', ''), 16)
 
 def _netbios_getnode():
-    """Get the hardware address on Windows using NetBIOS calls.
-    See http://support.microsoft.com/kb/118623 for details."""
+    '''Get the hardware address on Windows using NetBIOS calls.
+    See http://support.microsoft.com/kb/118623 for details.'''
     import win32wnet, netbios
     ncb = netbios.NCB()
     ncb.Command = netbios.NCBENUM
@@ -370,27 +370,27 @@ except:
     pass
 
 def _unixdll_getnode():
-    """Get the hardware address on Unix using ctypes."""
+    '''Get the hardware address on Unix using ctypes.'''
     _uuid_generate_time(_buffer)
     return UUID(bytes=_buffer.raw).node
 
 def _windll_getnode():
-    """Get the hardware address on Windows using ctypes."""
+    '''Get the hardware address on Windows using ctypes.'''
     if _UuidCreate(_buffer) == 0:
         return UUID(bytes=_buffer.raw).node
 
 def _random_getnode():
-    """Get a random node ID, with eighth bit set as suggested by RFC 4122."""
+    '''Get a random node ID, with eighth bit set as suggested by RFC 4122.'''
     import random
     return random.randrange(0, 1<<48L) | 0x010000000000L
 
 _node = None
 
 def getnode():
-    """Get the hardware address as a 48-bit integer.  The first time this
+    '''Get the hardware address as a 48-bit integer.  The first time this
     runs, it may launch a separate program, which could be quite slow.  If
     all attempts to obtain the hardware address fail, we choose a random
-    48-bit number with its eighth bit set to 1 as recommended in RFC 4122."""
+    48-bit number with its eighth bit set to 1 as recommended in RFC 4122.'''
 
     global _node
     if _node is not None:
@@ -411,10 +411,10 @@ def getnode():
             return _node
 
 def uuid1(node=None, clock_seq=None):
-    """Generate a UUID from a host ID, sequence number, and the current time.
+    '''Generate a UUID from a host ID, sequence number, and the current time.
     If 'node' is not given, getnode() is used to obtain the hardware
     address.  If 'clock_seq' is given, it is used as the sequence number;
-    otherwise a random 14-bit sequence number is chosen."""
+    otherwise a random 14-bit sequence number is chosen.'''
 
     # When the system provides a version-1 UUID generator, use it (but don't
     # use UuidCreate here because its UUIDs don't conform to RFC 4122).
@@ -441,13 +441,13 @@ def uuid1(node=None, clock_seq=None):
                         clock_seq_hi_variant, clock_seq_low, node), version=1)
 
 def uuid3(namespace, name):
-    """Generate a UUID from the MD5 hash of a namespace UUID and a name."""
+    '''Generate a UUID from the MD5 hash of a namespace UUID and a name.'''
     import md5
     hash = md5.md5(namespace.bytes + name).digest()
     return UUID(bytes=hash[:16], version=3)
 
 def uuid4():
-    """Generate a random UUID."""
+    '''Generate a random UUID.'''
 
     # When the system provides a version-4 UUID generator, use it.
     if _uuid_generate_random:
@@ -464,7 +464,7 @@ def uuid4():
         return UUID(bytes=bytes, version=4)
 
 def uuid5(namespace, name):
-    """Generate a UUID from the SHA-1 hash of a namespace UUID and a name."""
+    '''Generate a UUID from the SHA-1 hash of a namespace UUID and a name.'''
     import sha
     hash = sha.sha(namespace.bytes + name).digest()
     return UUID(bytes=hash[:16], version=5)

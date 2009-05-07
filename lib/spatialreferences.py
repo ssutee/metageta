@@ -1,3 +1,4 @@
+'''Spatial reference helper functions.'''
 import os,sys
 try:
     from osgeo import gdal
@@ -14,15 +15,7 @@ except ImportError:
 #Constants
 #==============================================================================
 
-#Units of measure from ogr_srs_api.h
-#with some extras thrown in just in case...
-#define SRS_UL_METER            "Meter"
-#define SRS_UL_FOOT             "Foot (International)" /* or just "FOOT"? */
-#define SRS_UL_US_FOOT          "U.S. Foot" /* or "US survey foot" */
-#define SRS_UL_NAUTICAL_MILE    "Nautical Mile"
-#define SRS_UA_DEGREE           "degree"
-#define SRS_UA_RADIAN           "radian"
-SRS_UNITS_CONV={ #Convert from GDAL-OSR to ISO 19115 metadata unit of measure
+SRS_UNITS_CONV={ 
     'meter':                'm',
     'metre':                'm',
     'meters':               'm',
@@ -42,6 +35,16 @@ SRS_UNITS_CONV={ #Convert from GDAL-OSR to ISO 19115 metadata unit of measure
     'radians':              'rad',
     'rad':                  'rad'
 }
+'''Convert from GDAL-OSR to ISO 19115 metadata unit of measure.
+
+Mostly from ogr_srs_api.h (with some extras thrown in just in case...)::
+  define SRS_UL_METER            "Meter"
+  define SRS_UL_FOOT             "Foot (International)" /* or just "FOOT"? */
+  define SRS_UL_US_FOOT          "U.S. Foot" /* or "US survey foot" */
+  define SRS_UL_NAUTICAL_MILE    "Nautical Mile"
+  define SRS_UA_DEGREE           "degree"
+  define SRS_UA_RADIAN           "radian"
+'''
 
 #Geog/Projected EPSG codes
 AUS_GEOGCS=(

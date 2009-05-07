@@ -1,9 +1,9 @@
-"""Metadata driver for ACRES Landsat FastL7A imagery"""
-#Regular expression list of file formats
+'''Metadata driver for ACRES Landsat FastL7A imagery'''
 format_regex=[                                       #Landsat 7 FastL7A - Multispectral, Pan & Thermal
     r'header\.h(rf|pn|tm)$',                         #  - GA file names
     r'l7[0-9]{7,7}\_[0-9]{11,11}\_h(rf|pn|tm).fst$', #  - Standard file names
 ]
+'''Regular expression list of file formats'''
 
 #import base dataset module
 import __dataset__
@@ -25,10 +25,12 @@ except ImportError:
     import osr
     import ogr
     
-class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
+class Dataset(__dataset__.Dataset): 
+    '''Subclass of base Dataset class'''
     def __init__(self,f):
-        """Read Metadata for an ACRES Landsat FastL7A format image as GDAL doesn't"""
-        #http://www.ga.gov.au/image_cache/GA10348.pdf
+        '''Read Metadata for an ACRES Landsat FastL7A format image as GDAL doesn't.
+        Format description: http://www.ga.gov.au/image_cache/GA10348.pdf
+        '''
 
         p=os.path.split(f)
         

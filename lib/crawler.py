@@ -1,12 +1,12 @@
-"""
+'''
 Iterator for metadata crawling.
-  Example:
+Example::
   import crawler
   Crawler=crawler.Crawler('Some directory to crawl')
   #Loop thru dataset objects returned by Crawler
   for dataset in Crawler:
       metadata=dataset.metadata
-"""
+'''
 
 import utilities
 import formats

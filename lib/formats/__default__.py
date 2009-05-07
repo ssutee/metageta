@@ -1,4 +1,4 @@
-"""Metadata driver for generic imagery"""
+'''Metadata driver for generic imagery'''
 
 format_regex=[
     r'\.ers$',
@@ -30,6 +30,8 @@ except ImportError:
     import ogr
     
 class Dataset(__dataset__.Dataset):
+    '''Default Dataset class.
+    For generic imagery formats that gdal can read.'''
     def __init__(self,f):
         try:
             cwd=os.curdir

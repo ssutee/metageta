@@ -1,6 +1,6 @@
-"""Metadata driver for Digital Globe Quickbird imagery"""
-#Regular expression list of file formats
+'''Metadata driver for Digital Globe Quickbird imagery'''
 format_regex=[r'[0-9][0-9][A-Z]{3,3}.*\.imd$']#Digital Globe Quickbird
+'''Regular expression list of file formats'''
 
 #import base dataset modules
 #import __dataset__
@@ -22,15 +22,19 @@ except ImportError:
     import osr
     import ogr
     
-class Dataset(__default__.Dataset): #Subclass of __default__.Dataset class so we get a load of metadata populated automatically, normally we'd just subclass the base __dataset__.Dataset class
-    """Read Metadata for an Digital Globe Quickbird format image as GDAL doesn't quite get it all..."""
+class Dataset(__default__.Dataset): 
+    '''Subclass of __default__.Dataset class so we get a load of metadata populated automatically'''
     def __init__(self,f):
+        '''Read Metadata for an Digital Globe Quickbird format image as GDAL doesn't quite get it all...
+        
+        TODO... does not handle QB tile files (*til)
+        Must check if GDAL can read them...?'''
         tif = os.path.splitext(f)[0]+'.tif'
         img = os.path.splitext(f)[0]+'.img'
         til = os.path.splitext(f)[0]+'.til'
         if   os.path.exists(tif):__default__.Dataset.__init__(self, tif)
         elif os.path.exists(img):__default__.Dataset.__init__(self, img)
-        #elif os.path.exists(til):__default__.Dataset.__init__(self, img) #NEED TO DO SOMETHING WITH THE TILE FILE!!!
+        #elif os.path.exists(til):__default__.Dataset.__init__(self, til) #NEED TO DO SOMETHING WITH THE TILE FILE!!!
         else:raise IOError, 'Matching Quickbird imagery TIFF/IMG not found:\n'
         #Loop thru and parse the IMD file.
         #would be easier to walk the nodes in the XML files, but not all of our QB imagery has this

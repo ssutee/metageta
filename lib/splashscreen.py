@@ -1,8 +1,12 @@
-import threading
+'''This is the beginnings of a splash screen cos the GUI's in runcrawler.py and runtransforms.py take sooo long to start up... '''
+import threading,os
 from Tkinter import *
 class SplashScreen(threading.Thread):
     def __init__(self, imagefile=None, imagedata=None, timeout=0.001, callback=lambda:True):
-        if not imagefile and not imagedata:raise Exception,'Image file name or base 64 encoded image data required!'
+    
+        if not imagefile and not imagedata:#raise Exception,'Image file name or base 64 encoded image data required!'
+            #imagefile=__file__[:-3]+'.gif' - this don't work cos __file__ might .pyc or .pyo not .py
+            imagefile=os.path.splitext(__file__)[0]+'.gif'
         if not timeout   and not callback: raise Exception,'Timeout (secs) or boolean callback function required!'
 
         self._root              = Tk()
@@ -47,19 +51,18 @@ class SplashScreen(threading.Thread):
         else:
             self._root.after(int(self._timeout*1000),self.__poll__)
 
+class CallBack:
+    def __init__(self,value=False):
+        self.value=value
+    def check(self):
+        return self.value
+
 if __name__=='__main__':
-    import time
-    class callback:
-        def __init__(self,value=False):
-            self.value=value
-        def check(self):
-            #print 'I''ve been checked!'
-            return self.value
-    c=callback()
-    splash=SplashScreen(imagefile=r'C:\WorkSpace\qlk.gif', callback=c.check)
+    import time,sys,os
+    c=CallBack()
+    splash=SplashScreen(callback=c.check)
     print 'Yawn... I''m going to sleep now!'
     time.sleep(5)
     print 'Stretch... I''m awake now!'
     c.value=True
-    #SplashScreen(r'C:\WorkSpace\qlk.gif', timeout=5.0)
 

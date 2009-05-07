@@ -1,4 +1,4 @@
-"""Metadata driver for ENVI imagery"""
+'''Metadata driver for ENVI imagery'''
 #list of file name regular expressions
 format_regex=[r'\.hdr$']
 
@@ -9,10 +9,10 @@ import __default__
 # import other modules
 import sys, os
 
-class Dataset(__default__.Dataset): #Subclass of __default__.Dataset class so we get a load of metadata populated automatically,
-                                    #normally we'd just subclass the base __dataset__.Dataset class
-    """Read Metadata for a ENVI image as GDAL doesn't work if you pass the header file..."""
+class Dataset(__default__.Dataset): 
+    '''Subclass of __default__.Dataset class so we get a load of metadata populated automatically'''
     def __init__(self,f):
+        '''Read Metadata for a ENVI image as GDAL doesn't work if you pass the header file...'''
         hdr=open(f)
         try:
             if hdr.readline().strip() == 'ENVI': #is it an ENVI hdr file...?

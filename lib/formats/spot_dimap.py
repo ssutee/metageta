@@ -1,4 +1,4 @@
-"""Metadata driver for SPOT DIMAP imagery"""
+'''Metadata driver for SPOT DIMAP imagery'''
 
 #Regular expression list of file formats
 format_regex=[r'metadata\.dim$'] #SPOT DIMAP
@@ -24,9 +24,10 @@ except ImportError:
     import osr
     import ogr
     
-class Dataset(__default__.Dataset): #Subclass of __default__.Dataset class so we get a load of metadata populated automatically, normally we'd just subclass the base __dataset__.Dataset class
-    """Read Metadata for a SPOT DIMAP image as GDAL doesn't quite get it all..."""
+class Dataset(__default__.Dataset): 
+    '''Subclass of __default__.Dataset class so we get a load of metadata populated automatically'''
     def __init__(self,f):
+        '''Read Metadata for a SPOT DIMAP image as GDAL doesn't quite get it all...'''
         __default__.Dataset.__init__(self, f) #autopopulate basic metadata
         #include every file in the current and upper level directory
         gdalmd=self._gdalDataset.GetMetadata()

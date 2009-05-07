@@ -1,3 +1,4 @@
+'''Provide GUI & file progress logging.'''
 import logging,warnings,random,os,sys,socket,pickle,win32api,threading,Queue,time
 from Tkinter import *
 import ScrolledText
@@ -11,7 +12,7 @@ CRITICAL=logging.CRITICAL
 FATAL=logging.FATAL
 
 class ProgressLogger(logging.Logger):
-    """ Provide logger interface """
+    ''' Provide logger interface '''
 
     def __init__(self,
                name='Progress Log',
@@ -70,23 +71,23 @@ class ProgressLogger(logging.Logger):
         if self.logToGUI:self.log(logging.PROGRESS, newMax)
 
     def shutdown(self):
-        """
+        '''
         Perform any cleanup actions in the logging system (e.g. flushing
         buffers).
 
         Should be called at application exit.
-        """
+        '''
         for h in self.handlers:
             h.flush()
             h.close()
 
 class ProgressLoggerHandler(logging.Handler):
-    """ Provide a Progress Bar Logging handler """
+    ''' Provide a Progress Bar Logging handler '''
 
     def __init__(self, name='Progress Log', level=logging.INFO, maxprogress=100):
-        """
+        '''
         Initializes the instance - set up the Tkinter GUI and log output.
-        """
+        '''
 
         ##Cos we've overwritten the class __init__ method        
         logging.Handler.__init__(self)
@@ -127,7 +128,7 @@ class ProgressLoggerHandler(logging.Handler):
             except:pass
 
     def emit(self, record):
-        """ Process a log message """
+        ''' Process a log message '''
         if record.levelname == 'PROGRESS':
             self.msgs.append([record.levelname,record.getMessage()])
         else:
@@ -135,21 +136,21 @@ class ProgressLoggerHandler(logging.Handler):
         self.sendmsgs()
 
     def close(self):
-        """
+        '''
         Tidy up any resources used by the handler.
-        """
+        '''
         self.sendmsgs()
         
     def close(self):
-        """
+        '''
         Tidy up any resources used by the handler.
-        """
+        '''
         self.msgs.append('EXIT')
         self.sendmsgs()
         
 
 class ProgressLoggerServer:
-    """ Provide a Progress Bar Logging GUI """
+    ''' Provide a Progress Bar Logging GUI '''
 
     def __init__(self,host,port,name=None, maxprogress=100):
         self.server=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -193,7 +194,7 @@ class ProgressLoggerServer:
         self.server.close()
         
 class ProgressLoggerGUI(threading.Thread):
-    """ Provide a Progress Bar Logging GUI """
+    ''' Provide a Progress Bar Logging GUI '''
 
     def __init__(self, queue, host, port, name=None, maxprogress=100):
         
@@ -208,28 +209,28 @@ class ProgressLoggerGUI(threading.Thread):
         self.keepchecking = True
 
     def run(self):
-        """
+        '''
         self.q
         Initializes the instance - set up the Tkinter progress bar and log output.
-        """
+        '''
 
         self.master=Tk()
         self.master.protocol("WM_DELETE_WINDOW", self.onOk)
         self.master.title(self.name)
         self.master.geometry("700x800")
         
-        """ Pack text message """
+        ''' Pack text message '''
         Label(self.master, text='Progress', anchor=NW, justify=LEFT).pack(fill=X)
 
-        """ Pack progress bar """
+        ''' Pack progress bar '''
         self.progress_bar = ProgressBarView(self.master, max=self.maxprogress)
         self.progress_bar.pack(fill=X)
 
-        """ Pack log window """
+        ''' Pack log window '''
         self.logwnd = ScrolledText.ScrolledText(self.master, width=60, height=12, state=DISABLED)
         self.logwnd.pack(fill=BOTH, expand=1)
 
-        """ Pack OK button """
+        ''' Pack OK button '''
         self.ok = Button(self.master, text="OK", width=10, command=self.onOk, state=DISABLED)
         self.ok.pack(side=RIGHT, padx=5, pady=5)
 
@@ -237,9 +238,9 @@ class ProgressLoggerGUI(threading.Thread):
         self.master.mainloop()
 
     def checkQueue(self):
-        """
+        '''
         Handle all the messages currently in the queue (if any).
-        """
+        '''
         #print 'checking queue'
         while self.queue.qsize():
             try:
@@ -252,7 +253,7 @@ class ProgressLoggerGUI(threading.Thread):
         if self.keepchecking:self.master.after(100, self.checkQueue)
 
     def onMsg(self, msg):
-        """ Process events """
+        ''' Process events '''
         eventName = msg[0]
         eventMsg  = msg[1]
         if msg == 'EXIT':
@@ -270,7 +271,7 @@ class ProgressLoggerGUI(threading.Thread):
             self.onLogMessage(eventMsg)
 
     def onLogMessage(self, msg):
-        """ Display log message """
+        ''' Display log message '''
         w = self.logwnd
         w.configure(state=NORMAL)
         w.insert(END, msg)

@@ -1,3 +1,4 @@
+'''Utility helper functions'''
 from xlutils import xlrd
 from xlutils import xlwt
 import sys, os.path, os, re, struct, glob, shutil,traceback
@@ -25,7 +26,7 @@ def readbinary(data,offset, start, stop):
     return ''.join(struct.unpack('s' * (stop-start+1), data[offset+start-1:offset+stop])).strip()
 
 def FileInfo(filepath):
-    #http://www.microsoft.com/technet/scriptcenter/guide/sas_fil_lunl.mspx?mfr=true
+    '''http://www.microsoft.com/technet/scriptcenter/guide/sas_fil_lunl.mspx?mfr=true'''
     import win32com.client, os.path
 
     fileattr={
@@ -85,9 +86,9 @@ def checkExt(var,vals):
     else:
         return var
 def GetFileList(f):
-    """Get all files that have the same name, or are related according to gdalinfo
+    '''Get all files that have the same name, or are related according to gdalinfo
         special cases (eg hdf, ccrs, etc) are handled separately in their respective
-        metadata functions"""
+        metadata functions'''
     files=[]
     files=glob.glob(os.path.splitext(f)[0]+'.*')
     if os.path.exists(os.path.splitext(f)[0]):files.append(os.path.splitext(f)[0])
@@ -177,7 +178,7 @@ def ExcelReader(xls):
             yield dict(zip(headers,cells))
 
 class rglob:
-    """a forward iterator that traverses a directory tree"""
+    '''a forward iterator that traverses a directory tree'''
     def __init__(self, directory, pattern="*", regex=False, regex_flags=0, recurse=True):
         self.stack = [directory]
         self.pattern = pattern

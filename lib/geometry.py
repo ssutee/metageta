@@ -1,3 +1,4 @@
+'''Geometry and dataset helper functions'''
 import os,math,warnings
 
 try:
@@ -11,23 +12,39 @@ except ImportError:
     import osr
     import ogr
 
-def OpenDataset(f,mode=gdalconst.GA_ReadOnly): #Open & return a gdalDataset object
+def OpenDataset(f,mode=gdalconst.GA_ReadOnly):
+    '''Open & return a gdalDataset object'''
     gdal.ErrorReset()
     gdal.PushErrorHandler( 'CPLQuietErrorHandler' )
     gdalDataset = gdal.Open(f, mode)
     gdal.PopErrorHandler()
     return gdalDataset
     
-def Rotation(gt):   #Get rotation angle from a geotransform
+def Rotation(gt):   
+    '''
+    Get rotation angle from a geotransform
+    @param gt: geotransform
+    '''
     try:return math.degrees(math.tanh(gt[2]/gt[5]))
     except:return 0
 
-def CellSize(gt):   #Get cell size from a geotransform
+def CellSize(gt):   
+    '''
+    Get cell size from a geotransform
+    @param gt: geotransform
+    '''
     cellx=round(math.hypot(gt[1],gt[4]),7)
     celly=round(math.hypot(gt[2],gt[5]),7)
     return (cellx,celly)
 
-def SceneCentre(gt,cols,rows):#Get scene centre from a geotransform
+def SceneCentre(gt,cols,rows):
+    '''
+    Get scene centre from a geotransform.
+    
+    @param gt: geotransform
+    @param cols: number of columns in the dataset
+    @param rows: number of rows in the dataset
+    '''
     px = cols/2
     py = rows/2
     x=gt[0]+(px*gt[1])+(py*gt[2])
@@ -35,15 +52,16 @@ def SceneCentre(gt,cols,rows):#Get scene centre from a geotransform
     return x,y
 
 def GeoTransformToGCPs(gt,cols,rows):
-    """ Form a gcp list from a geotransform using the 4 corners.
-        This function is meant to be used to convert a geotransform
-        to gcp's so that the geocoded information can be reprojected.
+    ''' 
+    Form a gcp list from a geotransform using the 4 corners.
 
-        Inputs: gt   - geotransform to convert to gcps
-                cols - number of columns in the dataset
-                rows - number of rows in the dataset
-        
-    """
+    This function is meant to be used to convert a geotransform
+    to gcp's so that the geocoded information can be reprojected.
+
+    @param gt: geotransform to convert to gcps
+    @param cols: number of columns in the dataset
+    @param rows: number of rows in the dataset
+    '''
     
     gcp_list=[]
     parr=[0,cols]
@@ -76,6 +94,13 @@ def GeomFromExtent(ext,srs=None,srs_wkt=None):
     return geom
 
 def ReprojectGeom(geom,src_srs,tgt_srs):
+    ''' 
+    Reproject a geometry object.
+
+    @param geom: GDAL geometry object
+    @param src_srs: GDAL (OSR) SpatialReference object
+    @param tgt_srs: GDAL (OSR) SpatialReference object
+    '''
     gdal.ErrorReset()
     gdal.PushErrorHandler( 'CPLQuietErrorHandler' )
     geom.AssignSpatialReference(src_srs)
@@ -87,8 +112,9 @@ def ReprojectGeom(geom,src_srs,tgt_srs):
     return geom
 
 class ShapeWriter:
-    """A class for writing geometry and fields to ESRI shapefile format"""
+    '''A class for writing geometry and fields to ESRI shapefile format'''
     def __init__(self,shapefile,fields,srs_wkt=None,overwrite=True):
+        '''Open the shapefile for writing or appending'''
         try:
             gdal.ErrorReset()
             self._srs=osr.SpatialReference()
@@ -100,6 +126,7 @@ class ShapeWriter:
             self.__error__(err)
 
     def __del__(self):
+        '''Shutdown and release the lock on the shapefile'''
         gdal.ErrorReset()
         self._shape.Release()
 
@@ -110,6 +137,7 @@ class ShapeWriter:
         raise err.__class__, errmsg
         
     def WriteRecord(self,extent,attributes):
+        '''Write record'''
         try:
             geom=GeomFromExtent(extent,self._srs)
             if self._srs.IsGeographic(): #basic coordinate bounds test. Can't do for projected though
@@ -130,6 +158,7 @@ class ShapeWriter:
             self.__error__(err)
 
     def OpenShapefile(self, shapefile,fields,overwrite):
+        '''Open the shapefile for writing or appending'''
         try:
             driver = ogr.GetDriverByName('ESRI Shapefile')
             if os.path.exists(shapefile):

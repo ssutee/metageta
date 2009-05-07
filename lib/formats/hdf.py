@@ -24,8 +24,8 @@ except ImportError:
     
 class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
     def __init__(self,f):
-        """Read Metadata for recognised HDF images as GDAL doesn't"""
-        #http:#www.gdal.org/frmt_hdf4.html
+        '''Read Metadata for recognised HDF images as GDAL doesn't (Currently only ASTER
+        Format description: http:#www.gdal.org/frmt_hdf4.html'''
         gdalDataset = geometry.OpenDataset(f)
 
         filelist=glob.glob(os.path.splitext(f)[0]+'.*')

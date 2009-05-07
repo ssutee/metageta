@@ -1,4 +1,4 @@
-"""Metadata driver for ACRES Landsat CCRS/SPOT 1-4 imagery"""
+'''Metadata driver for ACRES Landsat CCRS/SPOT 1-4 imagery'''
 #Regular expression list of file formats
 format_regex=[r'imag_[0-9]*\.dat$']#Landsat 5/SPOT 1-4 CCRS
 
@@ -23,7 +23,8 @@ except ImportError:
     
 class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
     def __init__(self,f):
-        """Read georeferencing information for a ACRES Landsat CCRS/SPOT 1-4 format image as GDAL doesn't"""
+        '''Read georeferencing information for a ACRES Landsat CCRS/SPOT 1-4 format image as GDAL doesn't
+        Format description: http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10349'''
         gdalDataset = geometry.OpenDataset(f)
 
         p=re.compile(r'\\imag_*', re.I)
@@ -32,13 +33,13 @@ class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
 
         meta = open(led,'rb').read()
 
-        """
+        '''
         metadata has 4 records, each is 4320 (LS) or 6120 (SPOT) bytes long:
         File descriptor record;
         Scene header record;
         Map projection (scene-related) ancillary record;
         Radiometric transformation ancillary record.
-        """
+        '''
 
         #Record 2 - Scene header record
         record=2

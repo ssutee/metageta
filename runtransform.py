@@ -1,7 +1,25 @@
+'''Script to run the Metadata Transforms
+
+Contains code to show GUI to gather input arguments when none are provided
+To run, call the eponymous batch file which sets the required environment variables
+
+Usage::
+    runtransform.bat xls xsl [dir]
+
+@newfield sysarg: Argument, Arguments
+@sysarg: C{xls}: MS Excel spreadsheet to read from
+@sysarg: C{xsl}: XSL transform - may be one of the pre-defined XSL transforms or a path to a custom XSL file.
+@sysarg: C{dir}: Optional - directory to write XML files to. If not supplied, XML files are written to the directory containing the image 
+'''
+
 #Imports
 import os,sys,glob
-#from splashscreen import SplashScreen
-#if len(sys.argv) == 1:SplashScreen(imagefile=r'C:\WorkSpace\qlk.gif', timeout=10)
+
+#Set up the splash screen. Importing the FT.Xml module takes forever...
+#Commented out as it's conflicting with the GetArgs GUI and needs to be sorted out - low priority...
+#from splashscreen import SplashScreen,CallBack
+#startup=CallBack()
+#if len(sys.argv) == 1:SplashScreen(callback=startup.check)
 
 from Tkinter import *
 import tkFileDialog
@@ -9,7 +27,9 @@ import tkFileDialog
 from Ft.Xml import Domlette as Dom
 import utilities
 import transforms
-reload(transforms)
+
+#Turn off the splashscreen
+#startup.value=True
 
 def main(xls,xsl,dir=''):
     for rec in utilities.ExcelReader(xls):

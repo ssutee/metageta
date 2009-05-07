@@ -1,4 +1,4 @@
-"""Dictionary of field names and data types"""
+'''Dictionary of field names and data types'''
 
 fields={'bands'           :('string',50),
         'cellx'           :'float',

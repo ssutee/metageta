@@ -1,4 +1,4 @@
-"""Metadata driver for ECW imagery"""
+'''Metadata driver for ECW imagery'''
 #list of file name regular expressions
 format_regex=[r'\.ecw$'] #Well duh...
 
@@ -9,10 +9,10 @@ import __default__
 # import other modules (use "_"  prefix to import privately)
 import sys, os
 
-class Dataset(__default__.Dataset): #Subclass of __default__.Dataset class so we get a load of metadata populated automatically,
-                                    #normally we'd just subclass the base __dataset__.Dataset class
-    """Read Metadata for a ECW image as GDAL doesn't quite get it all..."""
+class Dataset(__default__.Dataset): 
+    '''Subclass of __default__.Dataset class so we get a load of metadata populated automatically'''
     def __init__(self,f):
+        '''Read Metadata for a ECW image as GDAL doesn't quite get it all...'''
         ers=os.path.splitext(f)[0]+'.ers'
         if os.path.exists(ers):
             try:

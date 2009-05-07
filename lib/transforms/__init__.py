@@ -15,6 +15,7 @@ from utilities import rglob as _rglob
 #Public properties
 #++++++++++++++++++++++++
 transforms={}
+'''The pre-defined XSL transforms'''
 
 #++++++++++++++++++++++++
 #Private properties
@@ -37,7 +38,13 @@ for _f in _glob(_path.join(__path__[0],'*.xml')):
 #Public methods    
 #++++++++++++++++++++++++
 def Transform(inxmlstring,transform,outxmlfile):
-    '''Transform a metadata record to XML using an XSL stylesheet'''
+    '''
+    Transform a metadata record to XML using an XSL stylesheet
+    
+    @param inxmlstring: metadata record in XML format.
+    @param transform: may be one of the pre-defined XSL transforms or a path to a custom XSL file.
+    @param outxmlfile: File to write transformed metadata to.
+    '''
     if _xslfiles.has_key(transform): #Is it a known XSL transform...?
         xslfile = _path.join(__path__[0],_xslfiles[transform]).replace('\\','/')
     elif _path.exists(transform):    #Have we been passed an XSL file path...?
@@ -61,8 +68,9 @@ def DictToXML(dic,root):
     return buf.getvalue()
 
 def CreateMEF(outdir,xmlfile,uid,overviews=[]):
-    '''Generate Geonetwork "Metadata Exchange Format" from an ISO19139 XML record'''
-    #Format specs @ http://www.fao.org/geonetwork/docs/ch17s02.html or http://trac.osgeo.org/geonetwork/wiki/MEF
+    '''Generate Geonetwork "Metadata Exchange Format" from an ISO19139 XML record
+    Format specs @ http://www.fao.org/geonetwork/docs/ch17s02.html or http://trac.osgeo.org/geonetwork/wiki/MEF
+    '''
     xmldir=_path.dirname(xmlfile)
     curdir=_path.abspath(_os.curdir)
     _os.chdir(outdir)
@@ -90,6 +98,7 @@ def CreateMEF(outdir,xmlfile,uid,overviews=[]):
 #Private methods    
 #++++++++++++++++++++++++
 def _CreateInfo(uid,overviews=[]):
+    '''Create MEF info.xml file'''
     now = _time.strftime('%Y-%m-%dT%H:%M:%S',_time.localtime())
     if overviews:format='partial'
     else:format='simple'

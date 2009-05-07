@@ -1,4 +1,5 @@
-"""Base Dataset class"""
+'''Base Dataset class
+Defines the metadata fields and populates some basic info'''
 
 import utilities, uuid
 import os,time
@@ -6,10 +7,46 @@ import os,time
 #Import fieldnames
 import __fields__
 
-class idict(object):
-    """The idict class. An immutable dictionary.
+class Dataset(object):
+    '''A base Dataset class'''
+    _err=('fields','metadata') #These fields can't be deleted
+    def __setattr__(self, name, value):
+        #Stop the fields and metadata attributes from being changed
+        if name in self._err:raise TypeError("Can't modify field names")
+        else:self.__dict__[name] = value
+    def __delattr__(self, name):
+        #Stop the fields and metadata attributes from being deleted
+        if name in self._err:raise TypeError("Can't delete %s" % name)
+        else:self.__dict__[name] = value
+    def __new__(self,f):
+        #Initialise the object
+        self=object.__new__(self)
+
+        #Initialise the metadata
+        metadata={}
+        for field in __fields__.fields:metadata[field]=''
+        metadata=_idict(metadata) #We don't want any fields added/deleted
+        super(Dataset, self).__setattr__('fields', __fields__.fields) #required to avoid errors by
+        super(Dataset, self).__setattr__('metadata', metadata)        #bypassing local __setattr__
+
+        #Populate some basic fields
+        self.metadata['filename']=os.path.basename(f)
+        self.metadata['filepath']=f
+        self.metadata['metadatadate']=time.strftime('%Y-%m-%d',time.localtime())
+        fileinfo=utilities.FileInfo(f)
+        self.metadata['ownerid']=fileinfo['OWNERID']
+        self.metadata['ownername']=fileinfo['OWNERNAME']
+        self.metadata['datecreated']=fileinfo['DATE_CREATED']
+        self.metadata['guid']=str(uuid.uuid4())
+        
+        return self
+    def __init__(self,*args,**kwargs):
+        pass #just in case a subclass tries to call this method
+
+class _idict(object):
+    '''The idict class. An immutable dictionary.
        http://code.activestate.com/recipes/498072/
-    """
+    '''
     def __init__(self, dict=None, **kwds):
         self.__data = {}
         if dict is not None:
@@ -93,40 +130,3 @@ class idict(object):
         for key in iterable:
             d[key] = value
         return d
-
-class Dataset(object):
-    """A base Dataset class"""
-    _err=('fields','metadata') #These fields can't be deleted
-    def __setattr__(self, name, value):
-        #Stop the fields and metadata attributes from being changed
-        if name in self._err:raise TypeError("Can't modify field names")
-        else:self.__dict__[name] = value
-    def __delattr__(self, name):
-        #Stop the fields and metadata attributes from being deleted
-        if name in self._err:raise TypeError("Can't delete %s" % name)
-        else:self.__dict__[name] = value
-    def __new__(self,f):
-        #Initialise the object
-        self=object.__new__(self)
-
-        #Initialise the metadata
-        metadata={}
-        for field in __fields__.fields:metadata[field]=''
-        metadata=idict(metadata) #We don't want any fields added/deleted
-        super(Dataset, self).__setattr__('fields', __fields__.fields) #required to avoid errors by
-        super(Dataset, self).__setattr__('metadata', metadata)        #bypassing local __setattr__
-
-        #Populate some basic fields
-        self.metadata['filename']=os.path.basename(f)
-        self.metadata['filepath']=f
-        self.metadata['metadatadate']=time.strftime('%Y-%m-%d',time.localtime())
-        fileinfo=utilities.FileInfo(f)
-        self.metadata['ownerid']=fileinfo['OWNERID']
-        self.metadata['ownername']=fileinfo['OWNERNAME']
-        self.metadata['datecreated']=fileinfo['DATE_CREATED']
-        self.metadata['guid']=str(uuid.uuid4())
-        
-        return self
-    def __init__(self,*args,**kwargs):
-        pass #just in case a subclass tries to call this method
-

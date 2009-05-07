@@ -1,4 +1,4 @@
-"""Metadata driver for CSIRO MODIS imagery"""
+'''Metadata driver for CSIRO MODIS imagery'''
 #Regular expression list of file formats
 format_regex=[r'm[oyc]d\w{4,4}\.[0-9]{4,4}\.[0-9]{3,3}\.aust\.[0-9]{3,3}\.b[0-9]{2,2}\..*\.hdf.*'] #CSIRO MODIS
 
@@ -23,10 +23,16 @@ except ImportError:
     
 class Dataset(__dataset__.Dataset): #Subclass of base Dataset class
     def __init__(self,f):
-        """Read Metadata for an CSIRO MODIS format image as GDAL doesn't"""
-        #See http://www.cmar.csiro.au/e-print/open/2008/Pagetmj_a.pdf
-        #and http://www-data.wron.csiro.au/rs/MODIS/LPDAAC/MODIS_LandData_readme.txt
+        '''Read Metadata for an CSIRO MODIS format image as GDAL doesn't
+        
+        This is a really dodgy kludge which assumes standard extent coordinates
+        amongst other things purely for DEWHA data supplied by CSIRO. 
+        This needs to be rewritten once GDAL supports accessing data in zip/gzip archives (which should be soon)!!!
 
+        Format description:
+        http://www.cmar.csiro.au/e-print/open/2008/Pagetmj_a.pdf
+        http://www-data.wron.csiro.au/rs/MODIS/LPDAAC/MODIS_LandData_readme.txt
+        '''
         #Filename format = MXDxxxx.yyyy.ddd.aust.ccc.bNN.label.hdf.gz
         filelist=[m for m in utilities.rglob(os.path.split(f)[0], r'M[OYC]D\w{4,4}', True, re.IGNORECASE)]
         filelist.sort()

@@ -1,3 +1,17 @@
+'''Script to run the Metadata Crawler
+
+Contains code to show GUI to gather input arguments when none are provided
+To run, call the eponymous batch file which sets the required environment variables
+
+Usage::
+    runcrawler.bat dir xls shp log
+
+@newfield sysarg: Argument, Arguments
+@sysarg: C{dir}: Directory to to recursively search for imagery
+@sysarg: C{xls}: MS Excel spreadsheet to wrtite metadata to
+@sysarg: C{shp}: ESRI Shapefile to write extents to
+@sysarg: C{log}: Log file to write messages to
+'''
 import sys, os, re
 from Tkinter import *
 import tkFileDialog
