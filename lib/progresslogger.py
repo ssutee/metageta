@@ -39,7 +39,8 @@ class ProgressLogger(logging.Logger):
                logToGUI=True,
                maxprogress=100,
                logfile=None,
-               mode='w'):
+               mode='w',
+               windowicon=None):
 
         self.logToGUI=logToGUI
 
@@ -66,7 +67,7 @@ class ProgressLogger(logging.Logger):
 
         if logToGUI:
             self.progress=0
-            ph = ProgressLoggerHandler(name=name, maxprogress=maxprogress)
+            ph = ProgressLoggerHandler(name=name, maxprogress=maxprogress,windowicon=windowicon)
 
             #To handle the PROGRESS & END events without them going to the console or file
             logging.PROGRESS = level - 1
@@ -99,7 +100,7 @@ class ProgressLogger(logging.Logger):
 class ProgressLoggerHandler(logging.Handler):
     ''' Provide a Progress Bar Logging handler '''
 
-    def __init__(self, name='Progress Log', level=logging.INFO, maxprogress=100):
+    def __init__(self, name='Progress Log', level=logging.INFO, maxprogress=100, windowicon=None):
         '''
         Initializes the instance - set up the Tkinter GUI and log output.
         '''
@@ -115,18 +116,16 @@ class ProgressLoggerHandler(logging.Handler):
         ##as only a single thread will run at a time.
         self.host='localhost'
         self.port= random.randint(1024, 10000)
-        if ' ' in name:name='"'+name+'"'
         import win32api
         try:
-            pythonPath = r"%s\pythonw.exe" % os.environ['PYTHONHOME'] #set in crawler.bat
-            pythonPath=win32api.GetShortPathName(pythonPath)
+            pythonPath = r'%s\pythonw.exe' % os.environ['PYTHONHOME'] #set in setenv.bat
         except:
-            pythonPath = r"%s\bin\pythonw.exe" % os.environ['OSGEO4W_ROOT'] #set in crawler.bat
-            pythonPath=win32api.GetShortPathName(pythonPath)
-        pythonScript=win32api.GetShortPathName(__file__)
+            pythonPath = r'%s\bin\pythonw.exe' % os.environ['OSGEO4W_ROOT'] #set in setenv.bat
+        pythonScript=__file__
         parameterList = [pythonPath, pythonScript, self.host,str(self.port),name,str(maxprogress)]
-        #pythonPath = r'%s\progresslogger.bat'%os.path.dirname(__file__) #batch file for testing
-        #parameterList = [pythonPath,self.host,str(self.port),name,str(maxprogress)]
+        if windowicon:parameterList.append(windowicon)
+        for i,v in enumerate(parameterList): #Fix any spaces in parameters
+            if ' ' in v:parameterList[i]='"%s"'%v
         os.spawnv(os.P_NOWAIT, pythonPath, parameterList)
 
     def sendmsgs(self):
@@ -167,7 +166,7 @@ class ProgressLoggerHandler(logging.Handler):
 class ProgressLoggerServer:
     ''' Provide a Progress Bar Logging GUI '''
 
-    def __init__(self,host,port,name=None, maxprogress=100):
+    def __init__(self,host,port,name=None, maxprogress=100, windowicon=None):
         self.server=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind((host,int(port)))
         self.server.listen(1)
@@ -183,7 +182,7 @@ class ProgressLoggerServer:
         self.queue  = Queue.Queue()
         
         ##Create the GUI
-        self.gui=ProgressLoggerGUI(self.queue, self.host,self.port, name=name, maxprogress=maxprogress)
+        self.gui=ProgressLoggerGUI(self.queue, self.host,self.port, name=name, maxprogress=maxprogress, windowicon=windowicon)
         self.gui.start()
 
         self.startLogging()
@@ -211,7 +210,7 @@ class ProgressLoggerServer:
 class ProgressLoggerGUI(threading.Thread):
     ''' Provide a Progress Bar Logging GUI '''
 
-    def __init__(self, queue, host, port, name=None, maxprogress=100):
+    def __init__(self, queue, host, port, name=None, maxprogress=100, windowicon=None):
         
         ##Cos we've overwritten the class __init__ method        
         threading.Thread.__init__(self)
@@ -223,6 +222,7 @@ class ProgressLoggerGUI(threading.Thread):
         self.progress = 0
         self.keepchecking = True
 
+        self.windowicon=windowicon
     def run(self):
         '''
         self.q
@@ -230,6 +230,7 @@ class ProgressLoggerGUI(threading.Thread):
         '''
 
         self.master=Tk()
+        if self.windowicon:self.master.wm_iconbitmap(self.windowicon)
         self.master.protocol("WM_DELETE_WINDOW", self.onOk)
         self.master.title(self.name)
         self.master.geometry("700x800")
@@ -416,4 +417,6 @@ if __name__ == '__main__':
         kwargs['name']=sys.argv[3]
     if len(sys.argv) >= 5:
         kwargs['maxprogress']=sys.argv[4]
+    if len(sys.argv) >= 6:
+        kwargs['windowicon']=sys.argv[5]
     pl = ProgressLoggerServer(**kwargs)

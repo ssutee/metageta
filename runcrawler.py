@@ -40,7 +40,9 @@ def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug):
         formats.debug=debug
         crawler.debug=debug
     else:level=progresslogger.INFO
-    pl = progresslogger.ProgressLogger('Metadata Crawler',logfile=log, logToConsole=True, logToFile=True, logToGUI=gui, level=level)
+    
+    windowicon=os.environ['CURDIR']+'/lib/wm_icon.ico'
+    pl = progresslogger.ProgressLogger('Metadata Crawler',logfile=log, logToConsole=True, logToFile=True, logToGUI=gui, level=level, windowicon=windowicon)
 
     pl.debug('%s %s %s %s %s %s' % (dir,xls,shp,log,gui,debug))
 
@@ -111,6 +113,7 @@ class Command:
 
 class GetArgs:
     def __init__(self):
+        windowicon=os.environ['CURDIR']+'/lib/wm_icon.ico'
         #base 64 encoded gif images for the GUI buttons
         shp_img = '''
             R0lGODlhEAAQAMIFABAQEIBnII+HgLS0pfDwsC8gIC8gIC8gICH5BAEKAAcALAAAAAAQABAAAAND
@@ -156,7 +159,8 @@ class GetArgs:
             Ow=='''
         self.root = Tk()
         self.root.title('Metadata Crawler')
-
+        self.root.wm_iconbitmap(windowicon)
+        
         last_dir = StringVar()
         last_dir.set('C:\\')
 

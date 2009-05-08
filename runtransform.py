@@ -96,6 +96,8 @@ class DropList(Widget):
 
 class GetArgs:
     def __init__(self):
+        windowicon=os.environ['CURDIR']+'/lib/wm_icon.ico'
+
         #base 64 encoded gif images for the GUI buttons
         dir_img='''
             R0lGODlhEAAQAMZUABAQEB8QEB8YEC8gIC8vIEA4ME9IQF9IIFpTSWBXQHBfUFBoj3NlRoBnII9v
@@ -135,7 +137,8 @@ class GetArgs:
         
         self.root = Tk()
         self.root.title('Metadata Transform')
-        #self.root.withdraw()
+        self.root.wm_iconbitmap(windowicon)
+
         last_dir = StringVar()
         last_dir.set('C:\\')
 
