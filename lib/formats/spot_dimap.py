@@ -1,4 +1,9 @@
-'''Metadata driver for SPOT DIMAP imagery'''
+'''
+Metadata driver for SPOT DIMAP imagery
+======================================
+@see:Format specification
+    U{http://www.spotimage.fr/dimap/spec/documentation/refdoc.htm}
+'''
 
 #Regular expression list of file formats
 format_regex=[r'metadata\.dim$'] #SPOT DIMAP

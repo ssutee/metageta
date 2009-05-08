@@ -1,4 +1,19 @@
-'''Provide GUI & file progress logging.'''
+'''
+Provide GUI & file progress logging
+===================================
+Example:
+
+>>> import progresslogger
+>>> if debug:level=progresslogger.DEBUG
+>>> else:level=progresslogger.INFO
+>>> pl = progresslogger.ProgressLogger('Metadata Crawler',logfile=log, logToConsole=True, logToFile=True, logToGUI=True, level=level)
+>>> try:
+>>>     do somthing
+>>>     pl.info('That worked!')
+>>> except:
+>>>     pl.error('That didn't work!')
+
+'''
 import logging,warnings,random,os,sys,socket,pickle,win32api,threading,Queue,time
 from Tkinter import *
 import ScrolledText
@@ -12,7 +27,7 @@ CRITICAL=logging.CRITICAL
 FATAL=logging.FATAL
 
 class ProgressLogger(logging.Logger):
-    ''' Provide logger interface '''
+    '''Provide logger interface'''
 
     def __init__(self,
                name='Progress Log',

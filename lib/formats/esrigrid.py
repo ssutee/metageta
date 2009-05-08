@@ -1,4 +1,9 @@
-'''Metadata driver for ESRI GRIDs'''
+'''
+Metadata driver for ESRI GRIDs
+==============================
+@see:Format specification
+    U{http://home.gdal.org/projects/aigrid/aigrid_format.html}
+'''
 #list of file name regular expressions
 format_regex=[r'hdr\.adf$']
 

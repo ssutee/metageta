@@ -1,4 +1,6 @@
-'''Script to run the Metadata Crawler
+'''
+Script to run the Metadata Crawler
+==================================
 
 Contains code to show GUI to gather input arguments when none are provided
 To run, call the eponymous batch file which sets the required environment variables
@@ -47,7 +49,6 @@ def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug):
             os.remove(xls)
         except:
             pl.error('Unable to delete %s' % xls)
-            pl.close()
             del pl
             sys.exit(1)
 

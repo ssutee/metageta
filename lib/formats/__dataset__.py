@@ -1,5 +1,8 @@
-'''Base Dataset class
-Defines the metadata fields and populates some basic info'''
+'''
+Base Dataset class
+==================
+Defines the metadata fields and populates some basic info
+'''
 
 import utilities, uuid
 import os,time

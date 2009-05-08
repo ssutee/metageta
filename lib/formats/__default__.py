@@ -1,4 +1,7 @@
-'''Metadata driver for generic imagery'''
+'''
+Metadata driver for generic imagery
+===================================
+'''
 
 format_regex=[
     r'\.ers$',

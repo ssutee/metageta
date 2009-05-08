@@ -1,4 +1,10 @@
-'''Metadata driver for ACRES Landsat FastL7A imagery'''
+'''
+Metadata driver for ACRES Landsat FastL7A imagery
+=================================================
+
+@see:Format specification
+    U{http://www.ga.gov.au/image_cache/GA10348.pdf}
+'''
 format_regex=[                                       #Landsat 7 FastL7A - Multispectral, Pan & Thermal
     r'header\.h(rf|pn|tm)$',                         #  - GA file names
     r'l7[0-9]{7,7}\_[0-9]{11,11}\_h(rf|pn|tm).fst$', #  - Standard file names

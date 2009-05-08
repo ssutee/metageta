@@ -1,4 +1,18 @@
-'''Metadata driver for ACRES ALOS AVNIR-2/PRISM/PALSAR imagery'''
+'''
+Metadata driver for ACRES ALOS AVNIR-2/PRISM/PALSAR imagery
+===========================================================
+Supports:
+ALOS AVNIR2/PRISM
+PALSAR (Level 1.5 only, Level 1.0 not (yet?) implemented)
+
+@see:Format specifications
+    
+    PALSAR Level 1.0: U{http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10287}
+
+    PALSAR Level 1.1/1.5: U{http://www.eorc.jaxa.jp/ALOS/doc/fdata/PALSAR_x_Format_EK.pdf}
+
+    ALOS AVNIR2/PRISM: U{http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10285}
+'''
 format_regex=[
       r'IMG-[0-9]*-ALAV.*_U$', #ALOS AVNIR-2
       r'IMG-[HV][HV]-ALPSR.*UD$', #ALOS PALSAR
@@ -30,16 +44,8 @@ except ImportError:
 class Dataset(__dataset__.Dataset): 
     '''Subclass of base Dataset class'''
     def __init__(self,f):
-        '''Read Metadata for an ACRES ALOS AVNIR-2/PRISM/PALSAR format image as GDAL doesn't
-        PALSAR (supports Level 1.5 only, Level 1.0 not (yet?) implemented::
-            Format Description:
-            Level 1.0     - http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10287
-            Level 1.1/1.5 - http://www.eorc.jaxa.jp/ALOS/doc/fdata/PALSAR_x_Format_EK.pdf
-        ALOS AVNIR2/PRISM::
-            Format Description:
-            http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10285
-        '''
-
+        '''Read Metadata for an ACRES ALOS AVNIR-2/PRISM/PALSAR format image as GDAL doesn't'''
+        
         #Below is a little kludge. We used to check the gdal driver short name to
         #work out if the file was PALSAR or PRISM/AVNIR2 but gdal 1.6x now takes ~10min (and 1/2 Gb of RAM)
         #to simply open ALOS files, try running GDALINFO on one of them...

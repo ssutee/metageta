@@ -1,4 +1,11 @@
-'''Metadata driver for ACRES Landsat CCRS/SPOT 1-4 imagery'''
+'''
+Metadata driver for ACRES Landsat CCRS/SPOT 1-4 imagery
+=======================================================
+@see:Format specification
+    
+    U{http://www.ga.gov.au/servlet/BigObjFileManager?bigobjid=GA10349}
+'''
+
 #Regular expression list of file formats
 format_regex=[r'imag_[0-9]*\.dat$']#Landsat 5/SPOT 1-4 CCRS
 

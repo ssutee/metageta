@@ -1,4 +1,7 @@
-'''This is the beginnings of a splash screen cos the GUI's in runcrawler.py and runtransforms.py take sooo long to start up... '''
+'''
+This is the beginnings of a splash screen cos the GUI's in runcrawler.py and runtransforms.py take sooo long to start up...
+===========================================================================================================================
+'''
 import threading,os
 from Tkinter import *
 class SplashScreen(threading.Thread):

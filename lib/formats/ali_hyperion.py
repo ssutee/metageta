@@ -1,4 +1,14 @@
-'''Metadata driver for EO1 ALI (L1G & L1R) & Hyperion (L1R) images'''
+'''
+Metadata driver for EO1 ALI (L1G & L1R) & Hyperion (L1R) images
+===============================================================
+@see:Format specifications
+
+  HDF format:U{http://www.gdal.org/frmt_hdf4.html}
+
+  Hyperion/ALI format:U{http://eo1.usgs.gov/userGuide/index.php}
+
+@todo: extract stuff from FDGC metadata?
+'''
 #Regular expression list of file formats
 format_regex=[r'eo1.*\.[lm]1r$',     #EO1 ALI (L1R) & Hyperion
               r'eo1.*_hdf\.l1g$',    #EO1 ALI (L1G) HDF
@@ -26,16 +36,7 @@ except ImportError:
 class Dataset(__dataset__.Dataset):
     '''Subclass of base Dataset class'''
     def __init__(self,f):
-        '''Read Metadata for recognised EO1 ALI (L1G & L1R) & Hyperion (L1R) images as GDAL doesn't
-        HDF format:
-        http:#www.gdal.org/frmt_hdf4.html
-        Hyperion/ALI format:
-        http://eo1.usgs.gov/userGuide/index.php
-
-        ##==========================================
-        ##TODO... extract stuff from FDGC metadata!
-        ##==========================================
-        '''
+        '''Read Metadata for recognised EO1 ALI (L1G & L1R) & Hyperion (L1R) images as GDAL doesn't'''
 
         self.metadata['satellite']='E01'
         

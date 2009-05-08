@@ -1,4 +1,7 @@
-'''Geometry and dataset helper functions'''
+'''
+Geometry and dataset helper functions
+=====================================
+'''
 import os,math,warnings
 
 try:

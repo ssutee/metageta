@@ -1,4 +1,7 @@
-'''Utility helper functions'''
+'''
+Utility helper functions
+========================
+'''
 from xlutils import xlrd
 from xlutils import xlwt
 import sys, os.path, os, re, struct, glob, shutil,traceback

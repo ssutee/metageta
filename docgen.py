@@ -1,19 +1,23 @@
 '''Generate documentation for crawler modules'''
 
-import os,subprocess,utilities,sys,glob
+import os,utilities,sys
 from epydoc.cli import cli
 
 args=[]
 args.append('--debug')
 args.append('--name=Metadata Crawler')
-args.append('--css=white')
+#args.append('--css=white')     # Black on white, with blue highlights (similar to javadoc).
+args.append('--css=blue')      # Black on steel blue.
+#args.append('--css=green')     # Black on green.
+#args.append('--css=black')     # White on black, with blue highlights.
+#args.append('--css=grayscale') # Grayscale black on white.
 args.append('--output=%s\\doc\\files'%os.environ['CURDIR'])
-#args.append('--top=index.html')
 args.append('--html')
-args.append('--verbose')
 args.append('--show-private')
-args.append('--show-imports')
+args.append('--no-imports')
 
+if '--debug' in args:args.append('--verbose')
+else:args.append('--quiet')
 args.append('%s\\runcrawler.py'%os.environ['CURDIR'])
 args.append('%s\\runtransform.py'%os.environ['CURDIR'])
 

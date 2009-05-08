@@ -1,4 +1,9 @@
-'''Metadata driver for Digital Globe Quickbird imagery'''
+'''
+Metadata driver for Digital Globe Quickbird imagery
+===================================================
+@see:Format specification
+    U{http://www.digitalglobe.com/digitalglobe2/file.php/646/QuickBird_Imagery_Products-Product_Guide.pdf}
+'''
 format_regex=[r'[0-9][0-9][A-Z]{3,3}.*\.imd$']#Digital Globe Quickbird
 '''Regular expression list of file formats'''
 
@@ -26,9 +31,10 @@ class Dataset(__default__.Dataset):
     '''Subclass of __default__.Dataset class so we get a load of metadata populated automatically'''
     def __init__(self,f):
         '''Read Metadata for an Digital Globe Quickbird format image as GDAL doesn't quite get it all...
+
+        @todo: does not handle QB tile files (*til). Must check if GDAL can read them...?
+        '''
         
-        TODO... does not handle QB tile files (*til)
-        Must check if GDAL can read them...?'''
         tif = os.path.splitext(f)[0]+'.tif'
         img = os.path.splitext(f)[0]+'.img'
         til = os.path.splitext(f)[0]+'.til'

@@ -1,5 +1,6 @@
-'''Script to run the Metadata Transforms
-
+'''
+Script to run the Metadata Transforms
+=====================================
 Contains code to show GUI to gather input arguments when none are provided
 To run, call the eponymous batch file which sets the required environment variables
 

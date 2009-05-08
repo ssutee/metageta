@@ -1,4 +1,7 @@
-'''Utility functions to assist XSL transforms'''
+'''
+Utility functions to assist XSL transforms
+==========================================
+'''
 from glob import glob as _glob
 import os.path as _path
 import StringIO as _strio
@@ -69,7 +72,9 @@ def DictToXML(dic,root):
 
 def CreateMEF(outdir,xmlfile,uid,overviews=[]):
     '''Generate Geonetwork "Metadata Exchange Format" from an ISO19139 XML record
-    Format specs @ http://www.fao.org/geonetwork/docs/ch17s02.html or http://trac.osgeo.org/geonetwork/wiki/MEF
+    
+    @see:http://www.fao.org/geonetwork/docs/ch17s02.html
+    @see:http://trac.osgeo.org/geonetwork/wiki/MEF
     '''
     xmldir=_path.dirname(xmlfile)
     curdir=_path.abspath(_os.curdir)

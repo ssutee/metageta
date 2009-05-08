@@ -1,4 +1,8 @@
-'''Metadata driver for ENVI imagery'''
+'''
+Metadata driver for ENVI imagery
+================================
+'''
+
 #list of file name regular expressions
 format_regex=[r'\.hdr$']
 

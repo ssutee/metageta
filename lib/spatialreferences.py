@@ -1,4 +1,7 @@
-'''Spatial reference helper functions.'''
+'''
+Spatial reference helper functions
+==================================
+'''
 import os,sys
 try:
     from osgeo import gdal
