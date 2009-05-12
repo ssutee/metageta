@@ -1,6 +1,7 @@
 '''
 Provide GUI & file progress logging
 ===================================
+
 Example:
 
 >>> import progresslogger

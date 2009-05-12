@@ -1,19 +1,24 @@
-@echo off 
-pushd %~dp0
-set CURDIR=%cd%
-popd
+@ECHO OFF 
+PUSHD %~DP0
+SET CURDIR=%CD%
+POPD
 
-set OSGEO4W_ROOT=%CURDIR%\OSGeo4W
-set PYTHONHOME=%CURDIR%\Python25
+SET OSGEO4W_ROOT=%CURDIR%\OSGeo4W
+SET PYTHONHOME=%CURDIR%\Python25
 
 :: Initialise OSGEO4W
 PATH=%PYTHONHOME%;%OSGEO4W_ROOT%\bin;%PATH%
-for %%f in ("%OSGEO4W_ROOT%\etc\ini\*.bat") do call "%%f"
-call "%OSGEO4W_ROOT%\bin\gdal16.bat"
+FOR %%f IN ("%OSGEO4W_ROOT%\etc\ini\*.bat") DO CALL "%%f"
+CALL "%OSGEO4W_ROOT%\bin\gdal16.bat"
 
 :: Some vars
 ::PYTHONHOME needs to be reset after initialising OSGEO4W
-set PYTHONHOME=%CURDIR%\Python25
+SET PYTHONHOME=%CURDIR%\Python25
+SET PYTHONPATH=%PYTHONHOME%\Lib\lib-tk;%PYTHONPATH%
+SET PYTHONPATH=%PYTHONHOME%\Lib\site-packages\pywin32_system32;%PYTHONHOME%\Lib\site-packages\win32;%PYTHONHOME%\Lib\site-packages\win32\lib;%PYTHONHOME%\Lib\site-packages\pythonwin;%PYTHONPATH%
+SET PYTHONPATH=%OSGEO4W_ROOT%\bin;%OSGEO4W_ROOT%\apps\gdal-16\pymod\osgeo;%PYTHONPATH%
+SET PYTHONPATH=%CURDIR%\lib;%PYTHONPATH%
+SET PYTHONCASEOK=1
+
 SET GDAL_DATA=%CURDIR%\gdal_data
-SET PYTHONPATH=%OSGEO4W_ROOT%\bin;%PYTHONHOME%\Lib\lib-tk;%CURDIR%\lib;%PYTHONPATH%
-PATH=%GDAL_DRIVER_PATH%;%PATH%
+PATH=%GDAL_DRIVER_PATH%;%PYTHONHOME%;%PYTHONPATH%;%PATH%

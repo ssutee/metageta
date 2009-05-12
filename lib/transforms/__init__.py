@@ -73,8 +73,16 @@ def DictToXML(dic,root):
 def CreateMEF(outdir,xmlfile,uid,overviews=[]):
     '''Generate Geonetwork "Metadata Exchange Format" from an ISO19139 XML record
     
-    @see:http://www.fao.org/geonetwork/docs/ch17s02.html
-    @see:http://trac.osgeo.org/geonetwork/wiki/MEF
+    @see:
+        
+        http://www.fao.org/geonetwork/docs/ch17s02.html
+        
+        http://trac.osgeo.org/geonetwork/wiki/MEF
+    
+    @param outdir: Directory to write MEF file to.
+    @param xmlfile: XML file to create MEF from.
+    @param uid: ID of metadata record (UUID/GUID string).
+    @keyword overviews: List of overview image file (e.g quicklooks & thumbnails) OPTIONAL.
     '''
     xmldir=_path.dirname(xmlfile)
     curdir=_path.abspath(_os.curdir)

@@ -4,6 +4,7 @@ call setenv.bat
 call python.exe runtransform.py %*
 pause
 
+REM TODO... plug in the GUI progress logger if required...
 REM IF /I "%5"=="FALSE" (
 REM call python.exe runtransform.py %*
 REM pause

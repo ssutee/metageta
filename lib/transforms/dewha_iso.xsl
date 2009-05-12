@@ -100,28 +100,39 @@
     TOP LEVEL TEMPLATES
   -->
   <xsl:template name="contact">
-      <xsl:choose>
-          <xsl:when test="custodian">
-            <xsl:call-template name="other_contact">
-                <xsl:with-param name="contact" select="custodian"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <gmd:contact>
-              <xsl:call-template name="default_contact"/>
-            </gmd:contact>
-          </xsl:otherwise>
-      </xsl:choose><!--/gmd:contact-->
-      <xsl:if test="creator">
+    <xsl:choose>
+      <xsl:when test="custodian">
         <xsl:call-template name="other_contact">
-          <xsl:with-param name="contact" select="creator"/>
+          <xsl:with-param name="contact" select="custodian"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <gmd:contact>
+          <xsl:call-template name="default_contact"/>
+        </gmd:contact>
+      </xsl:otherwise>
+    </xsl:choose><!--/gmd:contact-->
+    <xsl:variable name="other_contacts"> <!-- Test for any other contacts-->
+      <!-- http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode -->
+      <xsl:element name="creator"><xsl:value-of select="creator"/></xsl:element>
+      <xsl:element name="owner"><xsl:value-of select="owner"/></xsl:element>
+      <xsl:element name="user"><xsl:value-of select="user"/></xsl:element>
+      <xsl:element name="resourceProvider"><xsl:value-of select="resourceProvider"/></xsl:element>
+      <xsl:element name="distributor"><xsl:value-of select="distributor"/></xsl:element>
+      <xsl:element name="originator"><xsl:value-of select="originator"/></xsl:element>
+      <xsl:element name="publisher"><xsl:value-of select="publisher"/></xsl:element>
+      <xsl:element name="pointOfContact"><xsl:value-of select="pointOfContact"/></xsl:element>
+      <xsl:element name="principalInvestigator"><xsl:value-of select="principalInvestigator"/></xsl:element>
+      <xsl:element name="processor"><xsl:value-of select="processor"/></xsl:element>
+      <xsl:element name="author"><xsl:value-of select="author"/></xsl:element>
+    </xsl:variable>
+    <xsl:for-each select="exsl:node-set($other_contacts)/*">
+      <xsl:if test="normalize-space(.)">
+        <xsl:call-template name="other_contact">
+          <xsl:with-param name="contact" select="."/>
         </xsl:call-template>
       </xsl:if>
-      <xsl:if test="owner">
-          <xsl:call-template name="other_contact">
-              <xsl:with-param name="contact" select="owner"/>
-          </xsl:call-template>
-      </xsl:if>
+    </xsl:for-each>
   </xsl:template><!--contact-->
   <xsl:template name="default_contact">
     <xsl:param name="contact"><xsl:value-of select="'custodian'"/></xsl:param> <!--default-->
@@ -1125,41 +1136,26 @@
                 <xsl:element name="demcorrection"><xsl:value-of select="demcorrection"/></xsl:element>
                 <xsl:element name="resampling"><xsl:value-of select="resampling"/></xsl:element>
               </xsl:variable>
-              <xsl:call-template name="processStep">
-                <xsl:with-param name="step" select="$step + 1"/>
-                <xsl:with-param name="count" select="count($tsteps)"/>
-                <xsl:with-param name="tsteps" select="$tsteps"/>
-              </xsl:call-template>
+              <xsl:for-each select="exsl:node-set($tsteps)/*">
+                <xsl:if test="normalize-space(.)">
+                  <processStep>
+                    <LI_ProcessStep>
+                      <xsl:attribute name="id"><xsl:value-of select="position()"/></xsl:attribute>
+                      <rationale>
+                        <gco:CharacterString><xsl:value-of select="local-name(.)"/></gco:CharacterString>
+                      </rationale>
+                      <description>
+                        <gco:CharacterString><xsl:value-of select="normalize-space(.)"/></gco:CharacterString>
+                      </description>
+                    </LI_ProcessStep>
+                  </processStep>
+                </xsl:if>
+              </xsl:for-each>
             </gmd:LI_Lineage>
           </gmd:lineage>
         </gmd:DQ_DataQuality>
       </gmd:dataQualityInfo>
   </xsl:template><!--dataQualityInfo-->
-  <xsl:template name="processStep">
-    <xsl:param name="step" select="'1'"/>
-    <xsl:param name="count" select="'1'"/>
-    <xsl:param name="tsteps"/>
-      <xsl:if test="$step &lt;= $count">
-        <xsl:if test="normalize-space($tsteps[$step])">
-          <processStep>
-            <LI_ProcessStep>
-              <xsl:attribute name="id"><xsl:value-of select="$step"/></xsl:attribute>
-              <description>
-                <gco:CharacterString>
-                  <xsl:value-of select="local-name($tsteps[$step])"/>
-                  <xsl:value-of select="normalize-space($tsteps[$step])"/>
-                </gco:CharacterString>
-              </description>
-            </LI_ProcessStep>
-          </processStep>
-        </xsl:if>
-        <xsl:call-template name="processStep">
-          <xsl:with-param name="step" select="$step + 1"/>
-          <xsl:with-param name="count" select="$count"/>
-          <xsl:with-param name="tsteps" select="$tsteps"/>
-        </xsl:call-template>
-      </xsl:if>
-  </xsl:template><!--processStep-->
   <!--
   -->  
   <xsl:template name="metadataConstraints">
