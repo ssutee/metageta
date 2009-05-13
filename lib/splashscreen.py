@@ -1,6 +1,10 @@
 '''
 This is the beginnings of a splash screen cos the GUI's in runcrawler.py and runtransforms.py take sooo long to start up...
 ===========================================================================================================================
+
+Modified from Activestate Recipe 534124: Elegant Tkinter Splash Screen U{http://code.activestate.com/recipes/534124} 
+by Luke Pinner (ERIN) to support threading & callback functions.
+
 '''
 import threading,os
 from Tkinter import *
@@ -26,7 +30,7 @@ class SplashScreen(threading.Thread):
         # Remove the app window from the display
         self._root.withdraw()
 
-        # Calculate the geometry to center the splash image
+        # Calculate the geometry to centre the splash image
         scrnWt = self._root.winfo_screenwidth()
         scrnHt = self._root.winfo_screenheight()
 
