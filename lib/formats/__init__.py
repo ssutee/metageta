@@ -88,7 +88,7 @@ __formats__={}
 format_regex=[]
 fields=__fields__.fields
 
-debug=0
+debug=False
 #Dynamically load all formats
 for _lib in _glob(_path.join(__path__[0],'[a-z]*.py')):
     _lib=_path.splitext(_path.basename(_lib))[0]
@@ -125,7 +125,7 @@ def Open(f):
                 pass #Used when a format driver can't open a file, but doesn't want to raise an error
             except Exception,err:
                 if debug:
-                    errinfo=utilities.FormatTraceback(_sys.exc_info()[2],debug)
+                    errinfo=utilities.FormatTraceback(_sys.exc_info()[2],10)
                     errargs=[arg for arg in err.args]
                     errargs.append(errinfo)
                     err.args=tuple(errargs)
@@ -140,7 +140,7 @@ def Open(f):
             return ds
     except Exception,err:
         if debug:
-            errinfo=utilities.FormatTraceback(_sys.exc_info()[2],debug)
+            errinfo=utilities.FormatTraceback(_sys.exc_info()[2],10)
             errargs=[arg for arg in err.args]
             errargs.append(errinfo)
             err.args=tuple(errargs)

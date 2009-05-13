@@ -16,7 +16,9 @@ import utilities
 import formats
 import re
 
-debug=0
+debug=False
+'''Default debug option'''
+
 class Crawler:
     "Iterator for metadata crawling"
     def __init__(self,dir):
@@ -69,7 +71,7 @@ class Crawler:
             self.filecount-=1
             self.errors.append((self.file,
                                 utilities.ExceptionInfo(),
-                                utilities.ExceptionInfo(int(debug))
+                                utilities.ExceptionInfo(10)
                         ))
 
             #Skip to the next file so we don't stop the iteration

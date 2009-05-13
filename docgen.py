@@ -2,6 +2,8 @@
 
 import os,utilities,sys
 from epydoc.cli import cli
+from epydoc import docparser
+docparser.IMPORT_STAR_HANDLING='ignore'
 
 args=[]
 args.append('--debug')
@@ -16,8 +18,8 @@ args.append('--html')
 args.append('--show-private')
 args.append('--no-imports')
 
-if '--debug' in args:args.append('--verbose')
-else:args.append('--quiet')
+if '--debug' in args:args.extend(['--verbose']*3)
+else:args.extend(['--quiet']*3)
 args.append('%s\\runcrawler.py'%os.environ['CURDIR'])
 args.append('%s\\runtransform.py'%os.environ['CURDIR'])
 

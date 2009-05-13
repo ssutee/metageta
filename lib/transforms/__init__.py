@@ -15,15 +15,13 @@ from Ft.Xml import Domlette as _Dom
 from utilities import rglob as _rglob
 
 #++++++++++++++++++++++++
-#Public properties
+#Public vars
 #++++++++++++++++++++++++
 transforms={}
-'''The pre-defined XSL transforms'''
+'''Pre-defined XSL transforms'''
 
-#++++++++++++++++++++++++
-#Private properties
-#++++++++++++++++++++++++
-_xslfiles={}
+xslfiles={}
+'''Pre-defined XSL files'''
 
 #++++++++++++++++++++++++
 #Initialise pub/priv properties - load known XSL transforms
@@ -33,7 +31,7 @@ for _f in _glob(_path.join(__path__[0],'*.xml')):
     _name = str(_xml.xpath('string(/stylesheet/@name)'))
     _file = str(_xml.xpath('string(/stylesheet/@file)'))
     _desc = str(_xml.xpath('string(/stylesheet/@description)'))
-    _xslfiles[_name]=_file
+    xslfiles[_name]=_file
     transforms[_name]=_desc
     del _xml
 
@@ -48,8 +46,8 @@ def Transform(inxmlstring,transform,outxmlfile):
     @param transform: may be one of the pre-defined XSL transforms or a path to a custom XSL file.
     @param outxmlfile: File to write transformed metadata to.
     '''
-    if _xslfiles.has_key(transform): #Is it a known XSL transform...?
-        xslfile = _path.join(__path__[0],_xslfiles[transform]).replace('\\','/')
+    if xslfiles.has_key(transform): #Is it a known XSL transform...?
+        xslfile = _path.join(__path__[0],xslfiles[transform]).replace('\\','/')
     elif _path.exists(transform):    #Have we been passed an XSL file path...?
         xslfile=_path.abspath(transform).replace('\\','/') #Xslt.Transform doesn't like backslashes in absolute paths...
     else: raise ValueError, 'Can not transform using %s!' % transform

@@ -24,10 +24,7 @@ import geometry
 import utilities
 import crawler
 
-defaultgui=True #do we use the gui progress bar logger by default...?
-defaultdebug=False #do we use debug logging by default...?
-
-def main(dir,xls,shp,log, gui=defaultgui, debug=defaultdebug): 
+def main(dir,xls,shp,log, gui=False, debug=False): 
     xls = utilities.checkExt(xls, ['.xls'])
     shp = utilities.checkExt(shp, ['.shp'])
     log = utilities.checkExt(shp, ['.log', '.txt'])
@@ -112,7 +109,7 @@ class Command:
         
 
 class GetArgs:
-    def __init__(self):
+    def __init__(self,gui,debug):
         windowicon=os.environ['CURDIR']+'/lib/wm_icon.ico'
         #base 64 encoded gif images for the GUI buttons
         shp_img = '''
@@ -164,6 +161,11 @@ class GetArgs:
         last_dir = StringVar()
         last_dir.set('C:\\')
 
+        bdebug = BooleanVar()
+        bdebug.set(debug)
+        bgui = BooleanVar()
+        bgui.set(gui)
+
         dir_ico = PhotoImage(format='gif',data=dir_img)
         xls_ico = PhotoImage(format='gif',data=xls_img)
         shp_ico = PhotoImage(format='gif',data=shp_img)
@@ -204,7 +206,7 @@ class GetArgs:
         bOK.grid(row=4, column=1,sticky=E, padx=5,pady=5)
         bCancel.grid(row=4, column=2,sticky=E, pady=5)
 
-        self.vars={'dir':sdir,'xls':sxls,'shp':sshp,'log':slog}
+        self.vars={'dir':sdir,'xls':sxls,'shp':sshp,'log':slog,'gui':bgui,'debug':bdebug}
         
         self.root.mainloop()
         
@@ -247,19 +249,40 @@ def StrToBool(val):
     else: return val
     
 if __name__ == '__main__':
-    if len(sys.argv) < 4:
-        GetArgs() #Popup the gui
+    import optparse
+    description='Run the metadata crawler'
+    parser = optparse.OptionParser(description=description)
+    parser.add_option('-d', dest="dir", metavar="dir",
+                      help='The directory to start the metadata crawl')
+    parser.add_option("-x", dest="xls", metavar="xls",
+                      help="Excel spreadsheet to write metadata to")
+    parser.add_option("-s", dest="shp", metavar="shp",
+                      help="Shapefile to write extents to")
+    parser.add_option("-l", dest="log", metavar="log",
+                      help="Log file")
+    parser.add_option("--debug", action="store_true", dest="debug",default=False,
+                      help="Turn debug output on")
+    parser.add_option("--gui", action="store_true", dest="gui", default=False,
+                      help="Show the GUI progress dialog")
+    opts,args = parser.parse_args()
+    if not opts.dir or not opts.log or not opts.shp or not opts.xls:
+        GetArgs(True,opts.debug) #Show progress GUI.
     else:
-        args=sys.argv[1:]
-        kwargs={'dir':args[0],
-                'xls':args[1],
-                'shp':args[2],
-                'log':args[3]
-        }
-        if len(args) >= 5:
-            kwargs['gui']=eval(args[4])
-        if len(args) == 6:
-            kwargs['debug']=eval(args[5])
+        main(opts.dir,opts.xls,opts.shp,opts.log,opts.gui,opts.debug)
 
-        main(**kwargs)
-        
+##    if len(sys.argv) < 4:
+##        GetArgs() #Popup the gui
+##    else:
+##        args=sys.argv[1:]
+##        kwargs={'dir':args[0],
+##                'xls':args[1],
+##                'shp':args[2],
+##                'log':args[3]
+##        }
+##        if len(args) >= 5:
+##            kwargs['gui']=eval(args[4])
+##        if len(args) == 6:
+##            kwargs['debug']=eval(args[5])
+##
+##        main(**kwargs)
+##        

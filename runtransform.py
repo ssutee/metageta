@@ -5,12 +5,14 @@ Contains code to show GUI to gather input arguments when none are provided
 To run, call the eponymous batch file which sets the required environment variables
 
 Usage::
-    runtransform.bat xls xsl [dir]
-
+    runtransform.bat -x xls -t xsl -d dir
+    
 @newfield sysarg: Argument, Arguments
-@sysarg: C{xls}: MS Excel spreadsheet to read from
-@sysarg: C{xsl}: XSL transform - may be one of the pre-defined XSL transforms or a path to a custom XSL file.
-@sysarg: C{dir}: Optional - directory to write XML files to. If not supplied, XML files are written to the directory containing the image 
+@sysarg: C{-x xls}: MS Excel spreadsheet to read from
+@sysarg: C{-t xsl}: XSL transform - may be one of the pre-defined XSL transforms or a path to a custom XSL file.
+@sysarg: C{-d dir}: Directory to write XML files to.
+
+@todo: Set up logging & debug properly.
 '''
 
 #Imports
@@ -32,13 +34,11 @@ import transforms
 #Turn off the splashscreen
 #startup.value=True
 
-def main(xls,xsl,dir=''):
+def main(xls,xsl,dir,log=None,debug=False,gui=False):
     for rec in utilities.ExcelReader(xls):
         strxml=transforms.DictToXML(rec,'crawlresult')
-        if dir=='': #Output to image directory
-            result = transforms.Transform(strxml, xsl, '%s.xml'%rec['filepath'])
-        else: #Output to a single directory, use image filename and guid to ensure uniqueness.
-            result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,rec['filename'],rec['guid']))
+        result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,rec['filename'],rec['guid']))
+        print 'Transformed metadata for ' +rec['filename'] #Update this to proper logging
 
 #========================================================================================================
 #Below is for the GUI if run without arguments
@@ -232,20 +232,28 @@ class GetArgs:
 #========================================================================================================
 
 if __name__ == '__main__':
+    #To ensure uri's work...
     if os.path.basename(sys.argv[0])!=sys.argv[0]:os.chdir(os.path.dirname(sys.argv[0]))
-    args=sys.argv
-    if len(args) < 3:
-        GetArgs() #Popup the gui
-    else:
-        kwargs={'xls':args[1],
-                'xsl':args[2]
-        }
-        if len(args) > 3:
-            kwargs['dir']=args[3]
-        if len(args) > 4:
-            kwargs['gui']=eval(args[4])
-        if len(args) > 5:
-            kwargs['debug']=eval(args[5])
 
-        main(**kwargs)
-        
+    import optparse
+    description='Transform metadata to XML'
+    parser = optparse.OptionParser(description=description)
+    parser.add_option('-d', dest="dir", metavar="dir",
+                      help='The directory to output metadata XML to')
+    parser.add_option("-x", dest="xls", metavar="xls",
+                      help="Excel spreadsheet to read metadata from")
+    parser.add_option("-t", dest="xsl", metavar="xsl",
+                      help="XSL transform {*.xsl|%s}" % '|'.join(['"%s"'%s for s in transforms.transforms.keys()]))
+                      #help="XSL transform {*.xsl|%s}" % '|'.join(['"%s"'%s for s in transforms.xslfiles.values()]))
+    parser.add_option("-l", dest="log", metavar="log",                            
+                      help=optparse.SUPPRESS_HELP) #help="Log file")                     #Not yet implemented
+    parser.add_option("--debug", action="store_true", dest="debug",default=False,   
+                      help=optparse.SUPPRESS_HELP) #help="Turn debug output on")         #Not yet implemented
+    parser.add_option("--gui", action="store_true", dest="gui", default=False,
+                      help=optparse.SUPPRESS_HELP) #help="Show the GUI progress dialog") #Not yet implemented
+    opts,args = parser.parse_args()
+    if not opts.dir or not opts.xls or not opts.xsl:
+        GetArgs()
+    else:
+        if opts.xsl in transforms.xslfiles.values():pass
+        main(opts.xls,opts.xsl,opts.dir,opts.log,opts.gui,opts.debug)

@@ -12,13 +12,9 @@ def ExceptionInfo(maxTBlevel=0):
     excName = cla.__name__
     if maxTBlevel > 0:
         excArgs=[]
-        #for key in exc.__dict__.keys():
-        #    if key != 'args':excArgs.append('%s: %s' % (key,exc.__dict__[key]))
-        #try: excArgs = exc.__dict__["args"]
-        #except KeyError: excArgs = "[<no args>]"
         excTb = FormatTraceback(trbk, maxTBlevel)
-        #return '%s\n%s\n%s' % (excName, '\n'.join([str(arg) for arg in excArgs]), ''.join(excTb))
-        return '%s: %s\nTraceback: %s' % (excName, str(exc), excTb)
+        #return '%s: %s\nTraceback: %s' % (excName, str(exc), excTb)
+        return '%s: %s\n%s' % (excName, str(exc), excTb)
     else:
         return '%s: %s' % (excName, str(exc))
 
