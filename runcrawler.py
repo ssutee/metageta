@@ -157,6 +157,15 @@ class GetArgs:
         self.root = Tk()
         self.root.title('Metadata Crawler')
         self.root.wm_iconbitmap(windowicon)
+
+        # Calculate the geometry to centre the app
+        scrnWt = self._root.winfo_screenwidth()
+        scrnHt = self._root.winfo_screenheight()
+        imgWt = self._image.width()
+        imgHt = self._image.height()
+        imgXPos = (scrnWt / 2) - (imgWt / 2)
+        imgYPos = (scrnHt / 2) - (imgHt / 2)
+        self.root.geometry('+%d+%d' % (imgXPos, imgYPos))
         
         last_dir = StringVar()
         last_dir.set('C:\\')

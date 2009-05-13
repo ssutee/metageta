@@ -2,14 +2,16 @@
 call setenv.bat
 
 REM Check if the progress bar GUI will be used.
-SET GUI=0
-FOR %%A IN (%*) DO (
-      IF /I "%%A"=="--gui" SET GUI=1
+set gui=0
+set /a nargs=0
+for %%a in (%*) do (
+    set /a nargs+=1
+    if /i "%%a"=="--gui" set gui=1
 )
-
-IF /I "%GUI%"=="0" (
-call python.exe runcrawler.py %*
-pause
-) ELSE (
-start "Crawler" /B pythonw.exe runcrawler.py %*
+if %nargs%==0 set gui=1
+if /i "%gui%"=="0" (
+    call python.exe runcrawler.py %*
+    pause
+) else (
+    start "Crawler" /b pythonw.exe runcrawler.py %*
 )
