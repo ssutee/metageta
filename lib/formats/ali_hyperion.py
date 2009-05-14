@@ -45,6 +45,10 @@ class Dataset(__dataset__.Dataset):
             self.metadata['sensor']='ALI'
 
             gdalDataset = geometry.OpenDataset(f)
+            if not gdalDataset:
+                errmsg=gdal.GetLastErrorMsg()
+                raise IOError, 'Unable to open %s\n%s' % (f,errmsg.strip())
+
             self.metadata['filetype'] = '%s/%s (%s %s)' % (gdalDataset.GetDriver().ShortName,
                                                            gdalDataset.GetDriver().LongName,
                                                            self.metadata['sensor'],
