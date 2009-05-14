@@ -30,15 +30,25 @@ import tkFileDialog
 from Ft.Xml import Domlette as Dom
 import utilities
 import transforms
+import progresslogger
 
 #Turn off the splashscreen
 #startup.value=True
 
 def main(xls,xsl,dir,log=None,debug=False,gui=False):
+    if debug:level=progresslogger.DEBUG
+    else:level=progresslogger.INFO
+    #pl = progresslogger.ProgressLogger('Metadata Crawler',logfile=log, logToConsole=True, logToFile=True, logToGUI=gui, level=level, windowicon=windowicon)
+    pl = progresslogger.ProgressLogger('Metadata Transforms', logToConsole=True, logToFile=False, logToGUI=False, level=level)
+
     for rec in utilities.ExcelReader(xls):
-        strxml=transforms.DictToXML(rec,'crawlresult')
-        result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,rec['filename'],rec['guid']))
-        print 'Transformed metadata for ' +rec['filename'] #Update this to proper logging
+        try:
+            strxml=transforms.DictToXML(rec,'crawlresult')
+            result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,rec['filename'],rec['guid']))
+            pl.info('Transformed metadata for ' +rec['filename'])
+        except Exception,err:
+            pl.error('%s\n%s' % (rec['filename'], utilities.ExceptionInfo()))
+            pl.debug(utilities.ExceptionInfo(10))
 
 #========================================================================================================
 #Below is for the GUI if run without arguments
@@ -56,7 +66,6 @@ class Command:
         
 
 class DropList(Widget):
-#class DropList(Widget):
     def __init__(self, root, options, stringvar, cnf={},**kwargs):
         self.root=root
         self.tk=root
@@ -140,13 +149,13 @@ class GetArgs:
         self.root.wm_iconbitmap(windowicon)
 
         # Calculate the geometry to centre the app
-        scrnWt = self._root.winfo_screenwidth()
-        scrnHt = self._root.winfo_screenheight()
-        imgWt = self._image.width()
-        imgHt = self._image.height()
-        imgXPos = (scrnWt / 2) - (imgWt / 2)
-        imgYPos = (scrnHt / 2) - (imgHt / 2)
-        self.root.geometry('+%d+%d' % (imgXPos, imgYPos))
+        scrnWt = self.root.winfo_screenwidth()
+        scrnHt = self.root.winfo_screenheight()
+        appWt = self.root.winfo_width()
+        appHt = self.root.winfo_height()
+        appXPos = (scrnWt / 2) - (appWt / 2)
+        appYPos = (scrnHt / 2) - (appHt / 2)
+        self.root.geometry('+%d+%d' % (appXPos, appYPos))
 
         last_dir = StringVar()
         last_dir.set('C:\\')
@@ -226,7 +235,7 @@ class GetArgs:
         self.root.destroy()
 
     def cmdDir(self,var,dir):
-        ad = tkFileDialog.askdirectory(parent=self.root,initialdir=dir.get(),title='Please select a directory to crawl for imagery')
+        ad = tkFileDialog.askdirectory(parent=self.root,initialdir=dir.get(),title='Please select a directory to output metadata to')
         if ad:
             var.set(ad)
             dir.set(ad)
@@ -254,10 +263,10 @@ if __name__ == '__main__':
     parser.add_option("-t", dest="xsl", metavar="xsl",
                       help="XSL transform {*.xsl|%s}" % '|'.join(['"%s"'%s for s in transforms.transforms.keys()]))
                       #help="XSL transform {*.xsl|%s}" % '|'.join(['"%s"'%s for s in transforms.xslfiles.values()]))
+    parser.add_option("--debug", action="store_true", dest="debug",default=False,   
+                      help="Turn debug output on")
     parser.add_option("-l", dest="log", metavar="log",                            
                       help=optparse.SUPPRESS_HELP) #help="Log file")                     #Not yet implemented
-    parser.add_option("--debug", action="store_true", dest="debug",default=False,   
-                      help=optparse.SUPPRESS_HELP) #help="Turn debug output on")         #Not yet implemented
     parser.add_option("--gui", action="store_true", dest="gui", default=False,
                       help=optparse.SUPPRESS_HELP) #help="Show the GUI progress dialog") #Not yet implemented
     opts,args = parser.parse_args()

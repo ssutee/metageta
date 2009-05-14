@@ -66,17 +66,17 @@ def main(dir,xls,shp,log, gui=False, debug=False):
                 ExcelWriter.WriteRecord(md)
             except Exception,err:
                pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
-               pl.debug(utilities.ExceptionInfo(int(debug)))
+               pl.debug(utilities.ExceptionInfo(10))
             try:
                 ShapeWriter.WriteRecord(geom,md)
             except Exception,err:
                 pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
-                pl.debug(utilities.ExceptionInfo(int(debug)))
+                pl.debug(utilities.ExceptionInfo(10))
 
             pl.updateProgress(newMax=Crawler.filecount)
         except Exception,err:
             pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
-            pl.debug(utilities.ExceptionInfo(int(debug)))
+            pl.debug(utilities.ExceptionInfo(10))
 
     #Check for files that couldn't be opened
     for file,err,dbg in Crawler.errors:
@@ -159,13 +159,13 @@ class GetArgs:
         self.root.wm_iconbitmap(windowicon)
 
         # Calculate the geometry to centre the app
-        scrnWt = self._root.winfo_screenwidth()
-        scrnHt = self._root.winfo_screenheight()
-        imgWt = self._image.width()
-        imgHt = self._image.height()
-        imgXPos = (scrnWt / 2) - (imgWt / 2)
-        imgYPos = (scrnHt / 2) - (imgHt / 2)
-        self.root.geometry('+%d+%d' % (imgXPos, imgYPos))
+        scrnWt = self.root.winfo_screenwidth()
+        scrnHt = self.root.winfo_screenheight()
+        appWt = self.root.winfo_width()
+        appHt = self.root.winfo_height()
+        appXPos = (scrnWt / 2) - (appWt / 2)
+        appYPos = (scrnHt / 2) - (appHt / 2)
+        self.root.geometry('+%d+%d' % (appXPos, appYPos))
         
         last_dir = StringVar()
         last_dir.set('C:\\')
@@ -278,20 +278,3 @@ if __name__ == '__main__':
         GetArgs(True,opts.debug) #Show progress GUI.
     else:
         main(opts.dir,opts.xls,opts.shp,opts.log,opts.gui,opts.debug)
-
-##    if len(sys.argv) < 4:
-##        GetArgs() #Popup the gui
-##    else:
-##        args=sys.argv[1:]
-##        kwargs={'dir':args[0],
-##                'xls':args[1],
-##                'shp':args[2],
-##                'log':args[3]
-##        }
-##        if len(args) >= 5:
-##            kwargs['gui']=eval(args[4])
-##        if len(args) == 6:
-##            kwargs['debug']=eval(args[5])
-##
-##        main(**kwargs)
-##        
