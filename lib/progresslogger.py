@@ -121,7 +121,7 @@ class ProgressLoggerHandler(logging.Handler):
         try:
             pythonPath = r'%s\pythonw.exe' % os.environ['PYTHONHOME'] #set in setenv.bat
         except:
-            pythonPath = r'%s\bin\pythonw.exe' % os.environ['OSGEO4W_ROOT'] #set in setenv.bat
+            pythonPath = r'%s\bin\pythonw.exe' % os.environ['GDAL_ROOT'] #set in setenv.bat
         pythonScript=__file__
         parameterList = [pythonPath, pythonScript, self.host,str(self.port),name,str(maxprogress)]
         if windowicon:parameterList.append(windowicon)
