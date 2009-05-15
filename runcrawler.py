@@ -219,15 +219,15 @@ class GetArgs:
         
         self.root.mainloop()
         
-    def cmdOK(self):
-        ok,args=True,{}
+    def cmdOK(self,*args,**kwargs):
+        ok,kwargs=True,{}
         for var in self.vars:
-            arg=self.vars[var].get()
-            if arg=='':ok=False
-            else:args[var]=arg
+            kwarg=self.vars[var].get()
+            if kwarg=='':ok=False
+            else:kwargs[var]=kwarg
         if ok:
             self.root.destroy()
-            main(**args)
+            main(**kwargs)
 
     def cmdCancel(self):
         self.root.destroy()

@@ -189,7 +189,11 @@ class Dataset(__dataset__.Dataset):
             filelist=glob.glob(os.path.dirname(f)+'/*')
 
             gdalDataset = geometry.OpenDataset(f)
-            self.metadata['filetype'] = '%s/%s (%s %s)' % (gdalDataset.GetDriver().ShortName,
+            if not gdalDataset:
+                errmsg=gdal.GetLastErrorMsg()
+                raise IOError, 'Unable to open %s\n%s' % (f,errmsg.strip())
+
+                self.metadata['filetype'] = '%s/%s (%s %s)' % (gdalDataset.GetDriver().ShortName,
                                                            gdalDataset.GetDriver().LongName,
                                                            self.metadata['sensor'],
                                                            self.metadata['level'])
@@ -263,6 +267,10 @@ class Dataset(__dataset__.Dataset):
             filelist.extend(glob.glob('%s\\%s_%s_*.hdf' % (os.path.dirname(f),os.path.basename(f)[10:14],os.path.basename(f)[14:17])))
 
             gdalDataset = geometry.OpenDataset(f)
+            if not gdalDataset:
+                errmsg=gdal.GetLastErrorMsg()
+                raise IOError, 'Unable to open %s\n%s' % (f,errmsg.strip())
+
             self.metadata['filetype'] = '%s/%s (%s %s)' % (gdalDataset.GetDriver().ShortName,
                                                            gdalDataset.GetDriver().LongName,
                                                            self.metadata['sensor'],

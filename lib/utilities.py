@@ -26,7 +26,6 @@ def readbinary(data,offset, start, stop):
 
 def FileInfo(filepath):
     '''http://www.microsoft.com/technet/scriptcenter/guide/sas_fil_lunl.mspx?mfr=true'''
-    import win32com.client, os.path
 
     fileattr={
         'SIZE':1,
@@ -176,6 +175,19 @@ def ExcelReader(xls):
             cells=[c.value for c in ws.row(i)]
             yield dict(zip(headers,cells))
 
+def runcmd(cmd, format='s'):
+    import subprocess
+    proc = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    if format.lower() == 's': #string output
+        stdout,stderr=proc.communicate()
+    #elif format.lower() == 'f': #file object output #doesn't flush IO buffer, causes python to hang
+    #    stdout,stderr=proc.stdout,proc.stderr
+    elif format.lower() == 'l': #list output
+        stdout,stderr=proc.stdout.readlines(),proc.stderr.readlines()
+    #else:raise TypeError, "fomat argument must be in ['s','f','l'] (string, file, list)"
+    else:raise TypeError, "fomat argument must be in ['s','l'] (string or list format)"
+    exit_code=proc.wait()
+    return exit_code,stdout,stderr
 class rglob:
     '''a forward iterator that traverses a directory tree'''
     def __init__(self, directory, pattern="*", regex=False, regex_flags=0, recurse=True):

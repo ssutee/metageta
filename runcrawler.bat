@@ -13,5 +13,7 @@ if /i "%gui%"=="0" (
     call python.exe runcrawler.py %*
     pause
 ) else (
-    start "Crawler" /b pythonw.exe runcrawler.py %*
+    call python.exe runcrawler.py %*
+    pause
+rem    start "Crawler" /b pythonw.exe runcrawler.py %*
 )
