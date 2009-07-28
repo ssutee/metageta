@@ -122,7 +122,7 @@ class ShapeWriter:
             gdal.ErrorReset()
             self._srs=osr.SpatialReference()
             self.fields=[]
-            if srs_wkt:self._srs.ImportFromWkt(wkt)
+            if srs_wkt:self._srs.ImportFromWkt(srs_wkt)
             else:self._srs.ImportFromEPSG(4283) #default=GDA94 Geographic
             self._shape=self.OpenShapefile(shapefile,fields,overwrite)
         except Exception, err:
