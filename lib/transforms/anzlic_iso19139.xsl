@@ -450,6 +450,61 @@
               </gmd:maintenanceAndUpdateFrequency>
             </gmd:MD_MaintenanceInformation>
           </gmd:resourceMaintenance>
+          <xsl:if test="normalize-space(quicklook)">
+            <gmd:graphicOverview>
+              <gmd:MD_BrowseGraphic>
+                <gmd:fileName>
+                  <gco:CharacterString>
+                    <xsl:choose>
+                      <xsl:when test="contains(quicklook, '\')">
+                        <xsl:value-of select="str:split(quicklook,'\')[last()]"/>
+                      </xsl:when>
+                      <xsl:when test="contains(quicklook, '/')">
+                        <xsl:value-of select="str:split(quicklook,'/')[last()]"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="normalize-space(quicklook)"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </gco:CharacterString>
+                </gmd:fileName>
+                <gmd:fileDescription>
+                  <gco:CharacterString>large_thumbnail</gco:CharacterString>
+                </gmd:fileDescription>
+                <gmd:fileType>
+                  <gco:CharacterString><xsl:value-of select="str:split(quicklook,'.')[last()]"/></gco:CharacterString>
+                </gmd:fileType>
+              </gmd:MD_BrowseGraphic>
+            </gmd:graphicOverview>
+          </xsl:if>
+          <xsl:if test="normalize-space(thumbnail)">
+            <gmd:graphicOverview>
+              <gmd:MD_BrowseGraphic>
+                <gmd:fileName>
+                  <gco:CharacterString>
+                    <xsl:choose>
+                      <xsl:when test="contains(thumbnail, '\')">
+                        <xsl:value-of select="str:split(thumbnail,'\')[last()]"/>
+                      </xsl:when>
+                      <xsl:when test="contains(thumbnail, '/')">
+                        <xsl:value-of select="str:split(thumbnail,'/')[last()]"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="normalize-space(thumbnail)"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </gco:CharacterString>
+                </gmd:fileName>
+                <gmd:fileDescription>
+                  <gco:CharacterString>thumbnail</gco:CharacterString>
+                </gmd:fileDescription>
+                <gmd:fileType>
+                  <gco:CharacterString><xsl:value-of select="str:split(thumbnail,'.')[last()]"/></gco:CharacterString>
+                </gmd:fileType>
+              </gmd:MD_BrowseGraphic>
+            </gmd:graphicOverview>
+          </xsl:if>
+          
           <gmd:resourceFormat>
             <gmd:MD_Format>
               <gmd:name>
