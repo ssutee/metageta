@@ -95,6 +95,9 @@ def CreateMEF(outdir,xmlfile,uid,overviews=[]):
     @param xmlfile: XML file to create MEF from.
     @param uid: ID of metadata record (UUID/GUID string).
     @keyword overviews: List of overview image file (e.g quicklooks & thumbnails) OPTIONAL.
+
+    @todo: Assumes metadata is ISO19139, need to make generic somehow...
+
     '''
     xmldir=_path.dirname(xmlfile)
     curdir=_path.abspath(_os.curdir)

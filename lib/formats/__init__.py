@@ -23,7 +23,7 @@ To add support for another format:
 -	Your format will be automatically loaded when the formats module is initialised.
 -	Errors should be propagated back up the chain. If you can't handle a certain file and for some reason you don't want an error to get raised (eg. the ENVI driver (*.hdr) doesn't handle ESRI bil/flt headers (*.hdr)) then raise NotImplementedError which will be ignored in lib.formats.Open()
 -	If you want some info to get logged by the application and then continue processing (e.g the image doesn't have a projection defined, etc...) then use the warnings.warn("Some message") method - don't forget to import the warnings module!
--	Date/Time formats must follow follow AS ISO 8601-2007 (see: U{http://www.anzlic.org.au/metadata/guidelines/date_and_datetime.htm})
+-	Date/Time formats must follow follow AS ISO 8601-2007 (see: U{http://www.anzlic.org.au/metadata/guidelines/Index.html?date_and_datetime.htm})
 
 Class hierarchy::
     __dataset__.Dataset():
