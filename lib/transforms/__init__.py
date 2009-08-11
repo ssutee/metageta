@@ -67,6 +67,20 @@ def DictToXML(dic,root):
     buf=_strio.StringIO()
     _Dom.PrettyPrint(doc,stream=buf)
     return buf.getvalue()
+def ListToXML(lst,root):
+    '''Transform a metadata record to a flat XML string'''
+    doc=_Dom.implementation.createRootNode('file:///%s.xml'%root)
+    docelement = doc.createElementNS(None, root)
+    for col in lst:
+        child=doc.createElementNS(None, col[0])
+        text=doc.createTextNode(str(col[1]))
+        child.appendChild(text)
+        docelement.appendChild(child)
+
+    doc.appendChild(docelement)
+    buf=_strio.StringIO()
+    _Dom.PrettyPrint(doc,stream=buf)
+    return buf.getvalue()
 
 def CreateMEF(outdir,xmlfile,uid,overviews=[]):
     '''Generate Geonetwork "Metadata Exchange Format" from an ISO19139 XML record

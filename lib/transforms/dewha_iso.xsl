@@ -21,13 +21,11 @@
   extension-element-prefixes="str func exsl date math">
 
   <xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
-  <xsl:param name="language" select="'eng'"/>
   <xsl:param name="hierarchyLevel" select="'dataset'"/>
   <xsl:param name="themesListLocation" select="'http://asdd.ga.gov.au/asdd/profileinfo/anzlic-theme.xml'"/><!-- Change this to canonical location when available -->
   <xsl:param name="codesListLocation" select="'http://asdd.ga.gov.au/asdd/profileinfo/'"/><!-- Change this to canonical location when available -->
   <xsl:param name="metadataOrganisation" select="'metadataOrganisation'"/><!-- no default -->
   <xsl:param name="topicCategory"  select="'imageryBaseMapsEarthCover'"/>
-  <xsl:param name="mdCreationDate" /><!-- no default -->
   <xsl:param name="resourceCreationDate" /><!-- no default -->
   <xsl:variable name="hierarchyLevelName">
     <xsl:choose><xsl:when test="$hierarchyLevel='dataset'">Dataset</xsl:when><xsl:otherwise><xsl:value-of select="$hierarchyLevel"/></xsl:otherwise></xsl:choose>
@@ -55,21 +53,22 @@
         <gco:CharacterString>eng</gco:CharacterString>
       </gmd:language>
       <gmd:characterSet>
-        <gmd:MD_CharacterSetCode codeListValue="utf8" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode"/>
+        <gmd:MD_CharacterSetCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
       </gmd:characterSet>
-      <gmd:parentIdentifier gco:nilReason="missing">
+      <!--gmd:parentIdentifier gco:nilReason="missing">
           <gco:CharacterString/>
-      </gmd:parentIdentifier>
+      </gmd:parentIdentifier-->
       <gmd:hierarchyLevel>
-        <gmd:MD_ScopeCode>
-          <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode</xsl:attribute>
-          <xsl:attribute name="codeListValue"><xsl:value-of select="$hierarchyLevel"/></xsl:attribute>
-        </gmd:MD_ScopeCode>
+        <gmd:MD_ScopeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/GAScopeCodeList.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
       </gmd:hierarchyLevel>
       <gmd:hierarchyLevelName>
-        <gco:CharacterString><xsl:value-of select="$hierarchyLevelName"/></gco:CharacterString>
+        <gco:CharacterString>dataset</gco:CharacterString>
       </gmd:hierarchyLevelName>
-      <xsl:call-template name="contact"/>
+      <gmd:contact>
+        <xsl:call-template name="default_contact">
+          <xsl:with-param name="contact" select="'publisher'"/>
+        </xsl:call-template>
+      </gmd:contact>
       <gmd:dateStamp>
           <gco:Date>
               <xsl:choose>
@@ -79,20 +78,38 @@
           </gco:Date>
       </gmd:dateStamp>
       <gmd:metadataStandardName>
-         <gco:CharacterString>ANZLIC Metadata Profile: An Australian/New Zealand Profile of AS/NZS ISO 19115:2005, Geographic information - Metadata</gco:CharacterString>
+        <gco:CharacterString>ANZLIC Metadata Profile: An Australian/New Zealand Profile of AS/NZS ISO 19115:2005, Geographic information - Metadata</gco:CharacterString>
       </gmd:metadataStandardName>
       <gmd:metadataStandardVersion>
          <gco:CharacterString>1.1</gco:CharacterString>
       </gmd:metadataStandardVersion>
       
       <xsl:call-template name="referenceSystemInfo"/>
-      <xsl:call-template name="metadataExtensionInfo"/>
+      <!--xsl:call-template name="metadataExtensionInfo"/-->
       <xsl:call-template name="identificationInfo"/>
       <xsl:call-template name="contentInfo"/>
       <xsl:call-template name="distributionInfo"/>
-      <xsl:call-template name="dataQualityInfo"/>
+      <xsl:call-template name="dataQualityInfo">
+        <xsl:with-param name="DQ_Type">lineage</xsl:with-param>
+        <xsl:with-param name="DQ_Value" select="''"/>
+      </xsl:call-template>
+      <xsl:call-template name="dataQualityInfo">
+        <xsl:with-param name="DQ_Type">CompletenessOmission</xsl:with-param>
+        <xsl:with-param name="DQ_Value">COMPLETENESS</xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="dataQualityInfo">
+        <xsl:with-param name="DQ_Type">AbsoluteExternalPositionalAccuracy</xsl:with-param>
+        <xsl:with-param name="DQ_Value">POSITIONAL ACCURACY</xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="dataQualityInfo">
+        <xsl:with-param name="DQ_Type">ConceptualConsistency</xsl:with-param>
+        <xsl:with-param name="DQ_Value">LOGICAL CONSISTENCY</xsl:with-param>
+      </xsl:call-template>
+      <xsl:call-template name="dataQualityInfo">
+        <xsl:with-param name="DQ_Type">NonQuantitativeAttributeAccuracy</xsl:with-param>
+        <xsl:with-param name="DQ_Value">ATTRIBUTE ACCURACY</xsl:with-param>
+      </xsl:call-template>
       <xsl:call-template name="metadataConstraints"/>
-
     </gmd:MD_Metadata>
   </xsl:template>
 
@@ -100,43 +117,49 @@
     TOP LEVEL TEMPLATES
   -->
   <xsl:template name="contact">
-    <xsl:choose>
-      <xsl:when test="custodian">
-        <xsl:call-template name="other_contact">
-          <xsl:with-param name="contact" select="custodian"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <gmd:contact>
-          <xsl:call-template name="default_contact"/>
-        </gmd:contact>
-      </xsl:otherwise>
-    </xsl:choose><!--/gmd:contact-->
+    <gmd:pointOfContact>
+      <xsl:choose>
+        <xsl:when test="custodian">
+          <xsl:call-template name="other_contact">
+            <xsl:with-param name="contact" select="custodian"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+            <xsl:call-template name="default_contact"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </gmd:pointOfContact><!--/gmd:pointOfContact-->
     <xsl:variable name="other_contacts"> <!-- Test for any other contacts-->
-      <!-- http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode -->
-      <xsl:element name="creator"><xsl:value-of select="creator"/></xsl:element>
-      <xsl:element name="owner"><xsl:value-of select="owner"/></xsl:element>
-      <xsl:element name="user"><xsl:value-of select="user"/></xsl:element>
-      <xsl:element name="resourceProvider"><xsl:value-of select="resourceProvider"/></xsl:element>
-      <xsl:element name="distributor"><xsl:value-of select="distributor"/></xsl:element>
-      <xsl:element name="originator"><xsl:value-of select="originator"/></xsl:element>
-      <xsl:element name="publisher"><xsl:value-of select="publisher"/></xsl:element>
-      <xsl:element name="pointOfContact"><xsl:value-of select="pointOfContact"/></xsl:element>
-      <xsl:element name="principalInvestigator"><xsl:value-of select="principalInvestigator"/></xsl:element>
-      <xsl:element name="processor"><xsl:value-of select="processor"/></xsl:element>
-      <xsl:element name="author"><xsl:value-of select="author"/></xsl:element>
+        <!-- http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode -->
+        <xsl:element name="creator"><xsl:value-of select="creator"/></xsl:element>
+        <xsl:element name="owner"><xsl:value-of select="owner"/></xsl:element>
+        <xsl:element name="user"><xsl:value-of select="user"/></xsl:element>
+        <xsl:element name="resourceProvider"><xsl:value-of select="resourceProvider"/></xsl:element>
+        <xsl:element name="distributor"><xsl:value-of select="distributor"/></xsl:element>
+        <xsl:element name="originator"><xsl:value-of select="originator"/></xsl:element>
+        <xsl:element name="publisher"><xsl:value-of select="publisher"/></xsl:element>
+        <xsl:element name="pointOfContact"><xsl:value-of select="pointOfContact"/></xsl:element>
+        <xsl:element name="principalInvestigator"><xsl:value-of select="principalInvestigator"/></xsl:element>
+        <xsl:element name="processor"><xsl:value-of select="processor"/></xsl:element>
+        <xsl:element name="author"><xsl:value-of select="author"/></xsl:element>
     </xsl:variable>
     <xsl:for-each select="exsl:node-set($other_contacts)/*">
       <xsl:if test="normalize-space(.)">
-        <xsl:call-template name="other_contact">
-          <xsl:with-param name="contact" select="."/>
-        </xsl:call-template>
+        <gmd:pointOfContact>
+          <xsl:call-template name="other_contact">
+            <xsl:with-param name="contactinfo" select="."/>
+          </xsl:call-template>
+        </gmd:pointOfContact><!--/gmd:pointOfContact-->
       </xsl:if>
     </xsl:for-each>
   </xsl:template><!--contact-->
   <xsl:template name="default_contact">
-    <xsl:param name="contact"><xsl:value-of select="'custodian'"/></xsl:param> <!--default-->
+    <xsl:param name="contact">custodian</xsl:param> <!--default-->
     <gmd:CI_ResponsibleParty>
+      <gmd:individualName gco:nilReason="withheld">
+        <gco:CharacterString>
+        </gco:CharacterString>
+      </gmd:individualName>
       <gmd:organisationName>
         <gco:CharacterString>Australian Government Department of the Environment, Water, Heritage and the Arts</gco:CharacterString>
       </gmd:organisationName>
@@ -164,7 +187,7 @@
                       <gco:CharacterString>Canberra</gco:CharacterString>
                    </gmd:city>
                    <gmd:administrativeArea>
-                      <gco:CharacterString>Australian Captial Territory</gco:CharacterString>
+                      <gco:CharacterString>Australian Captital Territory</gco:CharacterString>
                    </gmd:administrativeArea>
                    <gmd:postalCode>
                       <gco:CharacterString>2601</gco:CharacterString>
@@ -177,13 +200,13 @@
                    </gmd:electronicMailAddress>
                 </gmd:CI_Address>
              </gmd:address>
-             <gmd:onlineResource>
+             <gmd:onlineResource> <!--ANZMet Lite strips this out...-->
                 <gmd:CI_OnlineResource>
                    <gmd:linkage>
-                      <gmd:URL>http://www.environment.gov.au</gmd:URL>
+                      <gmd:URL>http://intranet.environment.gov.au/business/mapsdata/Pages/RemoteSensing.aspx</gmd:URL>
                    </gmd:linkage>
                    <gmd:protocol>
-                      <gco:CharacterString>WWW:LINK-1.0-http--link</gco:CharacterString>
+                      <gco:CharacterString>HTTP</gco:CharacterString>
                    </gmd:protocol>
                    <gmd:description>
                       <gco:CharacterString>image acquisitions</gco:CharacterString>
@@ -196,115 +219,68 @@
         <gmd:CI_RoleCode>
           <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode</xsl:attribute>
           <xsl:attribute name="codeListValue"><xsl:value-of select="$contact"/></xsl:attribute>
+          <xsl:value-of select="$contact"/>
+        </gmd:CI_RoleCode>
+      </gmd:role>    </gmd:CI_ResponsibleParty>
+  </xsl:template><!--default_custodian-->
+  <xsl:template name="other_contact">
+    <xsl:param name="contactinfo"/>
+    <xsl:variable name="contact" select="str:toNode($contactinfo)"/>
+    <gmd:CI_ResponsibleParty>
+      <gmd:individualName gco:nilReason="withheld">
+        <gco:CharacterString>
+        </gco:CharacterString>
+      </gmd:individualName>
+      <gmd:organisationName>
+        <gco:CharacterString><xsl:value-of select="$contact/organisationName"/></gco:CharacterString>
+      </gmd:organisationName>
+      <gmd:positionName>
+        <gco:CharacterString><xsl:value-of select="$contact/positionName"/></gco:CharacterString>
+      </gmd:positionName>
+      <gmd:contactInfo>
+        <gmd:CI_Contact>
+           <gmd:phone>
+              <gmd:CI_Telephone>
+                 <gmd:voice>
+                   <gco:CharacterString><xsl:value-of select="$contact/voice"/></gco:CharacterString>
+                 </gmd:voice>
+                 <gmd:facsimile>
+                   <gco:CharacterString><xsl:value-of select="$contact/facsimile"/></gco:CharacterString>
+                 </gmd:facsimile>
+              </gmd:CI_Telephone>
+           </gmd:phone>
+           <gmd:address>
+             <gmd:CI_Address>
+               <gmd:deliveryPoint>
+                 <gco:CharacterString><xsl:value-of select="$contact/deliveryPoint"/></gco:CharacterString>
+               </gmd:deliveryPoint>
+               <gmd:city>
+                 <gco:CharacterString><xsl:value-of select="$contact/city"/></gco:CharacterString>
+               </gmd:city>
+               <gmd:administrativeArea>
+                   <gco:CharacterString><xsl:value-of select="$contact/administrativeArea"/></gco:CharacterString>
+                </gmd:administrativeArea>
+                <gmd:postalCode>
+                    <gco:CharacterString><xsl:value-of select="$contact/postalCode"/></gco:CharacterString>
+                </gmd:postalCode>
+                <gmd:country>
+                  <gco:CharacterString><xsl:value-of select="$contact/country"/></gco:CharacterString>
+                </gmd:country>
+                <gmd:electronicMailAddress>
+                  <gco:CharacterString><xsl:value-of select="$contact/electronicMailAddress"/></gco:CharacterString>
+                </gmd:electronicMailAddress>
+              </gmd:CI_Address>
+           </gmd:address>
+        </gmd:CI_Contact>
+      </gmd:contactInfo>
+      <gmd:role>
+        <gmd:CI_RoleCode>
+          <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode</xsl:attribute>
+          <xsl:attribute name="codeListValue"><xsl:value-of select="local-name($contactinfo)"/></xsl:attribute>
+          <xsl:value-of select="local-name($contactinfo)"/>
         </gmd:CI_RoleCode>
       </gmd:role>
     </gmd:CI_ResponsibleParty>
-  </xsl:template><!--default_custodian-->
-  <xsl:template name="other_contact">
-    <xsl:param name="contact"><xsl:value-of select="custodian"/></xsl:param> <!--default-->
-    <xsl:variable name="tokens" select="str:tokenize(string($contact), '&#10;')"/>
-    <gmd:contact>
-      <gmd:CI_ResponsibleParty>
-        <gmd:organisationName>
-          <gco:CharacterString>
-          <xsl:for-each select="$tokens">
-            <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-            <xsl:if test="$token[1]='organisationName'"><xsl:value-of select="$token[2]"/></xsl:if>
-          </xsl:for-each>
-          </gco:CharacterString>
-        </gmd:organisationName>
-        <gmd:positionName>
-          <gco:CharacterString>
-            <xsl:for-each select="$tokens">
-              <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-              <xsl:if test="$token[1]='positionName'"><xsl:value-of select="$token[2]"/></xsl:if>
-            </xsl:for-each>
-          </gco:CharacterString>
-        </gmd:positionName>
-        <gmd:contactInfo>
-          <gmd:CI_Contact>
-             <gmd:phone>
-                <gmd:CI_Telephone>
-                   <gmd:voice>
-                     <gco:CharacterString>
-                       <xsl:for-each select="$tokens">
-                         <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-                         <xsl:if test="$token[1]='voice'"><xsl:value-of select="$token[2]"/></xsl:if>
-                       </xsl:for-each>
-                     </gco:CharacterString>
-                   </gmd:voice>
-                   <gmd:facsimile>
-                     <gco:CharacterString>
-                       <xsl:for-each select="$tokens">
-                         <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-                         <xsl:if test="$token[1]='facsimile'"><xsl:value-of select="$token[2]"/></xsl:if>
-                       </xsl:for-each>
-                     </gco:CharacterString>
-                   </gmd:facsimile>
-                </gmd:CI_Telephone>
-             </gmd:phone>
-             <gmd:address>
-               <gmd:CI_Address>
-                 <gmd:deliveryPoint>
-                   <gco:CharacterString>
-                     <xsl:for-each select="$tokens">
-                       <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-                       <xsl:if test="$token[1]='deliveryPoint'"><xsl:value-of select="$token[2]"/></xsl:if>
-                     </xsl:for-each>
-                   </gco:CharacterString>
-                 </gmd:deliveryPoint>
-                 <gmd:city>
-                   <gco:CharacterString>
-                     <xsl:for-each select="$tokens">
-                       <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-                       <xsl:if test="$token[1]='city'"><xsl:value-of select="$token[2]"/></xsl:if>
-                     </xsl:for-each>
-                   </gco:CharacterString>
-                 </gmd:city>
-                 <gmd:administrativeArea>
-                     <gco:CharacterString>
-                         <xsl:for-each select="$tokens">
-                             <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-                             <xsl:if test="$token[1]='administrativeArea'"><xsl:value-of select="$token[2]"/></xsl:if>
-                         </xsl:for-each>
-                     </gco:CharacterString>
-                  </gmd:administrativeArea>
-                  <gmd:postalCode>
-                      <gco:CharacterString>
-                          <xsl:for-each select="$tokens">
-                              <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-                              <xsl:if test="$token[1]='postalCode'"><xsl:value-of select="$token[2]"/></xsl:if>
-                          </xsl:for-each>
-                      </gco:CharacterString>
-                  </gmd:postalCode>
-                  <gmd:country>
-                    <gco:CharacterString>
-                      <xsl:for-each select="$tokens">
-                        <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-                        <xsl:if test="$token[1]='country'"><xsl:value-of select="$token[2]"/></xsl:if>
-                      </xsl:for-each>
-                    </gco:CharacterString>
-                  </gmd:country>
-                  <gmd:electronicMailAddress>
-                    <gco:CharacterString>
-                      <xsl:for-each select="$tokens">
-                        <xsl:variable name="token" select="str:tokenize(string(.), ':')"/>
-                        <xsl:if test="$token[1]='electronicMailAddress'"><xsl:value-of select="$token[2]"/></xsl:if>
-                      </xsl:for-each>
-                    </gco:CharacterString>
-                  </gmd:electronicMailAddress>
-                </gmd:CI_Address>
-             </gmd:address>
-          </gmd:CI_Contact>
-        </gmd:contactInfo>
-        <gmd:role>
-          <gmd:CI_RoleCode>
-            <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode</xsl:attribute>
-            <xsl:attribute name="codeListValue"><xsl:value-of select="local-name($contact)"/></xsl:attribute>
-          </gmd:CI_RoleCode>
-        </gmd:role>
-      </gmd:CI_ResponsibleParty>
-    </gmd:contact>
   </xsl:template><!--other_contact--> 
   <!--
   -->  
@@ -327,7 +303,7 @@
                   <gco:CharacterString>
                   <xsl:choose>
                     <xsl:when test="$rs_type='OGC'">
-                    <xsl:value-of select="'OGC Well-known Text Representation of Spatial Reference Systems'"/>
+                    <xsl:value-of select="'OGC Well-Known Text (WKT) Representation of Spatial Reference Systems'"/>
                     </xsl:when>
                     <xsl:otherwise>
                     <xsl:value-of select="'EPSG Geodetic Parameter Dataset'"/>
@@ -377,7 +353,7 @@
                     <xsl:value-of select="srs"/>
                   </xsl:when>
                   <xsl:otherwise>
-                    <xsl:value-of select="epsg"/>
+                    <xsl:value-of select="round(epsg)"/>
                   </xsl:otherwise>
                   </xsl:choose>
                 </gco:CharacterString>
@@ -405,14 +381,26 @@
               <gmd:title>
                 <gco:CharacterString>
                   <xsl:choose>
-                    <xsl:when test="title">
+                    <xsl:when test="normalize-space(title)">
                       <xsl:value-of select="normalize-space(title)"/>
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:value-of select="'PLEASE ENTER A TITLE! File name = '"/>
-                      <xsl:value-of select="filename"/>
+                      <xsl:choose>
+                        <xsl:when test="normalize-space(satellite)"><xsl:value-of select="normalize-space(satellite)"/><xsl:value-of select="' '"/></xsl:when>
+                        <xsl:otherwise>Unknown satellite </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:choose>
+                        <xsl:when test="normalize-space(sensor)"><xsl:value-of select="normalize-space(sensor)"/><xsl:value-of select="' '"/></xsl:when>
+                        <xsl:otherwise>Unknown sensor </xsl:otherwise>
+                      </xsl:choose>
+                      <xsl:value-of select="normalize-space(filename)"/>
                     </xsl:otherwise>
                   </xsl:choose>
+                  <xsl:message>
+                    <xsl:value-of select="normalize-space(satellite)"/><xsl:value-of select="' '"/>
+                    <xsl:value-of select="normalize-space(sensor)"/><xsl:value-of select="' '"/>
+                    <xsl:value-of select="normalize-space(filename)"/>
+                  </xsl:message>
                 </gco:CharacterString>
               </gmd:title>
               <gmd:date>
@@ -432,55 +420,6 @@
                   </gmd:dateType>
                 </gmd:CI_Date>
               </gmd:date>
-              <gmd:identifier>
-                <gmd:MD_Identifier>
-                  <gmd:authority>
-                    <gmd:CI_Citation>
-                      <gmd:title>
-                        <gco:CharacterString>ANZLIC Identifier</gco:CharacterString>
-                      </gmd:title>
-                      <gmd:date>
-                        <gmd:CI_Date>
-                          <gmd:date>
-                            <gco:Date>2001-02</gco:Date>
-                          </gmd:date>
-                          <gmd:dateType>
-                            <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">
-                              <xsl:value-of select="'revision'"/>
-                            </gmd:CI_DateTypeCode>
-                          </gmd:dateType>
-                        </gmd:CI_Date>
-                      </gmd:date>
-                      <gmd:edition>
-                        <gco:CharacterString>Version 2</gco:CharacterString>
-                      </gmd:edition>
-                      <gmd:editionDate>
-                        <gco:Date>2001-02</gco:Date>
-                      </gmd:editionDate>
-                      <gmd:citedResponsibleParty>
-                        <gmd:CI_ResponsibleParty>
-                          <gmd:organisationName>
-                            <gco:CharacterString>ANZLIC - the Spatial Information Council</gco:CharacterString>
-                          </gmd:organisationName>
-                          <gmd:role>
-                            <gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="owner">
-                              <xsl:value-of select="'owner'"/>
-                            </gmd:CI_RoleCode>
-                          </gmd:role>
-                        </gmd:CI_ResponsibleParty>
-                      </gmd:citedResponsibleParty>
-                      <gmd:otherCitationDetails>
-                        <gco:CharacterString>Defined in ANZLIC Metadata Guidelines Version 2 http://www.anzlic.org.au/download.html?oid=2358011755</gco:CharacterString>
-                      </gmd:otherCitationDetails>
-                    </gmd:CI_Citation>
-                  </gmd:authority>
-                  <gmd:code>
-                    <gco:CharacterString>
-                      <xsl:value-of select="guid"/>
-                    </gco:CharacterString>
-                  </gmd:code>
-                </gmd:MD_Identifier>
-              </gmd:identifier>
             </gmd:CI_Citation>
           </gmd:citation>
           <gmd:abstract>
@@ -495,11 +434,13 @@
               </xsl:choose>
             </gco:CharacterString>
           </gmd:abstract>
+          <gmd:purpose gco:nilReason="missing"><gco:CharacterString/></gmd:purpose>
           <gmd:status>
             <gmd:MD_ProgressCode 
                 codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode"
                 codeListValue="completed"/>
           </gmd:status>
+          <xsl:call-template name="contact"/>
           <gmd:resourceMaintenance>
             <gmd:MD_MaintenanceInformation>
               <gmd:maintenanceAndUpdateFrequency>
@@ -517,21 +458,71 @@
                 </gco:CharacterString>
               </gmd:name>
               <gmd:version>
-                <gco:CharacterString>none</gco:CharacterString>
+                <!--gco:CharacterString>none</gco:CharacterString-->
+                <gco:CharacterString>Unknown</gco:CharacterString>
               </gmd:version>
             </gmd:MD_Format>
           </gmd:resourceFormat>
           <gmd:descriptiveKeywords>
             <gmd:MD_Keywords>
               <gmd:keyword>
-                <gco:CharacterString>imageryBaseMapsEarthCover</gco:CharacterString>
-              </gmd:keyword>    
+                <gco:CharacterString>other</gco:CharacterString>
+              </gmd:keyword>
               <gmd:type>
-                <gmd:MD_KeywordTypeCode 
-                    codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode"
-                    codeListValue="discipline">
-                  <xsl:value-of select="'discipline'"/>
-                </gmd:MD_KeywordTypeCode>
+                <gmd:MD_KeywordTypeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
+              </gmd:type>
+              <gmd:thesaurusName>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>OSDM schedule names</gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date>2008-11-10</gco:Date>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">revision</gmd:CI_DateTypeCode>
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                  <gmd:edition>
+                    <gco:CharacterString>Version 1.1</gco:CharacterString>
+                  </gmd:edition>
+                  <gmd:editionDate>
+                    <gco:Date>2008-11-10</gco:Date>
+                  </gmd:editionDate>
+                  <gmd:identifier>
+                    <gmd:MD_Identifier>
+                      <gmd:code>
+                        <gco:CharacterString>http://asdd.ga.gov.au/asdd/profileinfo/osdm-schedule.xml#osdm-schedule</gco:CharacterString>
+                      </gmd:code>
+                    </gmd:MD_Identifier>
+                  </gmd:identifier>
+                  <gmd:citedResponsibleParty>
+                    <gmd:CI_ResponsibleParty>
+                      <gmd:organisationName>
+                        <gco:CharacterString>Office of Spatial Data Management</gco:CharacterString>
+                      </gmd:organisationName>
+                      <gmd:role>
+                        <gmd:CI_RoleCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian">custodian</gmd:CI_RoleCode>
+                      </gmd:role>
+                    </gmd:CI_ResponsibleParty>
+                  </gmd:citedResponsibleParty>
+                </gmd:CI_Citation>
+              </gmd:thesaurusName>
+            </gmd:MD_Keywords>
+          </gmd:descriptiveKeywords>
+          <gmd:descriptiveKeywords>
+            <gmd:MD_Keywords>
+              <gmd:keyword>
+                <gco:CharacterString>PHOTOGRAPHY-AND-IMAGERY-Remote-Sensing</gco:CharacterString>
+              </gmd:keyword>
+              <gmd:keyword>
+                <gco:CharacterString>PHOTOGRAPHY-AND-IMAGERY-Satellite</gco:CharacterString>
+              </gmd:keyword>
+              <gmd:type>
+                <gmd:MD_KeywordTypeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="theme">theme</gmd:MD_KeywordTypeCode>
               </gmd:type>
               <gmd:thesaurusName>
                 <gmd:CI_Citation>
@@ -541,39 +532,33 @@
                   <gmd:date>
                     <gmd:CI_Date>
                       <gmd:date>
-                        <gco:Date>2001</gco:Date>
+                        <gco:Date>2008-05-16</gco:Date>
                       </gmd:date>
                       <gmd:dateType>
-                        <gmd:CI_DateTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">
-                          <xsl:value-of select="'revision'"/>
-                        </gmd:CI_DateTypeCode>
+                        <gmd:CI_DateTypeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">revision</gmd:CI_DateTypeCode>
                       </gmd:dateType>
                     </gmd:CI_Date>
                   </gmd:date>
                   <gmd:edition>
-                    <gco:CharacterString>Version 2</gco:CharacterString>
+                    <gco:CharacterString>Version 2.1</gco:CharacterString>
                   </gmd:edition>
                   <gmd:editionDate>
-                    <gco:Date>2001-02</gco:Date>
+                    <gco:Date>2008-05-16</gco:Date>
                   </gmd:editionDate>
                   <gmd:identifier>
                     <gmd:MD_Identifier>
                       <gmd:code>
-                        <gco:CharacterString><xsl:value-of select="$themesListLocation"/></gco:CharacterString>
+                        <gco:CharacterString>http://asdd.ga.gov.au/asdd/profileinfo/anzlic-theme.xml#anzlic-theme</gco:CharacterString>
                       </gmd:code>
                     </gmd:MD_Identifier>
                   </gmd:identifier>
                   <gmd:citedResponsibleParty>
                     <gmd:CI_ResponsibleParty>
                       <gmd:organisationName>
-                        <gco:CharacterString>ANZLIC - the Spatial Information Council</gco:CharacterString>
+                        <gco:CharacterString>ANZLIC the Spatial Information Council</gco:CharacterString>
                       </gmd:organisationName>
                       <gmd:role>
-                        <gmd:CI_RoleCode 
-                            codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode"
-                            codeListValue="custodian">
-                          <xsl:value-of select="'custodian'"/>
-                        </gmd:CI_RoleCode>
+                        <gmd:CI_RoleCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian">custodian</gmd:CI_RoleCode>
                       </gmd:role>
                     </gmd:CI_ResponsibleParty>
                   </gmd:citedResponsibleParty>
@@ -581,12 +566,99 @@
               </gmd:thesaurusName>
             </gmd:MD_Keywords>
           </gmd:descriptiveKeywords>
+          <gmd:descriptiveKeywords>
+            <gmd:MD_Keywords>
+              <gmd:keyword>
+                <gco:CharacterString>Australia</gco:CharacterString>
+              </gmd:keyword>
+              <gmd:type>
+                <gmd:MD_KeywordTypeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="place">theme</gmd:MD_KeywordTypeCode>
+              </gmd:type>
+              <gmd:thesaurusName>
+                <gmd:CI_Citation>
+                  <gmd:title>
+                    <gco:CharacterString>ANZLIC Jurisdictions</gco:CharacterString>
+                  </gmd:title>
+                  <gmd:date>
+                    <gmd:CI_Date>
+                      <gmd:date>
+                        <gco:Date>2008-10-29</gco:Date>
+                      </gmd:date>
+                      <gmd:dateType>
+                        <gmd:CI_DateTypeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#CI_DateTypeCode" codeListValue="revision">revision</gmd:CI_DateTypeCode>
+                      </gmd:dateType>
+                    </gmd:CI_Date>
+                  </gmd:date>
+                  <gmd:edition>
+                    <gco:CharacterString>Version 2.1</gco:CharacterString>
+                  </gmd:edition>
+                  <gmd:editionDate>
+                    <gco:Date>2008-10-29</gco:Date>
+                  </gmd:editionDate>
+                  <gmd:identifier>
+                    <gmd:MD_Identifier>
+                      <gmd:code>
+                        <gco:CharacterString>http://asdd.ga.gov.au/asdd/profileinfo/anzlic-jurisdic.xml#anzlic-jurisdic</gco:CharacterString>
+                      </gmd:code>
+                    </gmd:MD_Identifier>
+                  </gmd:identifier>
+                  <gmd:citedResponsibleParty>
+                    <gmd:CI_ResponsibleParty>
+                      <gmd:organisationName>
+                        <gco:CharacterString>ANZLIC the Spatial Information Council</gco:CharacterString>
+                      </gmd:organisationName>
+                      <gmd:role>
+                        <gmd:CI_RoleCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#CI_RoleCode" codeListValue="custodian">custodian</gmd:CI_RoleCode>
+                      </gmd:role>
+                    </gmd:CI_ResponsibleParty>
+                  </gmd:citedResponsibleParty>
+                </gmd:CI_Citation>
+              </gmd:thesaurusName>
+            </gmd:MD_Keywords>
+          </gmd:descriptiveKeywords>          
           <gmd:resourceConstraints>
-            <gmd:MD_Constraints>
+            <gmd:MD_LegalConstraints>
               <gmd:useLimitation>
-                <gco:CharacterString>PLEASE ENTER ANY ACCESS CONSTRAINTS!</gco:CharacterString>
+                <gco:CharacterString>
+                  <xsl:choose>
+                    <xsl:when test="useConstraints">
+                      <xsl:value-of select="normalize-space(useLimitation)"/>
+                    </xsl:when>
+                    <xsl:otherwise>Usage constraints: Internal use only.</xsl:otherwise>
+                  </xsl:choose>
+                </gco:CharacterString>
               </gmd:useLimitation>
-            </gmd:MD_Constraints>
+              <gmd:useConstraints>
+                <gmd:MD_RestrictionCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_RestrictionCode" codeListValue="restricted">restricted</gmd:MD_RestrictionCode>
+              </gmd:useConstraints>
+            </gmd:MD_LegalConstraints>
+          </gmd:resourceConstraints>
+          <gmd:resourceConstraints>
+            <gmd:MD_LegalConstraints>
+              <gmd:useLimitation>
+                <gco:CharacterString>
+                  <xsl:choose>
+                    <xsl:when test="accessConstraints">
+                      <xsl:value-of select="normalize-space(useLimitation)"/>
+                    </xsl:when>
+                    <xsl:otherwise>Access constraints: Internal access only.</xsl:otherwise>
+                  </xsl:choose>
+                </gco:CharacterString>
+              </gmd:useLimitation>
+              <gmd:accessConstraints>
+                <gmd:MD_RestrictionCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_RestrictionCode" codeListValue="restricted">restricted</gmd:MD_RestrictionCode>
+              </gmd:accessConstraints>
+            </gmd:MD_LegalConstraints>
+          </gmd:resourceConstraints>
+          <gmd:resourceConstraints>
+            <gmd:MD_SecurityConstraints>
+              <gmd:useLimitation>
+                <gco:CharacterString>Security classification: UNCLASSIFIED</gco:CharacterString>
+              </gmd:useLimitation>
+              <gmd:classification>
+                <gmd:MD_ClassificationCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_ClassificationCode" codeListValue="unclassified">unclassified</gmd:MD_ClassificationCode>
+              </gmd:classification>
+            </gmd:MD_SecurityConstraints>
           </gmd:resourceConstraints>
           <gmd:spatialResolution>
             <gmd:MD_Resolution>
@@ -611,7 +683,7 @@
             </gmd:MD_Resolution>
           </gmd:spatialResolution>
           <gmd:language>
-            <gco:CharacterString><xsl:value-of select="$language"/></gco:CharacterString>
+            <gco:CharacterString>eng</gco:CharacterString>
           </gmd:language>
           <gmd:topicCategory>
             <gmd:MD_TopicCategoryCode><xsl:value-of select="$topicCategory"/></gmd:MD_TopicCategoryCode>
@@ -653,6 +725,10 @@
                   </gmd:northBoundLatitude>
                 </gmd:EX_GeographicBoundingBox>
               </gmd:geographicElement>
+            </gmd:EX_Extent>
+          </gmd:extent>
+          <gmd:extent>
+            <gmd:EX_Extent>
               <gmd:geographicElement>
                 <gmd:EX_BoundingPolygon>
                   <gmd:polygon>
@@ -663,12 +739,17 @@
                           <gml:pos><xsl:value-of select="str:replace(UL, ',', ' ')"/></gml:pos>
                           <gml:pos><xsl:value-of select="str:replace(UR, ',', ' ')"/></gml:pos>
                           <gml:pos><xsl:value-of select="str:replace(LR, ',', ' ')"/></gml:pos>
+                          <gml:pos><xsl:value-of select="str:replace(LL, ',', ' ')"/></gml:pos>
                         </gml:LinearRing>
                       </gml:exterior>
                     </gml:Polygon>
                   </gmd:polygon>
                 </gmd:EX_BoundingPolygon>
               </gmd:geographicElement>
+            </gmd:EX_Extent>
+          </gmd:extent>
+          <gmd:extent>
+            <gmd:EX_Extent>
               <gmd:geographicElement>
                 <gmd:EX_GeographicDescription>
                   <gmd:geographicIdentifier>
@@ -718,12 +799,16 @@
                         </gmd:CI_Citation>
                       </gmd:authority>
                       <gmd:code>
-                        <gco:CharacterString>AUSTRALIA EXCLUDING EXTERNAL TERRITORIES</gco:CharacterString>
+                        <gco:CharacterString>AUSTRALIA</gco:CharacterString>
                       </gmd:code>
                     </gmd:MD_Identifier>
                   </gmd:geographicIdentifier>
                 </gmd:EX_GeographicDescription>
               </gmd:geographicElement>
+            </gmd:EX_Extent>
+          </gmd:extent>
+          <gmd:extent>
+            <gmd:EX_Extent>
               <gmd:temporalElement>
                 <gmd:EX_TemporalExtent>
                   <gmd:extent>
@@ -753,7 +838,7 @@
                 </gmd:EX_TemporalExtent>
               </gmd:temporalElement>
             </gmd:EX_Extent>
-          </gmd:extent>
+         </gmd:extent>
           <gmd:supplementalInformation>
             <gco:CharacterString>
               <xsl:for-each select="./*">
@@ -781,19 +866,12 @@
     <gmd:contentInfo>
       <gmd:MD_ImageDescription>
         <gmd:attributeDescription>
-          <gco:RecordType/>
+           <gco:RecordType>Image and band information</gco:RecordType>
         </gmd:attributeDescription>
         <gmd:contentType>
           <gmd:MD_CoverageContentTypeCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CoverageContentTypeCode"
                                           codeListValue="image"/>
         </gmd:contentType>
-        <xsl:call-template name="bands">
-          <xsl:with-param name="band" select="1"/>
-          <xsl:with-param name="count" select="$tbandcount"/>
-          <xsl:with-param name="tbands" select="$tbands"/>
-          <xsl:with-param name="tnbits" select="$tnbits"/>
-        </xsl:call-template>
-
         <xsl:if test="normalize-space(sunelevation)">
           <gmd:illuminationElevationAngle>
             <gco:Real><xsl:value-of select="normalize-space(sunelevation)"/></gco:Real>
@@ -810,15 +888,13 @@
                 codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ImagingConditionCode"
                 codeListValue="cloud"/>
           </gmd:imagingCondition>
-          <gmd:imageQualityCode>
-            <!--gmd:RS_Identifier--> <!-- MD or RS Not sure about this... -->
+          <!--gmd:imageQualityCode>
             <gmd:MD_Identifier>
               <gmd:code gco:nilReason="missing">
                 <gco:CharacterString/>
               </gmd:code>
             </gmd:MD_Identifier>
-            <!--/gmd:RS_Identifier--> <!-- MD or RS Not sure about this... -->
-          </gmd:imageQualityCode>
+          </gmd:imageQualityCode-->
           <gmd:cloudCoverPercentage>
             <gco:Real><xsl:value-of select="normalize-space(cloudcover)"/></gco:Real>
           </gmd:cloudCoverPercentage>
@@ -853,6 +929,12 @@
            <gco:Boolean>1</gco:Boolean>
           </gmd:lensDistortionInformationAvailability>
         </xsl:if>
+        <xsl:call-template name="bands">
+          <xsl:with-param name="band" select="1"/>
+          <xsl:with-param name="count" select="$tbandcount"/>
+          <xsl:with-param name="tbands" select="$tbands"/>
+          <xsl:with-param name="tnbits" select="$tnbits"/>
+        </xsl:call-template>
       </gmd:MD_ImageDescription>
     </gmd:contentInfo>
   </xsl:template><!--contentInfo-->
@@ -908,10 +990,13 @@
         <gmd:distributionFormat>
           <gmd:MD_Format>
             <gmd:name>
-              <gco:CharacterString><xsl:value-of select="filetype"/></gco:CharacterString>
+              <gco:CharacterString>
+                <xsl:value-of select="normalize-space(filetype)"/>
+              </gco:CharacterString>
             </gmd:name>
             <gmd:version>
-              <gco:CharacterString>1</gco:CharacterString>
+              <!--gco:CharacterString>none</gco:CharacterString-->
+              <gco:CharacterString>Unknown</gco:CharacterString>
             </gmd:version>
           </gmd:MD_Format>
         </gmd:distributionFormat>
@@ -924,260 +1009,183 @@
             </gmd:distributorContact>
             </gmd:MD_Distributor>
         </gmd:distributor>
-        <!-- Commented out for future use. 
-              NOTE: remove underscores between the dashes from 
-              WWW:LINK-1.0-http-_- etc... they were added to workaround comment character issues with the parser
-        -->  
-        <!--gmd:transferOptions>
-          <gmd:MD_DigitalTransferOptions>
-            <gmd:onLine>
-              <gmd:CI_OnlineResource>
-                <gmd:linkage>
-                  <gmd:URL>http://pandora:81/ecwp/ecw_wms.dll?000014?Request=GetCapabilities</gmd:URL>
-                </gmd:linkage>
-                <gmd:protocol>
-                  <gco:CharacterString>OGC:WMS-1.1.1-http-get-map</gco:CharacterString>
-                </gmd:protocol>
-                <gmd:description>
-                  <gco:CharacterString>Image Web Server Web Map Service</gco:CharacterString>
-                </gmd:description>
-              </gmd:CI_OnlineResource>
-            </gmd:onLine>
-            <gmd:onLine>
-              <gmd:CI_OnlineResource>
-                <gmd:linkage>
-                  <gmd:URL>http://pandora:81/ecwp/ImageX.dll?image?layers=/iwsimages/aus/aust_2004.ecw&amp;sizex=800&amp;sizey=800&amp;quality=80&amp;type=png</gmd:URL>
-                </gmd:linkage>
-                <gmd:protocol>
-                  <gco:CharacterString>WWW:LINK-1.0-http- -link</gco:CharacterString>
-                </gmd:protocol>
-                <gmd:name>
-                  <gco:CharacterString>Image Web Server Image X</gco:CharacterString>
-                </gmd:name>
-                <gmd:description>
-                  <gco:CharacterString>Image Web Server Image X (simple browser display)</gco:CharacterString>
-                </gmd:description>
-              </gmd:CI_OnlineResource>
-            </gmd:onLine>
-            <gmd:onLine>
-              <gmd:CI_OnlineResource>
-                <gmd:linkage>
-                  <gmd:URL>http://pandora:81/ecwp/ecw_wms.dll?000014?SERVICE=WMS&amp;VERSION=1.1.1&amp;REQUEST=GetMap&amp;LAYERS=AUST_2004.ECW&amp;SRS=EPSG:4326&amp;BBOX=100.0,0,180.0,-60.0&amp;WIDTH=800&amp;HEIGHT=600&amp;FORMAT=image/png&amp;TRANSPARENT=TRUE&amp;STYLES=raster</gmd:URL>
-                </gmd:linkage>
-                <gmd:protocol>
-                  <gco:CharacterString>WWW:LINK-1.0-http- -link</gco:CharacterString>
-                </gmd:protocol>
-                <gmd:name>
-                  <gco:CharacterString>Image Web Server WMS GetMap</gco:CharacterString>
-                </gmd:name>
-                <gmd:description>
-                  <gco:CharacterString>Image Web Server WMS GetMap image display</gco:CharacterString>
-                </gmd:description>
-              </gmd:CI_OnlineResource>
-            </gmd:onLine>
-            <gmd:onLine>
-              <gmd:CI_OnlineResource>
-                <gmd:linkage>
-                  <gmd:URL>http://pandora.internal.govt:81/tmp/000014.kml</gmd:URL>
-                </gmd:linkage>
-                <gmd:protocol>
-                  <gco:CharacterString>GLG:KML-2.0-http-get-map</gco:CharacterString>
-                </gmd:protocol>
-                <gmd:name>
-                  <gco:CharacterString>Google Earth KML 000014 poly and thumb</gco:CharacterString>
-                </gmd:name>
-                <gmd:description>
-                  <gco:CharacterString>Google Earth KML poly thumb (requires Google Earth)</gco:CharacterString>
-                </gmd:description>
-              </gmd:CI_OnlineResource>
-            </gmd:onLine>
-            <gmd:onLine>
-              <gmd:CI_OnlineResource>
-                <gmd:linkage>
-                  <gmd:URL>http://pandora.internal.govt:81/KML/wms-kml.php?SERVICE=000014&amp;LAYERS=AUST_2004.ECW</gmd:URL>
-                </gmd:linkage>
-                <gmd:protocol>
-                  <gco:CharacterString>GLG:KML-2.0-http-get-map</gco:CharacterString>
-                </gmd:protocol>
-                <gmd:name>
-                  <gco:CharacterString>Google Earth KML 000014 iws full resolution</gco:CharacterString>
-                </gmd:name>
-                <gmd:description>
-                  <gco:CharacterString>Google Earth KML poly wms (requires Google Earth)</gco:CharacterString>
-                </gmd:description>
-              </gmd:CI_OnlineResource>
-            </gmd:onLine>
-            <gmd:onLine>
-              <gmd:CI_OnlineResource>
-                <gmd:linkage>
-                  <gmd:URL>ecwp://pandora:81/iwsimages/aus/aust_2004.ecw</gmd:URL>
-                </gmd:linkage>
-                <gmd:protocol>
-                  <gco:CharacterString>WWW:LINK-1.0-http- -samples</gco:CharacterString>
-                </gmd:protocol>
-                <gmd:name>
-                  <gco:CharacterString>ECWP - Enhanced Compression Wavelet Protocol</gco:CharacterString>
-                </gmd:name>
-                <gmd:description>
-                  <gco:CharacterString>ECWP - Streaming Imagery cut and paste to the open file dialog in ER Mapper or ER Mapper plugin for ArcGIS</gco:CharacterString>
-                </gmd:description>
-              </gmd:CI_OnlineResource>
-            </gmd:onLine>
-            <gmd:offLine>
-              <gmd:MD_Medium>
-                <gmd:name>
-                  <gmd:MD_MediumNameCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MediumNameCode"
-                                         codeListValue="digitalLinearTap"/>
-                </gmd:name>
-                <gmd:mediumFormat>
-                  <gmd:MD_MediumFormatCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MediumFormatCode"
-                                           codeListValue="tar"/>
-                </gmd:mediumFormat>
-                <gmd:mediumNote>
-                  <gco:CharacterString>RSA000002</gco:CharacterString>
-                </gmd:mediumNote>
-              </gmd:MD_Medium>
-            </gmd:offLine>
-          </gmd:MD_DigitalTransferOptions>
-        </gmd:transferOptions-->
+        <gmd:transferOptions>
+            <gmd:MD_DigitalTransferOptions>
+                <!--xsl:for-each select="OnlineResource"-->
+                <xsl:for-each select="*[starts-with(name(),'OnlineResource')]">
+                    <xsl:variable name="resource" select="str:toNode(.)"/>
+                    <gmd:onLine>
+                        <gmd:CI_OnlineResource>
+                            <gmd:linkage>
+                                <gmd:URL><xsl:value-of select="$resource/URL"/></gmd:URL>
+                            </gmd:linkage>
+                            <gmd:protocol>
+                                <gco:CharacterString><xsl:value-of select="$resource/protocol"/></gco:CharacterString>
+                            </gmd:protocol>
+                            <xsl:choose>
+                              <xsl:when test="normalize-space($resource/name)">
+                                  <gmd:name>
+                                      <gco:CharacterString><xsl:value-of select="$resource/name"/></gco:CharacterString>
+                                  </gmd:name>
+                              </xsl:when>
+                              <xsl:otherwise>
+                                <gmd:name gco:nilReason="missing"><gco:CharacterString/></gmd:name>
+                              </xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:choose>
+                              <xsl:when test="normalize-space($resource/description)">
+                                  <gmd:description><gco:CharacterString><xsl:value-of select="$resource/description"/></gco:CharacterString></gmd:description>
+                              </xsl:when>
+                              <xsl:otherwise><gmd:description gco:nilReason="missing"><gco:CharacterString/></gmd:description></xsl:otherwise>
+                            </xsl:choose>
+                            <xsl:if test="normalize-space($resource/function)">
+                              <gmd:function>
+                                <gmd:CI_OnLineFunctionCode>
+                                  <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/codeList.xml#CI_OnLineFunctionCode</xsl:attribute>
+                                  <xsl:attribute name="codeListValue"><xsl:value-of select="normalize-space($resource/function)"/></xsl:attribute>
+                                </gmd:CI_OnLineFunctionCode>
+                              </gmd:function>
+                            </xsl:if>
+                        </gmd:CI_OnlineResource>
+                    </gmd:onLine>                            
+                </xsl:for-each>
+                <!--gmd:offLine>
+                  <gmd:MD_Medium>
+                    <gmd:name>
+                      <gmd:MD_MediumNameCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MediumNameCode"
+                                             codeListValue="digitalLinearTap"/>
+                    </gmd:name>
+                    <gmd:mediumFormat>
+                      <gmd:MD_MediumFormatCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MediumFormatCode"
+                                               codeListValue="tar"/>
+                    </gmd:mediumFormat>
+                    <gmd:mediumNote>
+                      <gco:CharacterString>RSA000002</gco:CharacterString>
+                    </gmd:mediumNote>
+                  </gmd:MD_Medium>
+                </gmd:offLine-->
+            </gmd:MD_DigitalTransferOptions>
+        </gmd:transferOptions>
       </gmd:MD_Distribution>
     </gmd:distributionInfo>
-  </xsl:template><!--metadataExtensionInfo-->  
+  </xsl:template><!--distributionInfo-->  
   <!--
   -->  
   <xsl:template name="dataQualityInfo">
-      <gmd:dataQualityInfo>
-        <gmd:DQ_DataQuality>
-          <gmd:scope>
-            <gmd:DQ_Scope>
-              <gmd:level>
-                <gmd:MD_ScopeCode>
-                  <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ScopeCode</xsl:attribute>
-                  <xsl:attribute name="codeListValue">dataset</xsl:attribute>
-                  <xsl:value-of select="'dataset'"/>
-                </gmd:MD_ScopeCode>
-              </gmd:level>
-            </gmd:DQ_Scope>
-          </gmd:scope>
-          <gmd:report>
-              <gmd:DQ_CompletenessOmission>
+    <xsl:param name="DQ_Type"/>
+    <xsl:param name="DQ_Value"/>
+    <gmd:dataQualityInfo>
+      <gmd:DQ_DataQuality>
+        <gmd:scope>
+          <gmd:DQ_Scope>
+            <gmd:level>
+              <gmd:MD_ScopeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_ScopeCode" codeListValue="dataset">dataset</gmd:MD_ScopeCode>
+            </gmd:level>
+          </gmd:DQ_Scope>
+        </gmd:scope>
+        <xsl:choose>
+          <xsl:when test="$DQ_Type='lineage'">
+            <gmd:lineage>
+              <gmd:LI_Lineage>
+                <gmd:statement>
+                  <gco:CharacterString>
+                      <xsl:choose>
+                          <xsl:when test="normalize-space(lineage)"><xsl:value-of select="lineage"/></xsl:when>
+                          <xsl:otherwise>Please enter dataset LINEAGE</xsl:otherwise>
+                      </xsl:choose>
+                  </gco:CharacterString>
+                </gmd:statement>
+                <xsl:variable name="tsteps">
+                  <xsl:element name="demcorrection"><xsl:value-of select="demcorrection"/></xsl:element>
+                  <xsl:element name="resampling"><xsl:value-of select="resampling"/></xsl:element>
+                </xsl:variable>
+                <xsl:for-each select="exsl:node-set($tsteps)/*">
+                  <xsl:if test="normalize-space(.)">
+                    <gmd:processStep>
+                      <gmd:LI_ProcessStep>
+                        <!--xsl:attribute name="id"><xsl:value-of select="position()"/></xsl:attribute-->
+                        <gmd:description>
+                          <gco:CharacterString><xsl:value-of select="local-name(.)"/>: <xsl:value-of select="normalize-space(.)"/></gco:CharacterString>
+                        </gmd:description>
+                        <gmd:rationale gco:nilReason="missing"><gco:CharacterString/></gmd:rationale>
+                        <gmd:dateTime gco:nilReason="missing"/>
+                        <gmd:processor gco:nilReason="missing"></gmd:processor>
+                      </gmd:LI_ProcessStep>
+                    </gmd:processStep>
+                  </xsl:if>
+                </xsl:for-each>
+              </gmd:LI_Lineage>
+            </gmd:lineage>
+          </xsl:when>
+          <xsl:otherwise>
+            <gmd:report>
+              <xsl:element name="gmd:DQ_{$DQ_Type}">
                 <gmd:result>
                   <gmd:DQ_ConformanceResult>
                     <gmd:specification>
-                      <xsl:call-template name="DummyCitation"/>
+                      <gmd:CI_Citation>
+                        <gmd:title><gco:CharacterString><xsl:value-of select="$DQ_Value"/></gco:CharacterString></gmd:title>
+                        <!--xsl:call-template name="UnknownDate"/-->
+                        <gmd:date>
+                          <gmd:CI_Date>
+                            <gmd:date gco:nilReason="unknown"><!--gco:Date/--></gmd:date>
+                            <gmd:dateType>
+                              <gmd:CI_DateTypeCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication</gmd:CI_DateTypeCode>
+                            </gmd:dateType>
+                          </gmd:CI_Date>
+                        </gmd:date>
+                      </gmd:CI_Citation>
                     </gmd:specification>
                     <gmd:explanation>
-                      <gco:CharacterString>COMPLETENESS</gco:CharacterString>
+                      <gco:CharacterString>Please enter <xsl:value-of select="$DQ_Value"/> text</gco:CharacterString>
                     </gmd:explanation>
-                    <gmd:pass>
-                      <xsl:attribute name="gco:nilReason">missing</xsl:attribute>
-                    </gmd:pass>
+                      <gmd:pass>
+                        <gco:Boolean>1</gco:Boolean>
+                      </gmd:pass>
+                      <!--gmd:pass gco:nilReason="missing"> <- This fails validation
+                        <gco:Boolean/> 
+                      </gmd:pass-->
                   </gmd:DQ_ConformanceResult>
                 </gmd:result>
-              </gmd:DQ_CompletenessOmission>
-          </gmd:report>
-          <gmd:report>
-            <gmd:DQ_AbsoluteExternalPositionalAccuracy>
-              <gmd:result>
-                <gmd:DQ_ConformanceResult>
-                  <gmd:specification>
-                    <xsl:call-template name="DummyCitation"/>
-                  </gmd:specification>
-                  <gmd:explanation>
-                    <gco:CharacterString>POSITIONAL ACCURACY</gco:CharacterString>
-                  </gmd:explanation>
-                  <gmd:pass>
-                    <xsl:attribute name="gco:nilReason">missing</xsl:attribute>
-                  </gmd:pass>
-                </gmd:DQ_ConformanceResult>
-              </gmd:result>
-            </gmd:DQ_AbsoluteExternalPositionalAccuracy>
-          </gmd:report>
-          <gmd:report>
-            <gmd:DQ_ConceptualConsistency>
-              <gmd:result>
-                <gmd:DQ_ConformanceResult>
-                  <gmd:specification>
-                    <xsl:call-template name="DummyCitation"/>
-                  </gmd:specification>
-                  <gmd:explanation>
-                    <gco:CharacterString>LOGICAL CONSISTENCY</gco:CharacterString>
-                  </gmd:explanation>
-                  <gmd:pass>
-                    <xsl:attribute name="gco:nilReason">missing</xsl:attribute>
-                  </gmd:pass>
-                </gmd:DQ_ConformanceResult>
-              </gmd:result>
-            </gmd:DQ_ConceptualConsistency>
-          </gmd:report>
-          <gmd:report>
-            <gmd:DQ_NonQuantitativeAttributeAccuracy>
-              <gmd:result>
-                <gmd:DQ_ConformanceResult>
-                  <gmd:specification>
-                    <xsl:call-template name="DummyCitation"/>
-                  </gmd:specification>
-                  <gmd:explanation>
-                    <gco:CharacterString>ATTRIBUTE ACCURACY</gco:CharacterString>
-                  </gmd:explanation>
-                  <gmd:pass>
-                    <xsl:attribute name="gco:nilReason">missing</xsl:attribute>
-                  </gmd:pass>
-                </gmd:DQ_ConformanceResult>
-              </gmd:result>
-            </gmd:DQ_NonQuantitativeAttributeAccuracy>
-          </gmd:report>
-          <gmd:lineage>
-            <gmd:LI_Lineage>
-              <gmd:statement>
-                <gco:CharacterString>LINEAGE</gco:CharacterString>
-              </gmd:statement>
-              <xsl:variable name="tsteps">
-                <xsl:element name="demcorrection"><xsl:value-of select="demcorrection"/></xsl:element>
-                <xsl:element name="resampling"><xsl:value-of select="resampling"/></xsl:element>
-              </xsl:variable>
-              <xsl:for-each select="exsl:node-set($tsteps)/*">
-                <xsl:if test="normalize-space(.)">
-                  <processStep>
-                    <LI_ProcessStep>
-                      <xsl:attribute name="id"><xsl:value-of select="position()"/></xsl:attribute>
-                      <rationale>
-                        <gco:CharacterString><xsl:value-of select="local-name(.)"/></gco:CharacterString>
-                      </rationale>
-                      <description>
-                        <gco:CharacterString><xsl:value-of select="normalize-space(.)"/></gco:CharacterString>
-                      </description>
-                    </LI_ProcessStep>
-                  </processStep>
-                </xsl:if>
-              </xsl:for-each>
-            </gmd:LI_Lineage>
-          </gmd:lineage>
-        </gmd:DQ_DataQuality>
-      </gmd:dataQualityInfo>
+              </xsl:element><!--xsl:element name="gmd:DQ_{$DQ_Type}"-->
+            </gmd:report>
+          </xsl:otherwise>
+        </xsl:choose>
+      </gmd:DQ_DataQuality>
+    </gmd:dataQualityInfo>
   </xsl:template><!--dataQualityInfo-->
   <!--
   -->  
   <xsl:template name="metadataConstraints">
     <gmd:metadataConstraints>
-        <gmd:MD_LegalConstraints>
-           <gmd:useLimitation>
-
-              <gco:CharacterString>no limit</gco:CharacterString>
-           </gmd:useLimitation>
-           <gmd:accessConstraints>
-              <gmd:MD_RestrictionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode"
-                                      codeListValue="otherRestrictions"/>
-           </gmd:accessConstraints>
-           <gmd:useConstraints>
-              <gmd:MD_RestrictionCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode"
-                                      codeListValue="otherRestrictions"/>
-           </gmd:useConstraints>
-
-           <gmd:otherConstraints>
-              <gco:CharacterString>no constraints</gco:CharacterString>
-           </gmd:otherConstraints>
-        </gmd:MD_LegalConstraints>
+      <gmd:MD_SecurityConstraints>
+        <gmd:useLimitation>
+          <gco:CharacterString>Security classification: UNCLASSIFIED</gco:CharacterString>
+        </gmd:useLimitation>
+        <gmd:classification>
+          <gmd:MD_ClassificationCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_ClassificationCode" codeListValue="unclassified">unclassified</gmd:MD_ClassificationCode>
+        </gmd:classification>
+      </gmd:MD_SecurityConstraints>
+    </gmd:metadataConstraints>
+    <gmd:metadataConstraints>
+      <gmd:MD_LegalConstraints>
+        <gmd:useLimitation>
+          <gco:CharacterString>Internal access only.</gco:CharacterString>
+        </gmd:useLimitation>
+        <gmd:accessConstraints>
+          <gmd:MD_RestrictionCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_RestrictionCode" codeListValue="restricted">restricted</gmd:MD_RestrictionCode>
+        </gmd:accessConstraints>
+      </gmd:MD_LegalConstraints>
+    </gmd:metadataConstraints>
+    <gmd:metadataConstraints>
+      <gmd:MD_LegalConstraints>
+        <gmd:useLimitation>
+          <gco:CharacterString>Internal use only.</gco:CharacterString>
+        </gmd:useLimitation>
+        <gmd:useConstraints>
+          <gmd:MD_RestrictionCode codeList="http://asdd.ga.gov.au/asdd/profileinfo/gmxCodelists.xml#MD_RestrictionCode" codeListValue="restricted">restricted</gmd:MD_RestrictionCode>
+        </gmd:useConstraints>
+      </gmd:MD_LegalConstraints>
     </gmd:metadataConstraints>
   </xsl:template>
  
@@ -1186,9 +1194,7 @@
   -->
   <xsl:template name="DummyCitation">
     <gmd:CI_Citation>
-      <gmd:title>
-        <xsl:attribute name="gco:nilReason">missing</xsl:attribute>
-      </gmd:title>
+      <gmd:title gco:nilReason="unknown"><gco:CharacterString/></gmd:title>
       <xsl:call-template name="UnknownDate"/>
     </gmd:CI_Citation>
   </xsl:template><!-- /name="DummyCitation" -->
@@ -1197,16 +1203,27 @@
   <xsl:template name="UnknownDate">
     <gmd:date>
       <gmd:CI_Date>
-        <gmd:date>
-          <xsl:attribute name="gco:nilReason">unknown</xsl:attribute>
-        </gmd:date>
-        <gmd:dateType>
-          <xsl:attribute name="gco:nilReason">unknown</xsl:attribute>
-        </gmd:dateType>
+        <gmd:date gco:nilReason="unknown"/>
+        <gmd:dateType gco:nilReason="unknown"/>
       </gmd:CI_Date>
     </gmd:date>
   </xsl:template><!-- /name="UnknownDate" -->
 
+  <!--
+    F U N C T I O N S
+  -->
+    <func:function name="str:toNode">
+        <xsl:param name="strData" />
+        <xsl:variable name="arrData" select="str:split(string($strData), '&#10;')"/>
+        <xsl:variable name="retData">
+            <result>
+                <xsl:for-each select="$arrData">
+                    <xsl:element name="{str:split(string(.), '|')[1]}"><xsl:value-of select="str:split(string(.), '|')[2]"/></xsl:element>
+                </xsl:for-each>
+            </result>
+        </xsl:variable>
+        <func:result select="exsl:node-set($retData)/*" />
+    </func:function>
 
   
 </xsl:stylesheet>

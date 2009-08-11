@@ -41,14 +41,25 @@ def main(xls,xsl,dir,log=None,debug=False,gui=False):
     #pl = progresslogger.ProgressLogger('Metadata Crawler',logfile=log, logToConsole=True, logToFile=True, logToGUI=gui, level=level, windowicon=windowicon)
     pl = progresslogger.ProgressLogger('Metadata Transforms', logToConsole=True, logToFile=False, logToGUI=False, level=level)
 
-    for rec in utilities.ExcelReader(xls):
+    for rec in utilities.ExcelReader(xls, list):
         try:
-            strxml=transforms.DictToXML(rec,'crawlresult')
-            result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,rec['filename'],rec['guid']))
-            pl.info('Transformed metadata for ' +rec['filename'])
+            for val in rec:
+                if val[0]=='filename':filename=val[1]
+                elif val[0]=='guid':guid=val[1]
+            strxml=transforms.ListToXML(rec,'crawlresult')
+            result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,filename,guid))
+            pl.info('Transformed metadata for ' +filename)
         except Exception,err:
-            pl.error('%s\n%s' % (rec['filename'], utilities.ExceptionInfo()))
+            pl.error('%s\n%s' % (filename, utilities.ExceptionInfo()))
             pl.debug(utilities.ExceptionInfo(10))
+##    for rec in utilities.ExcelReader(xls):
+##        try:
+##            strxml=transforms.DictToXML(rec,'crawlresult')
+##            result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,rec['filename'],rec['guid']))
+##            pl.info('Transformed metadata for ' +rec['filename'])
+##        except Exception,err:
+##            pl.error('%s\n%s' % (rec['filename'], utilities.ExceptionInfo()))
+##            pl.debug(utilities.ExceptionInfo(10))
 
 #========================================================================================================
 #Below is for the GUI if run without arguments

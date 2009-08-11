@@ -166,14 +166,16 @@ class ExcelWriter:
         #del self._wb
     
 
-def ExcelReader(xls):
+def ExcelReader(xls,returntype=dict):
     wb=xlrd.open_workbook(xls)
     for ws in wb.sheets():
         headers=[c.value for c in ws.row(0)]
-
         for i in range(1,ws.nrows):
             cells=[c.value for c in ws.row(i)]
-            yield dict(zip(headers,cells))
+            if returntype is dict:
+                yield dict(zip(headers,cells))
+            else:
+                yield zip(headers,cells)
 
 def runcmd(cmd, format='s'):
     import subprocess
