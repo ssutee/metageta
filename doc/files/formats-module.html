@@ -110,9 +110,9 @@
       </li>
       <li>
         Date/Time formats must follow follow AS ISO 8601-2007 (see: <a 
-        href="http://www.anzlic.org.au/metadata/guidelines/date_and_datetime.htm"
+        href="http://www.anzlic.org.au/metadata/guidelines/Index.html?date_and_datetime.htm"
         
-        target="_top">http://www.anzlic.org.au/metadata/guidelines/date_and_datetime.htm</a>)
+        target="_top">http://www.anzlic.org.au/metadata/guidelines/Index.html?date_and_datetime.htm</a>)
         <p>Class hierarchy:</p>
 <pre class="literalblock">
    __dataset__.Dataset():
@@ -196,12 +196,12 @@
         (yet?) implemented)</em>    </li>
     <li> <strong class="uidlink"><a href="formats.aster-module.html">formats.aster</a></strong>: <em class="summary">&nbsp;</em>    </li>
     <li> <strong class="uidlink"><a href="formats.ccrs-module.html">formats.ccrs</a></strong>: <em class="summary">&nbsp;</em>    </li>
-    <li> <strong class="uidlink"><a href="formats.csiromodis-module.html">formats.csiromodis</a></strong>: <em class="summary">&nbsp;</em>    </li>
     <li> <strong class="uidlink"><a href="formats.ecw-module.html">formats.ecw</a></strong>: <em class="summary">&nbsp;</em>    </li>
     <li> <strong class="uidlink"><a href="formats.envi-module.html">formats.envi</a></strong>: <em class="summary">&nbsp;</em>    </li>
     <li> <strong class="uidlink"><a href="formats.esribil-module.html">formats.esribil</a></strong>: <em class="summary">&nbsp;</em>    </li>
     <li> <strong class="uidlink"><a href="formats.esrigrid-module.html">formats.esrigrid</a></strong>: <em class="summary">&nbsp;</em>    </li>
     <li> <strong class="uidlink"><a href="formats.fast_l7a-module.html">formats.fast_l7a</a></strong>: <em class="summary">&nbsp;</em>    </li>
+    <li> <strong class="uidlink"><a href="formats.jp2-module.html">formats.jp2</a></strong>: <em class="summary">&nbsp;</em>    </li>
     <li> <strong class="uidlink"><a href="formats.quickbird-module.html">formats.quickbird</a></strong>: <em class="summary">&nbsp;</em>    </li>
     <li> <strong class="uidlink"><a href="formats.spot_dimap-module.html">formats.spot_dimap</a></strong>: <em class="summary">&nbsp;</em>    </li>
   </ul></td></tr>
@@ -294,15 +294,15 @@ yc'&gt;,
     <td width="15%" align="right" valign="top" class="summary">
       <span class="summary-type">&nbsp;</span>
     </td><td class="summary">
-        <a href="formats-module.html#fields" class="summary-name">fields</a> = <code title="{'LL': ('string', 25),
- 'LR': ('string', 25),
- 'UL': ('string', 25),
- 'UR': ('string', 25),
+        <a href="formats-module.html#fields" class="summary-name">fields</a> = <code title="{'LL': 'float',
+ 'LR': 'float',
+ 'UL': 'float',
+ 'UR': 'float',
  'bands': ('string', 50),
  'cellx': 'float',
  'celly': 'float',
  'cloudcover': ('string', 50),
-..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">LL</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">string</code><code class="variable-quote">'</code><code class="variable-op">, </code>25<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">LR</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">string</code><code class="variable-quote">'</code><code class="variable-op">, </code>25<code class="variable-group">)</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">UL</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
+..."><code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">LL</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">LR</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">UL</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">, </code><code class="variable-quote">'</code><code class="variable-string">UR</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-ellipsis">...</code></code>
     </td>
   </tr>
 <tr>
@@ -450,10 +450,10 @@ yc'&gt;<code class="variable-op">,</code>
   <dl class="fields">
     <dt>Value:</dt>
       <dd><table><tr><td><pre class="variable">
-<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">LL</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">string</code><code class="variable-quote">'</code><code class="variable-op">, </code>25<code class="variable-group">)</code><code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">LR</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">string</code><code class="variable-quote">'</code><code class="variable-op">, </code>25<code class="variable-group">)</code><code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">UL</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">string</code><code class="variable-quote">'</code><code class="variable-op">, </code>25<code class="variable-group">)</code><code class="variable-op">,</code>
- <code class="variable-quote">'</code><code class="variable-string">UR</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">string</code><code class="variable-quote">'</code><code class="variable-op">, </code>25<code class="variable-group">)</code><code class="variable-op">,</code>
+<code class="variable-group">{</code><code class="variable-quote">'</code><code class="variable-string">LL</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">LR</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">UL</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">,</code>
+ <code class="variable-quote">'</code><code class="variable-string">UR</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">bands</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-group">(</code><code class="variable-quote">'</code><code class="variable-string">string</code><code class="variable-quote">'</code><code class="variable-op">, </code>50<code class="variable-group">)</code><code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">cellx</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">,</code>
  <code class="variable-quote">'</code><code class="variable-string">celly</code><code class="variable-quote">'</code><code class="variable-op">: </code><code class="variable-quote">'</code><code class="variable-string">float</code><code class="variable-quote">'</code><code class="variable-op">,</code>
@@ -493,7 +493,7 @@ yc'&gt;<code class="variable-op">,</code>
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu May 14 10:35:39 2009
+    Generated by Epydoc 3.0.1 on Wed Aug 12 09:47:07 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

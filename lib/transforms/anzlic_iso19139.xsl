@@ -677,7 +677,7 @@
                 <gco:CharacterString>
                   <xsl:choose>
                     <xsl:when test="useConstraints">
-                      <xsl:value-of select="normalize-space(useLimitation)"/>
+                      <xsl:value-of select="normalize-space(useConstraints)"/>
                     </xsl:when>
                     <xsl:otherwise>Usage constraints: Internal use only.</xsl:otherwise>
                   </xsl:choose>
@@ -694,7 +694,7 @@
                 <gco:CharacterString>
                   <xsl:choose>
                     <xsl:when test="accessConstraints">
-                      <xsl:value-of select="normalize-space(useLimitation)"/>
+                      <xsl:value-of select="normalize-space(accessConstraints)"/>
                     </xsl:when>
                     <xsl:otherwise>Access constraints: Internal access only.</xsl:otherwise>
                   </xsl:choose>

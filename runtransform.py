@@ -12,7 +12,7 @@ Usage::
 @sysarg: C{-t xsl}: XSL transform - may be one of the pre-defined XSL transforms or a path to a custom XSL file.
 @sysarg: C{-d dir}: Directory to write XML files to.
 
-@todo: Set up logging & debug properly.
+@todo: Set up logging & debug properly. Enable selecting if MEF is created regardless of whether overviews exist
 '''
 
 #Imports
@@ -31,11 +31,11 @@ from Ft.Xml import Domlette as Dom
 import utilities
 import transforms
 import progresslogger
-
+reload(transforms)
 #Turn off the splashscreen
 #startup.value=True
 
-def main(xls,xsl,dir,log=None,debug=False,gui=False):
+def main(xls,xsl,dir,mef=False,log=None,debug=False,gui=False):
     if debug:level=progresslogger.DEBUG
     else:level=progresslogger.INFO
     #pl = progresslogger.ProgressLogger('Metadata Crawler',logfile=log, logToConsole=True, logToFile=True, logToGUI=gui, level=level, windowicon=windowicon)
@@ -43,19 +43,24 @@ def main(xls,xsl,dir,log=None,debug=False,gui=False):
 
     for rec in utilities.ExcelReader(xls, list):
         try:
+            overviews=[]
             for val in rec:
                 if val[0]=='filename':filename=val[1]
                 elif val[0]=='guid':guid=val[1]
+                elif val[0] in ['quicklook','thumbnail'] and val[1] != '':overviews.append(val[1])
             strxml=transforms.ListToXML(rec,'crawlresult')
-            result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,filename,guid))
+            xmlfile='%s/%s.%s.xml'%(dir,filename,guid)
+            result = transforms.Transform(strxml, xsl, xmlfile)
+            if overviews:transforms.CreateMEF(dir,xmlfile,guid,overviews)
             pl.info('Transformed metadata for ' +filename)
         except Exception,err:
             pl.error('%s\n%s' % (filename, utilities.ExceptionInfo()))
             pl.debug(utilities.ExceptionInfo(10))
+        
 ##    for rec in utilities.ExcelReader(xls):
 ##        try:
 ##            strxml=transforms.DictToXML(rec,'crawlresult')
-##            result = transforms.Transform(strxml, xsl, '%s/%s%s.xml'%(dir,rec['filename'],rec['guid']))
+##            result = transforms.Transform(strxml, xsl, '%s/%s.%s.xml'%(dir,rec['filename'],rec['guid']))
 ##            pl.info('Transformed metadata for ' +rec['filename'])
 ##        except Exception,err:
 ##            pl.error('%s\n%s' % (rec['filename'], utilities.ExceptionInfo()))
@@ -116,6 +121,7 @@ class DropList(Widget):
 
 class GetArgs:
     def __init__(self):
+
         windowicon=os.environ['CURDIR']+'/lib/wm_icon.ico'
 
         #base 64 encoded gif images for the GUI buttons
@@ -178,10 +184,12 @@ class GetArgs:
         sxls = StringVar()
         sxsl = StringVar()
         sdir = StringVar()
+        smef = IntVar()
 
         lxls=Label(self.root, text="Input spreadsheet:")
         lxsl=Label(self.root, text="XSL Stylesheet:")
         ldir=Label(self.root, text="Output directory:")
+        lmef=Label(self.root, text="Create MEF:")
 
         self.transforms=transforms.transforms.keys()
 
@@ -191,6 +199,7 @@ class GetArgs:
         exsl=DropList(self.root,self.transforms,sxsl)
         exls=Entry(self.root, textvariable=sxls, width=exsl.width)
         edir=Entry(self.root, textvariable=sdir, width=exsl.width)
+        emef=Checkbutton(self.root, variable=smef, text="",onvalue=True, offvalue=False)
 
         bxls = Button(self.root,image=xls_ico, command=Command(self.cmdFile,sxls,[('Excel Spreadsheet','*.xls')],last_dir))
         bxsl = Label(self.root,image=xsl_ico)
@@ -199,10 +208,13 @@ class GetArgs:
         lxls.grid(row=0, column=0, sticky=W)
         lxsl.grid(row=1, column=0, sticky=W)
         ldir.grid(row=2, column=0, sticky=W)
+        #lmef.grid(row=3, column=0, sticky=W)
 
         exls.grid(row=0, column=1, sticky=W)
         exsl.grid(row=1, column=1, sticky=W)
         edir.grid(row=2, column=1, sticky=W)
+
+        #emef.grid(row=3, column=1, sticky=W)
 
         bxls.grid(row=0, column=2, sticky=E)
         bxsl.grid(row=1, column=2, sticky=E)
@@ -214,8 +226,6 @@ class GetArgs:
         bCancel = Button(self.root,text="Cancel", command=self.cmdCancel)
         bOK.grid(row=4, column=1,sticky=E, padx=5,pady=5)
         bCancel.grid(row=4, column=2,sticky=E, pady=5)
-
-        self.vars={'dir':sdir,'xls':sxls,'xsl':sxsl}
 
         scrnWt = self.root.winfo_screenwidth()
         scrnHt = self.root.winfo_screenheight()
@@ -229,7 +239,9 @@ class GetArgs:
         #self.root.overrideredirect(1)
         self.root.geometry('+%d+%d' % (imgXPos, imgYPos))
         
-        #self.root.update()
+        self.vars={'dir':sdir,'xls':sxls,'xsl':sxsl,'mef':smef}
+
+       #self.root.update()
         self.root.mainloop()
         
     def cmdOK(self):
@@ -274,6 +286,8 @@ if __name__ == '__main__':
     parser.add_option("-t", dest="xsl", metavar="xsl",
                       help="XSL transform {*.xsl|%s}" % '|'.join(['"%s"'%s for s in transforms.transforms.keys()]))
                       #help="XSL transform {*.xsl|%s}" % '|'.join(['"%s"'%s for s in transforms.xslfiles.values()]))
+    parser.add_option("-m", action="store_true", dest="mef",default=False,   
+                      help="Create Metadata Exchange Format (MEF) file")
     parser.add_option("--debug", action="store_true", dest="debug",default=False,   
                       help="Turn debug output on")
     parser.add_option("-l", dest="log", metavar="log",                            

@@ -64,18 +64,18 @@
 <a name="L4"></a><tt class="py-lineno">  4</tt>  <tt class="py-line"><tt class="py-docstring">@see:Format specification</tt> </tt>
 <a name="L5"></a><tt class="py-lineno">  5</tt>  <tt class="py-line"><tt class="py-docstring">    U{http://www.digitalglobe.com/digitalglobe2/file.php/646/QuickBird_Imagery_Products-Product_Guide.pdf}</tt> </tt>
 <a name="L6"></a><tt class="py-lineno">  6</tt>  <tt class="py-line"><tt class="py-docstring">'''</tt> </tt>
-<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable formats.__default__.format_regex=formats.__default__-module.html#format_regex,Variable formats.ali_hyperion.format_regex=formats.ali_hyperion-module.html#format_regex,Variable formats.alos.format_regex=formats.alos-module.html#format_regex,Variable formats.aster.format_regex=formats.aster-module.html#format_regex,Variable formats.ccrs.format_regex=formats.ccrs-module.html#format_regex,Variable formats.csiromodis.format_regex=formats.csiromodis-module.html#format_regex,Variable formats.ecw.format_regex=formats.ecw-module.html#format_regex,Variable formats.envi.format_regex=formats.envi-module.html#format_regex,Variable formats.esribil.format_regex=formats.esribil-module.html#format_regex,Variable formats.esrigrid.format_regex=formats.esrigrid-module.html#format_regex,Variable formats.fast_l7a.format_regex=formats.fast_l7a-module.html#format_regex,Variable formats.format_regex=formats-module.html#format_regex,Variable formats.quickbird.format_regex=formats.quickbird-module.html#format_regex,Variable formats.spot_dimap.format_regex=formats.spot_dimap-module.html#format_regex"><a title="formats.__default__.format_regex
+<a name="L7"></a><tt class="py-lineno">  7</tt>  <tt class="py-line"><tt id="link-0" class="py-name" targets="Variable formats.__default__.format_regex=formats.__default__-module.html#format_regex,Variable formats.ali_hyperion.format_regex=formats.ali_hyperion-module.html#format_regex,Variable formats.alos.format_regex=formats.alos-module.html#format_regex,Variable formats.aster.format_regex=formats.aster-module.html#format_regex,Variable formats.ccrs.format_regex=formats.ccrs-module.html#format_regex,Variable formats.ecw.format_regex=formats.ecw-module.html#format_regex,Variable formats.envi.format_regex=formats.envi-module.html#format_regex,Variable formats.esribil.format_regex=formats.esribil-module.html#format_regex,Variable formats.esrigrid.format_regex=formats.esrigrid-module.html#format_regex,Variable formats.fast_l7a.format_regex=formats.fast_l7a-module.html#format_regex,Variable formats.format_regex=formats-module.html#format_regex,Variable formats.jp2.format_regex=formats.jp2-module.html#format_regex,Variable formats.quickbird.format_regex=formats.quickbird-module.html#format_regex,Variable formats.spot_dimap.format_regex=formats.spot_dimap-module.html#format_regex"><a title="formats.__default__.format_regex
 formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-0', 'format_regex', 'link-0');">format_regex</a></tt><tt class="py-op">=</tt><tt class="py-op">[</tt><tt class="py-string">r'[0-9][0-9][A-Z]{3,3}.*\.imd$'</tt><tt class="py-op">]</tt><tt class="py-comment">#Digital Globe Quickbird</tt> </tt>
 <a name="L8"></a><tt class="py-lineno">  8</tt>  <tt class="py-line"><tt class="py-string">'''Regular expression list of file formats'''</tt> </tt>
@@ -111,20 +111,20 @@ formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclin
 <a name="L38"></a><tt class="py-lineno"> 38</tt>  <tt class="py-line">        <tt class="py-name">tif</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">+</tt><tt class="py-string">'.tif'</tt> </tt>
 <a name="L39"></a><tt class="py-lineno"> 39</tt>  <tt class="py-line">        <tt class="py-name">img</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">+</tt><tt class="py-string">'.img'</tt> </tt>
 <a name="L40"></a><tt class="py-lineno"> 40</tt>  <tt class="py-line">        <tt class="py-name">til</tt> <tt class="py-op">=</tt> <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">splitext</tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt><tt class="py-op">+</tt><tt class="py-string">'.til'</tt> </tt>
-<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt>   <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">tif</tt><tt class="py-op">)</tt><tt class="py-op">:</tt><tt id="link-5" class="py-name"><a title="formats.__default__" class="py-name" href="#" onclick="return doclink('link-5', '__default__', 'link-1');">__default__</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Class formats.__dataset__.Dataset=formats.__dataset__.Dataset-class.html,Class formats.__default__.Dataset=formats.__default__.Dataset-class.html,Class formats.ali_hyperion.Dataset=formats.ali_hyperion.Dataset-class.html,Class formats.alos.Dataset=formats.alos.Dataset-class.html,Class formats.aster.Dataset=formats.aster.Dataset-class.html,Class formats.ccrs.Dataset=formats.ccrs.Dataset-class.html,Class formats.csiromodis.Dataset=formats.csiromodis.Dataset-class.html,Class formats.ecw.Dataset=formats.ecw.Dataset-class.html,Class formats.envi.Dataset=formats.envi.Dataset-class.html,Class formats.esribil.Dataset=formats.esribil.Dataset-class.html,Class formats.esrigrid.Dataset=formats.esrigrid.Dataset-class.html,Class formats.fast_l7a.Dataset=formats.fast_l7a.Dataset-class.html,Class formats.quickbird.Dataset=formats.quickbird.Dataset-class.html,Class formats.spot_dimap.Dataset=formats.spot_dimap.Dataset-class.html"><a title="formats.__dataset__.Dataset
+<a name="L41"></a><tt class="py-lineno"> 41</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt>   <tt class="py-name">os</tt><tt class="py-op">.</tt><tt class="py-name">path</tt><tt class="py-op">.</tt><tt class="py-name">exists</tt><tt class="py-op">(</tt><tt class="py-name">tif</tt><tt class="py-op">)</tt><tt class="py-op">:</tt><tt id="link-5" class="py-name"><a title="formats.__default__" class="py-name" href="#" onclick="return doclink('link-5', '__default__', 'link-1');">__default__</a></tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Class formats.__dataset__.Dataset=formats.__dataset__.Dataset-class.html,Class formats.__default__.Dataset=formats.__default__.Dataset-class.html,Class formats.ali_hyperion.Dataset=formats.ali_hyperion.Dataset-class.html,Class formats.alos.Dataset=formats.alos.Dataset-class.html,Class formats.aster.Dataset=formats.aster.Dataset-class.html,Class formats.ccrs.Dataset=formats.ccrs.Dataset-class.html,Class formats.ecw.Dataset=formats.ecw.Dataset-class.html,Class formats.envi.Dataset=formats.envi.Dataset-class.html,Class formats.esribil.Dataset=formats.esribil.Dataset-class.html,Class formats.esrigrid.Dataset=formats.esrigrid.Dataset-class.html,Class formats.fast_l7a.Dataset=formats.fast_l7a.Dataset-class.html,Class formats.jp2.Dataset=formats.jp2.Dataset-class.html,Class formats.quickbird.Dataset=formats.quickbird.Dataset-class.html,Class formats.spot_dimap.Dataset=formats.spot_dimap.Dataset-class.html"><a title="formats.__dataset__.Dataset
 formats.__default__.Dataset
 formats.ali_hyperion.Dataset
 formats.alos.Dataset
 formats.aster.Dataset
 formats.ccrs.Dataset
-formats.csiromodis.Dataset
 formats.ecw.Dataset
 formats.envi.Dataset
 formats.esribil.Dataset
 formats.esrigrid.Dataset
 formats.fast_l7a.Dataset
+formats.jp2.Dataset
 formats.quickbird.Dataset
-formats.spot_dimap.Dataset" class="py-name" href="#" onclick="return doclink('link-6', 'Dataset', 'link-6');">Dataset</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method crawler.Crawler.__init__()=crawler.Crawler-class.html#__init__,Method formats.__dataset__.Dataset.__init__()=formats.__dataset__.Dataset-class.html#__init__,Method formats.__dataset__._idict.__init__()=formats.__dataset__._idict-class.html#__init__,Method formats.__default__.Dataset.__init__()=formats.__default__.Dataset-class.html#__init__,Method formats.ali_hyperion.Dataset.__init__()=formats.ali_hyperion.Dataset-class.html#__init__,Method formats.alos.Dataset.__init__()=formats.alos.Dataset-class.html#__init__,Method formats.aster.Dataset.__init__()=formats.aster.Dataset-class.html#__init__,Method formats.ccrs.Dataset.__init__()=formats.ccrs.Dataset-class.html#__init__,Method formats.csiromodis.Dataset.__init__()=formats.csiromodis.Dataset-class.html#__init__,Method formats.ecw.Dataset.__init__()=formats.ecw.Dataset-class.html#__init__,Method formats.envi.Dataset.__init__()=formats.envi.Dataset-class.html#__init__,Method formats.esribil.Dataset.__init__()=formats.esribil.Dataset-class.html#__init__,Method formats.esrigrid.Dataset.__init__()=formats.esrigrid.Dataset-class.html#__init__,Method formats.fast_l7a.Dataset.__init__()=formats.fast_l7a.Dataset-class.html#__init__,Method formats.quickbird.Dataset.__init__()=formats.quickbird.Dataset-class.html#__init__,Method formats.spot_dimap.Dataset.__init__()=formats.spot_dimap.Dataset-class.html#__init__,Method geometry.ShapeWriter.__init__()=geometry.ShapeWriter-class.html#__init__,Method progresslogger.ProgressBarView.__init__()=progresslogger.ProgressBarView-class.html#__init__,Method progresslogger.ProgressLogger.__init__()=progresslogger.ProgressLogger-class.html#__init__,Method progresslogger.ProgressLoggerGUI.__init__()=progresslogger.ProgressLoggerGUI-class.html#__init__,Method progresslogger.ProgressLoggerHandler.__init__()=progresslogger.ProgressLoggerHandler-class.html#__init__,Method progresslogger.ProgressLoggerServer.__init__()=progresslogger.ProgressLoggerServer-class.html#__init__,Method runcrawler.Command.__init__()=runcrawler.Command-class.html#__init__,Method runcrawler.GetArgs.__init__()=runcrawler.GetArgs-class.html#__init__,Method runtransform.Command.__init__()=runtransform.Command-class.html#__init__,Method runtransform.DropList.__init__()=runtransform.DropList-class.html#__init__,Method runtransform.GetArgs.__init__()=runtransform.GetArgs-class.html#__init__,Method splashscreen.CallBack.__init__()=splashscreen.CallBack-class.html#__init__,Method splashscreen.SplashScreen.__init__()=splashscreen.SplashScreen-class.html#__init__,Method utilities.ExcelWriter.__init__()=utilities.ExcelWriter-class.html#__init__,Method utilities.rglob.__init__()=utilities.rglob-class.html#__init__,Method uuid.UUID.__init__()=uuid.UUID-class.html#__init__"><a title="crawler.Crawler.__init__
+formats.spot_dimap.Dataset" class="py-name" href="#" onclick="return doclink('link-6', 'Dataset', 'link-6');">Dataset</a></tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method crawler.Crawler.__init__()=crawler.Crawler-class.html#__init__,Method formats.__dataset__.Dataset.__init__()=formats.__dataset__.Dataset-class.html#__init__,Method formats.__dataset__._idict.__init__()=formats.__dataset__._idict-class.html#__init__,Method formats.__default__.Dataset.__init__()=formats.__default__.Dataset-class.html#__init__,Method formats.ali_hyperion.Dataset.__init__()=formats.ali_hyperion.Dataset-class.html#__init__,Method formats.alos.Dataset.__init__()=formats.alos.Dataset-class.html#__init__,Method formats.aster.Dataset.__init__()=formats.aster.Dataset-class.html#__init__,Method formats.ccrs.Dataset.__init__()=formats.ccrs.Dataset-class.html#__init__,Method formats.ecw.Dataset.__init__()=formats.ecw.Dataset-class.html#__init__,Method formats.envi.Dataset.__init__()=formats.envi.Dataset-class.html#__init__,Method formats.esribil.Dataset.__init__()=formats.esribil.Dataset-class.html#__init__,Method formats.esrigrid.Dataset.__init__()=formats.esrigrid.Dataset-class.html#__init__,Method formats.fast_l7a.Dataset.__init__()=formats.fast_l7a.Dataset-class.html#__init__,Method formats.jp2.Dataset.__init__()=formats.jp2.Dataset-class.html#__init__,Method formats.quickbird.Dataset.__init__()=formats.quickbird.Dataset-class.html#__init__,Method formats.spot_dimap.Dataset.__init__()=formats.spot_dimap.Dataset-class.html#__init__,Method geometry.ShapeWriter.__init__()=geometry.ShapeWriter-class.html#__init__,Method progresslogger.ProgressBarView.__init__()=progresslogger.ProgressBarView-class.html#__init__,Method progresslogger.ProgressLogger.__init__()=progresslogger.ProgressLogger-class.html#__init__,Method progresslogger.ProgressLoggerGUI.__init__()=progresslogger.ProgressLoggerGUI-class.html#__init__,Method progresslogger.ProgressLoggerHandler.__init__()=progresslogger.ProgressLoggerHandler-class.html#__init__,Method progresslogger.ProgressLoggerServer.__init__()=progresslogger.ProgressLoggerServer-class.html#__init__,Method runcrawler.Command.__init__()=runcrawler.Command-class.html#__init__,Method runcrawler.GetArgs.__init__()=runcrawler.GetArgs-class.html#__init__,Method runtransform.Command.__init__()=runtransform.Command-class.html#__init__,Method runtransform.DropList.__init__()=runtransform.DropList-class.html#__init__,Method runtransform.GetArgs.__init__()=runtransform.GetArgs-class.html#__init__,Method splashscreen.CallBack.__init__()=splashscreen.CallBack-class.html#__init__,Method splashscreen.SplashScreen.__init__()=splashscreen.SplashScreen-class.html#__init__,Method utilities.ExcelWriter.__init__()=utilities.ExcelWriter-class.html#__init__,Method utilities.rglob.__init__()=utilities.rglob-class.html#__init__,Method uuid.UUID.__init__()=uuid.UUID-class.html#__init__"><a title="crawler.Crawler.__init__
 formats.__dataset__.Dataset.__init__
 formats.__dataset__._idict.__init__
 formats.__default__.Dataset.__init__
@@ -132,12 +132,12 @@ formats.ali_hyperion.Dataset.__init__
 formats.alos.Dataset.__init__
 formats.aster.Dataset.__init__
 formats.ccrs.Dataset.__init__
-formats.csiromodis.Dataset.__init__
 formats.ecw.Dataset.__init__
 formats.envi.Dataset.__init__
 formats.esribil.Dataset.__init__
 formats.esrigrid.Dataset.__init__
 formats.fast_l7a.Dataset.__init__
+formats.jp2.Dataset.__init__
 formats.quickbird.Dataset.__init__
 formats.spot_dimap.Dataset.__init__
 geometry.ShapeWriter.__init__
@@ -162,12 +162,12 @@ formats.ali_hyperion.Dataset
 formats.alos.Dataset
 formats.aster.Dataset
 formats.ccrs.Dataset
-formats.csiromodis.Dataset
 formats.ecw.Dataset
 formats.envi.Dataset
 formats.esribil.Dataset
 formats.esrigrid.Dataset
 formats.fast_l7a.Dataset
+formats.jp2.Dataset
 formats.quickbird.Dataset
 formats.spot_dimap.Dataset" class="py-name" href="#" onclick="return doclink('link-9', 'Dataset', 'link-6');">Dataset</a></tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="crawler.Crawler.__init__
 formats.__dataset__.Dataset.__init__
@@ -177,12 +177,12 @@ formats.ali_hyperion.Dataset.__init__
 formats.alos.Dataset.__init__
 formats.aster.Dataset.__init__
 formats.ccrs.Dataset.__init__
-formats.csiromodis.Dataset.__init__
 formats.ecw.Dataset.__init__
 formats.envi.Dataset.__init__
 formats.esribil.Dataset.__init__
 formats.esrigrid.Dataset.__init__
 formats.fast_l7a.Dataset.__init__
+formats.jp2.Dataset.__init__
 formats.quickbird.Dataset.__init__
 formats.spot_dimap.Dataset.__init__
 geometry.ShapeWriter.__init__
@@ -308,7 +308,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu May 14 10:35:44 2009
+    Generated by Epydoc 3.0.1 on Wed Aug 12 09:47:10 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"

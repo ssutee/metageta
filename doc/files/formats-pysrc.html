@@ -82,7 +82,7 @@
 <a name="L23"></a><tt class="py-lineno"> 23</tt>  <tt class="py-line"><tt class="py-docstring">-       Your format will be automatically loaded when the formats module is initialised.</tt> </tt>
 <a name="L24"></a><tt class="py-lineno"> 24</tt>  <tt class="py-line"><tt class="py-docstring">-       Errors should be propagated back up the chain. If you can't handle a certain file and for some reason you don't want an error to get raised (eg. the ENVI driver (*.hdr) doesn't handle ESRI bil/flt headers (*.hdr)) then raise NotImplementedError which will be ignored in lib.formats.Open()</tt> </tt>
 <a name="L25"></a><tt class="py-lineno"> 25</tt>  <tt class="py-line"><tt class="py-docstring">-       If you want some info to get logged by the application and then continue processing (e.g the image doesn't have a projection defined, etc...) then use the warnings.warn("Some message") method - don't forget to import the warnings module!</tt> </tt>
-<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">-       Date/Time formats must follow follow AS ISO 8601-2007 (see: U{http://www.anzlic.org.au/metadata/guidelines/date_and_datetime.htm})</tt> </tt>
+<a name="L26"></a><tt class="py-lineno"> 26</tt>  <tt class="py-line"><tt class="py-docstring">-       Date/Time formats must follow follow AS ISO 8601-2007 (see: U{http://www.anzlic.org.au/metadata/guidelines/Index.html?date_and_datetime.htm})</tt> </tt>
 <a name="L27"></a><tt class="py-lineno"> 27</tt>  <tt class="py-line"><tt class="py-docstring"></tt> </tt>
 <a name="L28"></a><tt class="py-lineno"> 28</tt>  <tt class="py-line"><tt class="py-docstring">Class hierarchy::</tt> </tt>
 <a name="L29"></a><tt class="py-lineno"> 29</tt>  <tt class="py-line"><tt class="py-docstring">    __dataset__.Dataset():</tt> </tt>
@@ -144,18 +144,18 @@
 <a name="L85"></a><tt class="py-lineno"> 85</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt id="link-2" class="py-name" targets="Variable formats.__formats__=formats-module.html#__formats__"><a title="formats.__formats__" class="py-name" href="#" onclick="return doclink('link-2', '__formats__', 'link-2');">__formats__</a></tt><tt class="py-op">=</tt><tt class="py-op">{</tt><tt class="py-op">}</tt> </tt>
 <a name="L86"></a><tt class="py-lineno"> 86</tt>  <tt class="py-line"> </tt>
 <a name="L87"></a><tt class="py-lineno"> 87</tt>  <tt class="py-line"><tt class="py-comment">#Public</tt> </tt>
-<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt id="link-3" class="py-name" targets="Variable formats.__default__.format_regex=formats.__default__-module.html#format_regex,Variable formats.ali_hyperion.format_regex=formats.ali_hyperion-module.html#format_regex,Variable formats.alos.format_regex=formats.alos-module.html#format_regex,Variable formats.aster.format_regex=formats.aster-module.html#format_regex,Variable formats.ccrs.format_regex=formats.ccrs-module.html#format_regex,Variable formats.csiromodis.format_regex=formats.csiromodis-module.html#format_regex,Variable formats.ecw.format_regex=formats.ecw-module.html#format_regex,Variable formats.envi.format_regex=formats.envi-module.html#format_regex,Variable formats.esribil.format_regex=formats.esribil-module.html#format_regex,Variable formats.esrigrid.format_regex=formats.esrigrid-module.html#format_regex,Variable formats.fast_l7a.format_regex=formats.fast_l7a-module.html#format_regex,Variable formats.format_regex=formats-module.html#format_regex,Variable formats.quickbird.format_regex=formats.quickbird-module.html#format_regex,Variable formats.spot_dimap.format_regex=formats.spot_dimap-module.html#format_regex"><a title="formats.__default__.format_regex
+<a name="L88"></a><tt class="py-lineno"> 88</tt>  <tt class="py-line"><tt class="py-comment"></tt><tt id="link-3" class="py-name" targets="Variable formats.__default__.format_regex=formats.__default__-module.html#format_regex,Variable formats.ali_hyperion.format_regex=formats.ali_hyperion-module.html#format_regex,Variable formats.alos.format_regex=formats.alos-module.html#format_regex,Variable formats.aster.format_regex=formats.aster-module.html#format_regex,Variable formats.ccrs.format_regex=formats.ccrs-module.html#format_regex,Variable formats.ecw.format_regex=formats.ecw-module.html#format_regex,Variable formats.envi.format_regex=formats.envi-module.html#format_regex,Variable formats.esribil.format_regex=formats.esribil-module.html#format_regex,Variable formats.esrigrid.format_regex=formats.esrigrid-module.html#format_regex,Variable formats.fast_l7a.format_regex=formats.fast_l7a-module.html#format_regex,Variable formats.format_regex=formats-module.html#format_regex,Variable formats.jp2.format_regex=formats.jp2-module.html#format_regex,Variable formats.quickbird.format_regex=formats.quickbird-module.html#format_regex,Variable formats.spot_dimap.format_regex=formats.spot_dimap-module.html#format_regex"><a title="formats.__default__.format_regex
 formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-3', 'format_regex', 'link-3');">format_regex</a></tt><tt class="py-op">=</tt><tt class="py-op">[</tt><tt class="py-op">]</tt> </tt>
 <a name="L89"></a><tt class="py-lineno"> 89</tt>  <tt class="py-line"><tt id="link-4" class="py-name" targets="Variable formats.__fields__.fields=formats.__fields__-module.html#fields,Variable formats.fields=formats-module.html#fields,Variable uuid.UUID.fields=uuid.UUID-class.html#fields"><a title="formats.__fields__.fields
@@ -179,39 +179,39 @@ formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-14', 'format_regex', 'link-3');">format_regex</a></tt><tt class="py-op">.</tt><tt class="py-name">extend</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt id="link-15" class="py-name" targets="Variable formats.r=formats-module.html#r"><a title="formats.r" class="py-name" href="#" onclick="return doclink('link-15', 'r', 'link-15');">r</a></tt> <tt class="py-keyword">for</tt> <tt id="link-16" class="py-name"><a title="formats.r" class="py-name" href="#" onclick="return doclink('link-16', 'r', 'link-15');">r</a></tt> <tt class="py-keyword">in</tt> <tt id="link-17" class="py-name"><a title="formats.__formats__" class="py-name" href="#" onclick="return doclink('link-17', '__formats__', 'link-2');">__formats__</a></tt><tt class="py-op">[</tt><tt id="link-18" class="py-name"><a title="formats._lib" class="py-name" href="#" onclick="return doclink('link-18', '_lib', 'link-8');">_lib</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name"><a title="formats.__default__.format_regex
 formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-19', 'format_regex', 'link-3');">format_regex</a></tt> <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-20" class="py-name"><a title="formats.r" class="py-name" href="#" onclick="return doclink('link-20', 'r', 'link-15');">r</a></tt> <tt class="py-keyword">in</tt> <tt id="link-21" class="py-name"><a title="formats.__default__.format_regex
 formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-21', 'format_regex', 'link-3');">format_regex</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
 <a name="L101"></a><tt class="py-lineno">101</tt>  <tt class="py-line">    <tt class="py-keyword">except</tt><tt class="py-op">:</tt><tt class="py-keyword">pass</tt>  </tt>
@@ -225,39 +225,39 @@ formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-23', 'format_regex', 'link-3');">format_regex</a></tt><tt class="py-op">.</tt><tt class="py-name">extend</tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt id="link-24" class="py-name"><a title="formats.r" class="py-name" href="#" onclick="return doclink('link-24', 'r', 'link-15');">r</a></tt> <tt class="py-keyword">for</tt> <tt id="link-25" class="py-name"><a title="formats.r" class="py-name" href="#" onclick="return doclink('link-25', 'r', 'link-15');">r</a></tt> <tt class="py-keyword">in</tt> <tt id="link-26" class="py-name"><a title="formats.__default__" class="py-name" href="#" onclick="return doclink('link-26', '__default__', 'link-22');">__default__</a></tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="formats.__default__.format_regex
 formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-27', 'format_regex', 'link-3');">format_regex</a></tt> <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt id="link-28" class="py-name"><a title="formats.r" class="py-name" href="#" onclick="return doclink('link-28', 'r', 'link-15');">r</a></tt> <tt class="py-keyword">in</tt> <tt id="link-29" class="py-name"><a title="formats.__default__.format_regex
 formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-29', 'format_regex', 'link-3');">format_regex</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
 <a name="L108"></a><tt class="py-lineno">108</tt>  <tt class="py-line"> </tt>
@@ -275,30 +275,30 @@ formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-34', 'format_regex', 'link-3');">format_regex</a></tt><tt class="py-op">)</tt> </tt>
 <a name="L119"></a><tt class="py-lineno">119</tt>  <tt class="py-line">        <tt class="py-name">rx</tt><tt class="py-op">=</tt><tt class="py-name">_re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt><tt class="py-name">fr</tt><tt class="py-op">,</tt> <tt class="py-name">_re</tt><tt class="py-op">.</tt><tt class="py-name">IGNORECASE</tt><tt class="py-op">)</tt> </tt>
 <a name="L120"></a><tt class="py-lineno">120</tt>  <tt class="py-line">        <tt class="py-keyword">if</tt> <tt class="py-name">rx</tt><tt class="py-op">.</tt><tt class="py-name">search</tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
 <a name="L121"></a><tt class="py-lineno">121</tt>  <tt class="py-line">            <tt class="py-keyword">try</tt><tt class="py-op">:</tt> </tt>
-<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                <tt class="py-name">ds</tt><tt class="py-op">=</tt><tt id="link-35" class="py-name"><a title="formats.__formats__" class="py-name" href="#" onclick="return doclink('link-35', '__formats__', 'link-2');">__formats__</a></tt><tt class="py-op">[</tt><tt id="link-36" class="py-name"><a title="uuid.lib" class="py-name" href="#" onclick="return doclink('link-36', 'lib', 'link-30');">lib</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Class formats.__dataset__.Dataset=formats.__dataset__.Dataset-class.html,Class formats.__default__.Dataset=formats.__default__.Dataset-class.html,Class formats.ali_hyperion.Dataset=formats.ali_hyperion.Dataset-class.html,Class formats.alos.Dataset=formats.alos.Dataset-class.html,Class formats.aster.Dataset=formats.aster.Dataset-class.html,Class formats.ccrs.Dataset=formats.ccrs.Dataset-class.html,Class formats.csiromodis.Dataset=formats.csiromodis.Dataset-class.html,Class formats.ecw.Dataset=formats.ecw.Dataset-class.html,Class formats.envi.Dataset=formats.envi.Dataset-class.html,Class formats.esribil.Dataset=formats.esribil.Dataset-class.html,Class formats.esrigrid.Dataset=formats.esrigrid.Dataset-class.html,Class formats.fast_l7a.Dataset=formats.fast_l7a.Dataset-class.html,Class formats.quickbird.Dataset=formats.quickbird.Dataset-class.html,Class formats.spot_dimap.Dataset=formats.spot_dimap.Dataset-class.html"><a title="formats.__dataset__.Dataset
+<a name="L122"></a><tt class="py-lineno">122</tt>  <tt class="py-line">                <tt class="py-name">ds</tt><tt class="py-op">=</tt><tt id="link-35" class="py-name"><a title="formats.__formats__" class="py-name" href="#" onclick="return doclink('link-35', '__formats__', 'link-2');">__formats__</a></tt><tt class="py-op">[</tt><tt id="link-36" class="py-name"><a title="uuid.lib" class="py-name" href="#" onclick="return doclink('link-36', 'lib', 'link-30');">lib</a></tt><tt class="py-op">]</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name" targets="Class formats.__dataset__.Dataset=formats.__dataset__.Dataset-class.html,Class formats.__default__.Dataset=formats.__default__.Dataset-class.html,Class formats.ali_hyperion.Dataset=formats.ali_hyperion.Dataset-class.html,Class formats.alos.Dataset=formats.alos.Dataset-class.html,Class formats.aster.Dataset=formats.aster.Dataset-class.html,Class formats.ccrs.Dataset=formats.ccrs.Dataset-class.html,Class formats.ecw.Dataset=formats.ecw.Dataset-class.html,Class formats.envi.Dataset=formats.envi.Dataset-class.html,Class formats.esribil.Dataset=formats.esribil.Dataset-class.html,Class formats.esrigrid.Dataset=formats.esrigrid.Dataset-class.html,Class formats.fast_l7a.Dataset=formats.fast_l7a.Dataset-class.html,Class formats.jp2.Dataset=formats.jp2.Dataset-class.html,Class formats.quickbird.Dataset=formats.quickbird.Dataset-class.html,Class formats.spot_dimap.Dataset=formats.spot_dimap.Dataset-class.html"><a title="formats.__dataset__.Dataset
 formats.__default__.Dataset
 formats.ali_hyperion.Dataset
 formats.alos.Dataset
 formats.aster.Dataset
 formats.ccrs.Dataset
-formats.csiromodis.Dataset
 formats.ecw.Dataset
 formats.envi.Dataset
 formats.esribil.Dataset
 formats.esrigrid.Dataset
 formats.fast_l7a.Dataset
+formats.jp2.Dataset
 formats.quickbird.Dataset
 formats.spot_dimap.Dataset" class="py-name" href="#" onclick="return doclink('link-37', 'Dataset', 'link-37');">Dataset</a></tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt> </tt>
 <a name="L123"></a><tt class="py-lineno">123</tt>  <tt class="py-line">                <tt class="py-keyword">return</tt> <tt class="py-name">ds</tt> </tt>
@@ -320,13 +320,13 @@ formats.ali_hyperion.format_regex
 formats.alos.format_regex
 formats.aster.format_regex
 formats.ccrs.format_regex
-formats.csiromodis.format_regex
 formats.ecw.format_regex
 formats.envi.format_regex
 formats.esribil.format_regex
 formats.esrigrid.format_regex
 formats.fast_l7a.format_regex
 formats.format_regex
+formats.jp2.format_regex
 formats.quickbird.format_regex
 formats.spot_dimap.format_regex" class="py-name" href="#" onclick="return doclink('link-42', 'format_regex', 'link-3');">format_regex</a></tt><tt class="py-op">)</tt> </tt>
 <a name="L137"></a><tt class="py-lineno">137</tt>  <tt class="py-line">        <tt class="py-name">rx</tt><tt class="py-op">=</tt><tt class="py-name">_re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt><tt class="py-name">fr</tt><tt class="py-op">,</tt> <tt class="py-name">_re</tt><tt class="py-op">.</tt><tt class="py-name">IGNORECASE</tt><tt class="py-op">)</tt> </tt>
@@ -337,12 +337,12 @@ formats.ali_hyperion.Dataset
 formats.alos.Dataset
 formats.aster.Dataset
 formats.ccrs.Dataset
-formats.csiromodis.Dataset
 formats.ecw.Dataset
 formats.envi.Dataset
 formats.esribil.Dataset
 formats.esrigrid.Dataset
 formats.fast_l7a.Dataset
+formats.jp2.Dataset
 formats.quickbird.Dataset
 formats.spot_dimap.Dataset" class="py-name" href="#" onclick="return doclink('link-44', 'Dataset', 'link-37');">Dataset</a></tt><tt class="py-op">(</tt><tt class="py-name">f</tt><tt class="py-op">)</tt> </tt>
 <a name="L140"></a><tt class="py-lineno">140</tt>  <tt class="py-line">            <tt class="py-keyword">return</tt> <tt class="py-name">ds</tt> </tt>
@@ -394,7 +394,7 @@ expandto(location.href);
 <table border="0" cellpadding="0" cellspacing="0" width="100%%">
   <tr>
     <td align="left" class="footer">
-    Generated by Epydoc 3.0.1 on Thu May 14 10:35:44 2009
+    Generated by Epydoc 3.0.1 on Wed Aug 12 09:47:12 2009
     </td>
     <td align="right" class="footer">
       <a target="mainFrame" href="http://epydoc.sourceforge.net"
