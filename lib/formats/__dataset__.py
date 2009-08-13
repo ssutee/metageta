@@ -40,7 +40,9 @@ class Dataset(object):
         self.metadata['ownerid']=fileinfo['OWNERID']
         self.metadata['ownername']=fileinfo['OWNERNAME']
         self.metadata['datecreated']=fileinfo['DATE_CREATED']
-        self.metadata['guid']=str(uuid.uuid4())
+        #Make the guid reproducible based on filename
+        #self.metadata['guid']=str(uuid.uuid4())
+        self.metadata['guid']=str(uuid.uuid3(uuid.NAMESPACE_DNS,f))
         
         return self
     def __init__(self,*args,**kwargs):
