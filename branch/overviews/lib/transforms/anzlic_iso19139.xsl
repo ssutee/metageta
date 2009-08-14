@@ -396,11 +396,6 @@
                       <xsl:value-of select="normalize-space(filename)"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:message>
-                    <xsl:value-of select="normalize-space(satellite)"/><xsl:value-of select="' '"/>
-                    <xsl:value-of select="normalize-space(sensor)"/><xsl:value-of select="' '"/>
-                    <xsl:value-of select="normalize-space(filename)"/>
-                  </xsl:message>
                 </gco:CharacterString>
               </gmd:title>
               <gmd:date>
@@ -1068,41 +1063,43 @@
             <gmd:MD_DigitalTransferOptions>
                 <!--xsl:for-each select="OnlineResource"-->
                 <xsl:for-each select="*[starts-with(name(),'OnlineResource')]">
+                  <xsl:if test="normalize-space(.)">
                     <xsl:variable name="resource" select="str:toNode(.)"/>
                     <gmd:onLine>
-                        <gmd:CI_OnlineResource>
-                            <gmd:linkage>
-                                <gmd:URL><xsl:value-of select="$resource/URL"/></gmd:URL>
-                            </gmd:linkage>
-                            <gmd:protocol>
-                                <gco:CharacterString><xsl:value-of select="$resource/protocol"/></gco:CharacterString>
-                            </gmd:protocol>
-                            <xsl:choose>
-                              <xsl:when test="normalize-space($resource/name)">
-                                  <gmd:name>
-                                      <gco:CharacterString><xsl:value-of select="$resource/name"/></gco:CharacterString>
-                                  </gmd:name>
-                              </xsl:when>
-                              <xsl:otherwise>
-                                <gmd:name gco:nilReason="missing"><gco:CharacterString/></gmd:name>
-                              </xsl:otherwise>
-                            </xsl:choose>
-                            <xsl:choose>
-                              <xsl:when test="normalize-space($resource/description)">
-                                  <gmd:description><gco:CharacterString><xsl:value-of select="$resource/description"/></gco:CharacterString></gmd:description>
-                              </xsl:when>
-                              <xsl:otherwise><gmd:description gco:nilReason="missing"><gco:CharacterString/></gmd:description></xsl:otherwise>
-                            </xsl:choose>
-                            <xsl:if test="normalize-space($resource/function)">
-                              <gmd:function>
-                                <gmd:CI_OnLineFunctionCode>
-                                  <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/codeList.xml#CI_OnLineFunctionCode</xsl:attribute>
-                                  <xsl:attribute name="codeListValue"><xsl:value-of select="normalize-space($resource/function)"/></xsl:attribute>
-                                </gmd:CI_OnLineFunctionCode>
-                              </gmd:function>
-                            </xsl:if>
-                        </gmd:CI_OnlineResource>
-                    </gmd:onLine>                            
+                      <gmd:CI_OnlineResource>
+                        <gmd:linkage>
+                          <gmd:URL><xsl:value-of select="$resource/URL"/></gmd:URL>
+                        </gmd:linkage>
+                        <gmd:protocol>
+                          <gco:CharacterString><xsl:value-of select="$resource/protocol"/></gco:CharacterString>
+                        </gmd:protocol>
+                        <xsl:choose>
+                          <xsl:when test="normalize-space($resource/name)">
+                            <gmd:name>
+                              <gco:CharacterString><xsl:value-of select="$resource/name"/></gco:CharacterString>
+                            </gmd:name>
+                          </xsl:when>
+                          <xsl:otherwise>
+                            <gmd:name gco:nilReason="missing"><gco:CharacterString/></gmd:name>
+                          </xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:choose>
+                          <xsl:when test="normalize-space($resource/description)">
+                            <gmd:description><gco:CharacterString><xsl:value-of select="$resource/description"/></gco:CharacterString></gmd:description>
+                          </xsl:when>
+                          <xsl:otherwise><gmd:description gco:nilReason="missing"><gco:CharacterString/></gmd:description></xsl:otherwise>
+                        </xsl:choose>
+                        <xsl:if test="normalize-space($resource/function)">
+                          <gmd:function>
+                            <gmd:CI_OnLineFunctionCode>
+                              <xsl:attribute name="codeList">http://www.isotc211.org/2005/resources/codeList.xml#CI_OnLineFunctionCode</xsl:attribute>
+                              <xsl:attribute name="codeListValue"><xsl:value-of select="normalize-space($resource/function)"/></xsl:attribute>
+                            </gmd:CI_OnLineFunctionCode>
+                          </gmd:function>
+                        </xsl:if>
+                      </gmd:CI_OnlineResource>
+                    </gmd:onLine>
+                  </xsl:if>
                 </xsl:for-each>
                 <!--gmd:offLine>
                   <gmd:MD_Medium>
@@ -1268,16 +1265,20 @@
     F U N C T I O N S
   -->
     <func:function name="str:toNode">
-        <xsl:param name="strData" />
+      <xsl:param name="strData" />
+      <xsl:if test="normalize-space($strData)">
         <xsl:variable name="arrData" select="str:split(string($strData), '&#10;')"/>
         <xsl:variable name="retData">
-            <result>
-                <xsl:for-each select="$arrData">
-                    <xsl:element name="{str:split(string(.), '|')[1]}"><xsl:value-of select="str:split(string(.), '|')[2]"/></xsl:element>
-                </xsl:for-each>
-            </result>
+          <result>
+            <xsl:for-each select="$arrData">
+              <xsl:if test="normalize-space(.)">
+                <xsl:element name="{str:split(string(.), '|')[1]}"><xsl:value-of select="str:split(string(.), '|')[2]"/></xsl:element>
+              </xsl:if>
+            </xsl:for-each>
+          </result>
         </xsl:variable>
         <func:result select="exsl:node-set($retData)/*" />
+      </xsl:if>
     </func:function>
 
   
