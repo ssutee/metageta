@@ -129,3 +129,4 @@ class Dataset(__dataset__.Dataset):
         finally: #Cleanup
             gdal.ErrorReset()
             os.chdir(cwd)
+

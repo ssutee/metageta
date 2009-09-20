@@ -425,3 +425,4 @@ class Dataset(__dataset__.Dataset):
         self.metadata['compressionratio']=0
         self.metadata['compressiontype']='None'
         self.extent=ext
+#CreateSimpleVRT(bands,cols,rows,datatype,relativeToVRT=0)
