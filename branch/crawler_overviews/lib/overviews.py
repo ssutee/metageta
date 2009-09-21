@@ -46,6 +46,17 @@ def getoverview(ds,outfile,width,format,bands,stretch_type,*stretch_args):
     cols=ds.RasterXSize
     rows=ds.RasterYSize
 
+    #Below is a bit of a kludge to handle creating a VRT that is based on an in-memory vrt file
+    bTempVRT=False
+    drv=ds.GetDriver().ShortName
+    desc=ds.GetDescription()
+    if drv == 'VRT' and desc[0] == '<':# input path is an in-memory vrt file
+        vrtfd,vrtfn=tempfile.mkstemp('.vrt')
+        os.write(vrtfd,desc)
+        os.close(vrtfd)
+        ds=geometry.OpenDataset(vrtfn)
+        bTempVRT=True
+        
     vrtcols=width
     vrtrows=int(math.ceil(width*float(rows)/cols))
     vrtxml=stretch(stretch_type,vrtcols,vrtrows,ds,bands,*stretch_args)
@@ -53,11 +64,11 @@ def getoverview(ds,outfile,width,format,bands,stretch_type,*stretch_args):
     if outfile:
         ovdriver.CreateCopy(outfile, vrtds)
     else:
-        from tempfile import mkstemp
-        fd,fn=mkstemp(suffix='.'+format.lower(), prefix='getoverviewtempimage')
+        fd,fn=tempfile.mkstemp(suffix='.'+format.lower(), prefix='getoverviewtempimage')
         ovdriver.CreateCopy(fn, vrtds)
         outfile=os.fdopen(fd).read()
         os.unlink(fn)
+    if bTempVRT:os.unlink(vrtfn)
     return outfile
 #========================================================================================================
 #Stretch algorithms
@@ -66,7 +77,7 @@ def stretch(stretchType,vrtcols,vrtrows,*args):
     vrt=globals()['_stretch_'+stretchType.upper()](vrtcols,vrtrows,*args)
     return geometry.CreateCustomVRT(vrt,vrtcols,vrtrows)
 
-def _stretch_NONE(vrtcols,vrtrows,ds,bands):
+def _stretch_NONE(vrtcols,vrtrows,ds,bands,*args):
     vrt=[]
     for bandnum, band in enumerate(bands):
         srcband=ds.GetRasterBand(band)
@@ -80,7 +91,7 @@ def _stretch_NONE(vrtcols,vrtrows,ds,bands):
         vrt.append('  </VRTRasterBand>')
     return '\n'.join(vrt)
 
-def _stretch_PERCENT(vrtcols,vrtrows,ds,bands,low,high):
+def _stretch_PERCENT(vrtcols,vrtrows,ds,bands,low,high,*args):
     if low >=1:
         low=low/100.0
         high=high/100.0
@@ -112,7 +123,7 @@ def _stretch_PERCENT(vrtcols,vrtrows,ds,bands,low,high):
         vrt.append('  </VRTRasterBand>')
     return '\n'.join(vrt)
 
-def _stretch_MINMAX(vrtcols,vrtrows,ds,bands):
+def _stretch_MINMAX(vrtcols,vrtrows,ds,bands,*args):
     vrt=[]
     for bandnum, band in enumerate(bands):
         srcband=ds.GetRasterBand(band)
@@ -134,7 +145,7 @@ def _stretch_MINMAX(vrtcols,vrtrows,ds,bands):
         vrt.append('  </VRTRasterBand>')
     return '\n'.join(vrt)
 
-def _stretch_STDDEV(vrtcols,vrtrows,ds,bands,std):
+def _stretch_STDDEV(vrtcols,vrtrows,ds,bands,std,*args):
     vrt=[]
     for bandnum, band in enumerate(bands):
         srcband=ds.GetRasterBand(band)
@@ -159,7 +170,7 @@ def _stretch_STDDEV(vrtcols,vrtrows,ds,bands,std):
         vrt.append('  </VRTRasterBand>')
     return '\n'.join(vrt)
 
-def _stretch_COLORTABLE(vrtcols,vrtrows,ds,bands,clr):
+def _stretch_COLORTABLE(vrtcols,vrtrows,ds,bands,clr,*args):
     vrt=[]
     srcband=ds.GetRasterBand(1)
     nvals=2**(gdal.GetDataTypeSize(srcband.DataType))
