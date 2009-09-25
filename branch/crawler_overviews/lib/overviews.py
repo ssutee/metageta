@@ -8,7 +8,7 @@ except ImportError:
     import gdalconst
     import osr
     import ogr
-import geometry,vrtutils
+import geometry
 import sys, os.path, os, csv, re, struct, math, glob, string, time,shutil, tempfile
 
 def getoverview(ds,outfile,width,format,bands,stretch_type,*stretch_args):
@@ -26,9 +26,9 @@ def getoverview(ds,outfile,width,format,bands,stretch_type,*stretch_args):
     @type  bands:   list
     @param bands:   list of band numbers (base 1) in processing order - e.g [3,2,1]
     @type  stretch_type:  string
-    @param stretch_type:  format to generate overview image, one of ['JPG','PNG','GIF','BMP','TIF']. Not required if outfile is supplied.
-    @type  stretch_args:  string
-    @param stretch_args:  format to generate overview image, one of ['JPG','PNG','GIF','BMP','TIF']. Not required if outfile is supplied.
+    @param stretch_type:  stretch to apply to overview image, one of ['NONE','PERCENT','MINMAX','STDDEV','COLOURTABLE'].
+    @type  stretch_args:  various
+    @param stretch_args:  args to pass to the stretch algorithms 
 
     @return:        filepath (if outfile is supplied)/binary image data (if outfile is not supplied)
     '''
@@ -40,8 +40,8 @@ def getoverview(ds,outfile,width,format,bands,stretch_type,*stretch_args):
              'TIF':'GTiff' #Tagged Image File Format/GeoTIFF (.tif)
             }
 
-    if outfile:format=os.path.splitext(outfile)[1].replace('.','') #overrides "format" arg if supplied
-    ovdriver=gdal.GetDriverByName(formats.get(format.upper(), 'JPEG')) #Get format code, default to 'JPEG' if supplied format doesn't match the predefined ones...
+    if outfile:format=os.path.splitext(outfile)[1].replace('.','')      #overrides "format" arg if supplied
+    ovdriver=gdal.GetDriverByName(formats.get(format.upper(), 'JPEG'))  #Get format code, default to 'JPEG' if supplied format doesn't match the predefined ones...
 
     cols=ds.RasterXSize
     rows=ds.RasterYSize
@@ -50,12 +50,12 @@ def getoverview(ds,outfile,width,format,bands,stretch_type,*stretch_args):
     bTempVRT=False
     drv=ds.GetDriver().ShortName
     desc=ds.GetDescription()
-    if drv == 'VRT' and desc[0] == '<':# input path is an in-memory vrt file
-        vrtfd,vrtfn=tempfile.mkstemp('.vrt')
-        os.write(vrtfd,desc)
-        os.close(vrtfd)
-        ds=geometry.OpenDataset(vrtfn)
-        bTempVRT=True
+    if drv == 'VRT':
+        if not desc or desc[0] == '<':# input path is an in-memory vrt file
+            vrtdrv=gdal.GetDriverByName('VRT')
+            vrtfd,vrtfn=tempfile.mkstemp('.vrt')
+            ds=vrtdrv.CreateCopy(vrtfn,ds)
+            bTempVRT=True
         
     vrtcols=width
     vrtrows=int(math.ceil(width*float(rows)/cols))
@@ -68,7 +68,9 @@ def getoverview(ds,outfile,width,format,bands,stretch_type,*stretch_args):
         ovdriver.CreateCopy(fn, vrtds)
         outfile=os.fdopen(fd).read()
         os.unlink(fn)
-    if bTempVRT:os.unlink(vrtfn)
+    if bTempVRT:
+        ds=None;del ds
+        os.close(vrtfd);os.unlink(vrtfn)
     return outfile
 #========================================================================================================
 #Stretch algorithms
@@ -170,7 +172,7 @@ def _stretch_STDDEV(vrtcols,vrtrows,ds,bands,std,*args):
         vrt.append('  </VRTRasterBand>')
     return '\n'.join(vrt)
 
-def _stretch_COLORTABLE(vrtcols,vrtrows,ds,bands,clr,*args):
+def _stretch_COLOURTABLE(vrtcols,vrtrows,ds,bands,clr,*args):
     vrt=[]
     srcband=ds.GetRasterBand(1)
     nvals=2**(gdal.GetDataTypeSize(srcband.DataType))
@@ -188,7 +190,7 @@ def _stretch_COLORTABLE(vrtcols,vrtrows,ds,bands,clr,*args):
         vrt.append('    </ComplexSource>')
         vrt.append('  </VRTRasterBand>')
     return '\n'.join(vrt)
-
+_stretch_COLORTABLE=_stretch_COLOURTABLE #SYNONYM for the yanks
 #========================================================================================================
 #Helper functions
 #========================================================================================================

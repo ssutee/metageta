@@ -31,6 +31,7 @@ class Dataset(object):
         self._metadata={}
         self._extent=[]
         self._filelist=[]
+        self._stretch=None
         
         ##Populate some basic info
         self.fileinfo=utilities.FileInfo(f)
@@ -57,6 +58,8 @@ class Dataset(object):
         '''
         Generate overviews for generic imagery
 
+        Override this class if you like, otherwise simply expose a GDALDataset object as self._gdaldataset_
+
         @type  outfile: string
         @param outfile: a filepath to the output overview image. If supplied, format is determined from the file extension
         @type  width:   integer
@@ -71,38 +74,61 @@ class Dataset(object):
         ds=self._gdaldataset
         if not ds:raise AttributeError, 'No GDALDataset object available, overview image can not be generated'
 
-        nodata=md['nodata']
-        nbands=md['nbands']
-        cols=md['cols']
-        rows=md['rows']
-        nbits=md['nbits']
-        if nbands < 3:
-            #Assume greyscale
-            stretch_type='PERCENT'
-            stretch_args=[2,98]
-            bands=[1]
-        elif nbands == 3:
-            #Assume RGB
-            if nbits > 8:stretch_type='MINMAX'
-            else:stretch_type='NONE'
-            stretch_args=[]
-            bands=[1,2,3]
-        elif nbands >= 4:
-            bands=[3,2,1]
-            #test if any bands have R,G or B color interps
-            for i in range(1,nbands+1):
-                gci=ds.GetRasterBand(i).GetRasterColorInterpretation()
-                if   gci == gdal.GCI_RedBand:
-                    bands[0]=i
-                elif gci == gdal.GCI_GreenBand:
-                    bands[1]=i
-                elif gci == gdal.GCI_BlueBand:
-                    bands[2]=i
-            if bands==[3,2,1]:#Assume unstretched multispectral B,G,R,etc... 
+        #Don't rely on the metadata as self._gdaldataset might be a custom VRT
+        ##nbands=md['nbands']
+        ##cols=md['cols']
+        ##rows=md['rows']
+        ##nbits=md['nbits']
+        nbands=ds.RasterCount
+        cols=ds.RasterXSize
+        rows=ds.RasterYSize
+        nbits=gdal.GetDataTypeSize(ds.GetRasterBand(1).DataType)
+
+        stretch_type=None
+        stretch_args=None
+        rgb_bands = {}
+
+        #Check for pre-defined stretch
+        if self._stretch:
+            stretch_type,stretch_args=self._stretch
+
+        #Check for pre-defined rgb bands
+        for i in range(1,nbands+1):
+            gci=ds.GetRasterBand(i).GetRasterColorInterpretation()
+            if   gci == gdal.GCI_RedBand:
+                rgb_bands[0]=i
+            elif gci == gdal.GCI_GreenBand:
+                rgb_bands[1]=i
+            elif gci == gdal.GCI_BlueBand:
+                rgb_bands[2]=i
+            if len(rgb_bands)==3:
+                rgb_bands=rgb_bands[0],rgb_bands[1],rgb_bands[2]
+                break
+
+        #Set some defaults
+        if not stretch_type and not stretch_args:
+            if nbands < 3:
+                #Assume greyscale
                 stretch_type='PERCENT'
                 stretch_args=[2,98]
+                rgb_bands=[1]
+            elif nbands == 3:
+                #Assume RGB
+                if nbits > 8:
+                    stretch_type='PERCENT'
+                    stretch_args=[2,98]
+                else:
+                    stretch_type='NONE'
+                    stretch_args=[]
+                if len(rgb_bands) < 3:rgb_bands=[1,2,3]
+            elif nbands >= 4:
+                stretch_type='PERCENT'
+                stretch_args=[2,98]
+                #stretch_type='STDDEV'
+                #stretch_args=[2]
+                if len(rgb_bands) < 3:rgb_bands=[3,2,1]
 
-        return overviews.getoverview(ds,outfile,width,format,bands,stretch_type,*stretch_args)
+        return overviews.getoverview(ds,outfile,width,format,rgb_bands,stretch_type,*stretch_args)
 
     # ===================== #
     # Private Class Methods
