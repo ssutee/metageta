@@ -13,7 +13,7 @@ Usage::
 @sysarg: C{-x [xls]}: MS Excel spreadsheet to wrtite metadata to
 @sysarg: C{-s [shp]}: ESRI Shapefile to write extents to
 @sysarg: C{-l [log]}: Log file to write messages to
-@sysarg: C{-o [log]}: Generate overview (quicklook/thumbnail) images")
+@sysarg: C{-o}      : Generate overview (quicklook/thumbnail) images")
 @sysarg: C{--nomd}  : Extract metadata (crawl), if False just get basic file info (walk)")
 @sysarg: C{--gui}   : Show the GUI progress dialog")
 @sysarg: C{--debug} : Turn debug output on
@@ -61,6 +61,7 @@ def main(dir,xls,shp,log, gui=False, debug=False, nomd=False):
     pl.info('Searching for files...')
     now=time.time()
     Crawler=crawler.Crawler(dir)
+    pl.info('Found %s files...'%Crawler.filecount)
     #Loop thru dataset objects returned by Crawler
     for ds in Crawler:
         try:
@@ -71,7 +72,7 @@ def main(dir,xls,shp,log, gui=False, debug=False, nomd=False):
                 fi['filepath']=utilities.convertUNC(fi['filepath'])
                 fi['filelist']=','.join(utilities.convertUNC(ds.filelist))
                 md.update(fi)
-                pl.info('Extracted metadata from %s' % Crawler.file)
+                pl.info('Extracted metadata from %s, %s of %s files remaining' % (Crawler.file,len(Crawler.files),Crawler.filecount))
                 try:
                     qlk=os.path.join(os.path.dirname(xls),'%s.%s.qlk.jpg'%(fi['filename'],fi['guid']))
                     thm=os.path.join(os.path.dirname(xls),'%s.%s.thm.jpg'%(fi['filename'],fi['guid']))
@@ -98,7 +99,7 @@ def main(dir,xls,shp,log, gui=False, debug=False, nomd=False):
                 fi['filepath']=utilities.convertUNC(fi['filepath'])
                 fi['filelist']=','.join(utilities.convertUNC(ds.filelist))
 
-                pl.info('Extracted file info from %s' % Crawler.file)
+                pl.info('Extracted file info from %s, %s of %s files remaining' % (Crawler.file,len(Crawler.files),Crawler.filecount))
                 try:
                     ExcelWriter.WriteRecord(fi)
                 except Exception,err:
