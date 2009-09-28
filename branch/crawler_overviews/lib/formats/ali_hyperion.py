@@ -21,7 +21,6 @@ import __dataset__
 import sys, os, re, glob, time, math, string
 import utilities
 import geometry
-import vrtutils_mod as vrtutils
 
 try:
     from osgeo import gdal
