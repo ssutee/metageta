@@ -6,13 +6,17 @@ Contains code to show GUI to gather input arguments when none are provided
 To run, call the eponymous batch file which sets the required environment variables
 
 Usage::
-    runcrawler.bat dir xls shp log
+    runcrawler.bat -d dir -x xls -s shp -l log {--nomd} {--gui} {--debug}
 
 @newfield sysarg: Argument, Arguments
-@sysarg: C{dir}: Directory to to recursively search for imagery
-@sysarg: C{xls}: MS Excel spreadsheet to wrtite metadata to
-@sysarg: C{shp}: ESRI Shapefile to write extents to
-@sysarg: C{log}: Log file to write messages to
+@sysarg: C{-d [dir]}: Directory to to recursively search for imagery
+@sysarg: C{-x [xls]}: MS Excel spreadsheet to wrtite metadata to
+@sysarg: C{-s [shp]}: ESRI Shapefile to write extents to
+@sysarg: C{-l [log]}: Log file to write messages to
+@sysarg: C{-o [log]}: Generate overview (quicklook/thumbnail) images")
+@sysarg: C{--nomd}  : Extract metadata (crawl), if False just get basic file info (walk)")
+@sysarg: C{--gui}   : Show the GUI progress dialog")
+@sysarg: C{--debug} : Turn debug output on
 '''
 import sys, os, re,time
 from Tkinter import *
@@ -298,6 +302,8 @@ if __name__ == '__main__':
                       help="Shapefile to write extents to")
     parser.add_option("-l", dest="log", metavar="log",
                       help="Log file")
+    parser.add_option("-o", action="store_true", dest="ovs",default=False,
+                      help="Generate overview (quicklook/thumbnail) images")
     parser.add_option("--nomd", action="store_true", dest="nomd",default=False,
                       help="Extract metadata (crawl), if False just get basic file info (walk)")
     parser.add_option("--debug", action="store_true", dest="debug",default=False,

@@ -66,7 +66,10 @@ class Dataset(object):
         @param width:   image width
         @type  format:  string
         @param format:  format to generate overview image, one of ['JPG','PNG','GIF','BMP','TIF']. Not required if outfile is supplied.
-        @return:        filepath (if outfile is supplied)/binary image data (if outfile is not supplied)
+
+        @return:
+            - B{filepath} (if outfile is supplied) B{OR}
+            - B{binary image data} (if outfile is not supplied)
         '''
         import overviews
 
