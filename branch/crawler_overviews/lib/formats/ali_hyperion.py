@@ -93,7 +93,7 @@ class Dataset(__dataset__.Dataset):
                     multi=0
                     multibands=nbands
                     multicols=ncols
-                    multirows=rows
+                    multirows=nrows
                 multibands=range(1,int(multibands)+1)
 
                 #Make a csv list of cols, bands
@@ -133,7 +133,6 @@ class Dataset(__dataset__.Dataset):
             for i in range(0,4):
                 files.append(sd.replace(f,strips[i]))
                 dstrects.append([i*(scols-xoff),0,scols,srows])
-                print '-'*25
             self._gdaldataset=geometry.OpenDataset(geometry.CreateMosaicedVRT(files,multibands,srcrects,dstrects,multicols,srows,'Int16'))
             self._gdaldataset.GetRasterBand(2).SetRasterColorInterpretation(gdal.GCI_BlueBand)
             self._gdaldataset.GetRasterBand(3).SetRasterColorInterpretation(gdal.GCI_GreenBand)

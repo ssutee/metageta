@@ -449,10 +449,3 @@ class Dataset(__dataset__.Dataset):
         self.metadata['compressiontype']='None'
         self.extent=ext
 
-
-
-##            #Default stretch type and additional args
-##            stretch_type='NONE'
-##
-##            return overviews.getoverview(ds,outfile,width,format,bands,stretch_type)
-##        else: return __default__.Dataset.getoverview(self,outfile,width,format)#Do it the slow way...

@@ -69,6 +69,17 @@ def main(dir,xls,shp,log, gui=False, debug=False, nomd=False):
                 md.update(fi)
                 pl.info('Extracted metadata from %s' % Crawler.file)
                 try:
+                    qlk=os.path.join(os.path.dirname(xls),'%s.%s.qlk.jpg'%(fi['filename'],fi['guid']))
+                    thm=os.path.join(os.path.dirname(xls),'%s.%s.thm.jpg'%(fi['filename'],fi['guid']))
+                    qlk=ds.getoverview(qlk, width=800)
+                    thm=ds.getoverview(thm, width=150)
+                    md['quicklook']=qlk
+                    md['thumbnail']=thm
+                    pl.info('Generated overviews from %s' % Crawler.file)
+                except Exception,err:
+                    pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
+                    pl.debug(utilities.ExceptionInfo(10))
+                try:
                     ExcelWriter.WriteRecord(md)
                 except Exception,err:
                     pl.error('%s\n%s' % (Crawler.file, utilities.ExceptionInfo()))
