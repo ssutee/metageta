@@ -400,11 +400,6 @@
                       <xsl:value-of select="normalize-space(units)"/><xsl:value-of select="')'"/>
                     </xsl:otherwise>
                   </xsl:choose>
-                  <xsl:message>
-                    <xsl:value-of select="normalize-space(satellite)"/><xsl:value-of select="' '"/>
-                    <xsl:value-of select="normalize-space(sensor)"/><xsl:value-of select="' '"/>
-                    <xsl:value-of select="normalize-space(filename)"/>
-                  </xsl:message>
                 </gco:CharacterString>
               </gmd:title>
               <gmd:date>
