@@ -6,7 +6,7 @@ Contains code to show GUI to gather input arguments when none are provided
 To run, call the eponymous batch file which sets the required environment variables
 
 Usage::
-    runcrawler.bat -d dir -x xls -s shp -l log {--nomd} {--gui} {--debug}
+    runcrawler.bat -d dir -x xls -s shp -l log {-o} {--nomd} {--gui} {--debug}
 
 @newfield sysarg: Argument, Arguments
 @sysarg: C{-d [dir]}: Directory to to recursively search for imagery
