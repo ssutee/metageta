@@ -895,9 +895,10 @@
          </gmd:extent>
           <gmd:supplementalInformation>
             <gco:CharacterString>
-              <xsl:for-each select="./*">
-                <xsl:value-of select="local-name(.)"/>: <xsl:value-of select="."/>
-                <xsl:if test="position() != last()">  |  </xsl:if>
+              <xsl:for-each select="*[not(self::quicklook)][not(self::thumbnail)]">
+                  <xsl:value-of select="local-name(.)"/>: <xsl:value-of select="."/>
+                  <!--xsl:if test="position() != last()">  |  </xsl:if-->
+                  <xsl:if test="position() != last()"><xsl:text>&#xA;</xsl:text></xsl:if><!--insert line break-->
               </xsl:for-each>
             </gco:CharacterString>
           </gmd:supplementalInformation>
