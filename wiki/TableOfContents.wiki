@@ -1,10 +1,6 @@
-#sidebar TableOfContents
+#summary Table Of Contents
   
-  * [Articles HOWTO articles]
-    * [ArticlesXSS Web security]
-    * [ArticlesDom DOM manipulation]
-    * [ArticlesStyle CSS and style]
-    * [ArticlesTips Tips and tricks]
-  * [DOMReference DOM reference]
-  * [HTMLElements HTML reference]
-  * [CSSReference CSS reference]
+* [http://code.google.com/p/metageta/downloads/list Downloads]
+* [installation Installation]
+* [usage Usage]
+  * [http://metageta.googlecode.com/svn/trunk/doc/index.html Advanced usage]
