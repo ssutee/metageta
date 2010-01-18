@@ -1,6 +1,6 @@
 #summary Table Of Contents
   
-* [http://code.google.com/p/metageta/downloads/list Downloads]
-* [installation Installation]
-* [usage Usage]
-  * [http://metageta.googlecode.com/svn/trunk/doc/index.html Advanced usage]
+  * [http://code.google.com/p/metageta/downloads/list Downloads]
+  * [installation Installation]
+  * [usage Usage]
+    * [http://metageta.googlecode.com/svn/trunk/doc/index.html Advanced usage]
