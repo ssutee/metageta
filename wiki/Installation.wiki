@@ -1,6 +1,5 @@
 #summary How to install MetaGeta.
 #labels Phase-Deploy
-#sidebar TableOfContents
 
 = System =
 Runs on Windows XP or Vista (only tested on 32 bit OS). 
