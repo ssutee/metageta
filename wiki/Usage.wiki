@@ -1,5 +1,6 @@
 #summary Usage
 #labels Featured
+#sidebar TableOfContents
 
 = Usage =
 To use MetaGeta as provided, the first step is to locate imagery and extract metadata to a spreadsheet. Writing to a spreadsheet allows for quality control, such as removal of records, checking for duplicates, bulk updates, etc. It also allows the addition of extra metadata fields such as contacts, use and access constraints etc. Information on additional metadata fields can be found [http://metageta.googlecode.com/svn/trunk/doc/files/transforms-module.html here].
