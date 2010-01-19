@@ -3,7 +3,11 @@
 
 
 = Usage =
-To use MetaGeta as provided, the first step is to locate imagery and extract metadata to a spreadsheet. Writing to a spreadsheet allows for quality control, such as removal of records, checking for duplicates, bulk updates, etc. It also allows the addition of extra metadata fields such as contacts, use and access constraints etc. Information on additional metadata fields can be found [http://metageta.googlecode.com/svn/trunk/doc/files/transforms-module.html here].
+To use MetaGeta as provided, the first step is to crawl the filesystem to locate imagery and extract metadata to a spreadsheet. Writing to a spreadsheet allows for quality control, such as removal of records, checking for duplicates, bulk updates, etc. It also allows the addition of extra metadata fields such as contacts, use and access constraints etc. Information on additional metadata fields can be found [http://metageta.googlecode.com/svn/trunk/doc/files/transforms-module.html here].
+
+You can run the crawler and transform applications by simply double clicking the runcrawler/runtransform.[bat|sh] files.  Don't try to run any *.py files directly unless you have set up your environment to suit.
+
+You can also run the crawler and transform applications without the directory/files entry GUI popping up by passing arguments to runcrawler/runtransform.[bat|sh]. 
 
 {{{
 Usage: runcrawler.bat/sh [arguments]
