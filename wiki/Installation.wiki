@@ -10,12 +10,12 @@ However, there are issues with segfaults and read errors on HDF and NetCDF files
 = Installation =
 *Windows*:
 
-Download the package containing OSGeo4W from the [http://code.google.com/p/metageta/downloads/list downloads] area and extract to a local directory.  It will run from a network path, but is considerably slower.  The application contains all the 3rd party libraries and applications required. The MrSID and ECW drivers use proprietary SDK's. See mrsid-eula.txt and ecw-eula.txt in the `<install>\OSGeo4W` directory.
+[http://code.google.com/p/metageta/downloads/list Download] the package containing OSGeo4W and extract to a local directory.  It will run from a network path, but is considerably slower.  The application contains all the 3rd party libraries and applications required. The MrSID and ECW drivers use proprietary SDK's. See mrsid-eula.txt and ecw-eula.txt in the `<install>\OSGeo4W` directory.
 
 
 *Linux* (or Windows where you wish to use your own Python and GDAL/OGR installations):
 
-[http://code.google.com/p/metageta/downloads/list Download] the package that doesn't contain OSGeo4W, extract somewhere and see below:
+[http://code.google.com/p/metageta/downloads/list Download] the package that doesn't contain OSGeo4W or [http://code.google.com/p/metageta/source/checkout checkout] a copy of the source code, extract somewhere and see below:
 
 You will need the following libraries:
 
