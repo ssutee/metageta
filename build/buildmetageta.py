@@ -18,7 +18,7 @@ def main():
     if len(sys.argv)>1:
         vers=sys.argv[1]
     else:
-        try:vers = raw_input('Enter the version to build, options are \n1.N (eg. 1.1), curr (latest release),  trunk (unstable developement):  ')
+        try:vers = raw_input('Enter the version to build, options are \n1.N (eg. 1.1), curr (latest release),  trunk (unstable development):  ')
         except:sys.exit(0)#vers = 'trunk'
         if vers in ['curr','']:
             cmd='svn ls http://metageta.googlecode.com/svn/tags'
@@ -31,6 +31,7 @@ def main():
                 sys.exit(exit_code)
             else:
                 vers=stdout.strip().split()[-1][:-1]
+                print 'Latest release is %s'%vers
 
     cd = os.path.abspath(os.path.dirname(sys.argv[0]))
     td = os.path.dirname(cd)
