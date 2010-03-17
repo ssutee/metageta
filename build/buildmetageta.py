@@ -1,23 +1,31 @@
 # -*- coding: latin-1 -*-
 import os,sys,shutil,glob,tempfile,zipfile as zip
 
+BIN_DIR=r'..\bin' #Path to directory containing gdal and python, relative to script.
+
 def main():
+    global BIN_DIR
+    if len(sys.argv)>1:
+        vers=sys.argv[1]
+        pause=False
+    else:
+        vers=''
+        pause=True
+        
     svn=which('svn')
     makensis=which('makensis')
 
     if not svn:
         print 'Install an SVN command line client (e.g. http://www.sliksvn.com) or ensure that it is on your PATH'
-        raw_input('Press enter to exit.')
+        if pause:raw_input('Press enter to exit.')
         sys.exit(1)
 
     if not makensis:
         print 'Install NSIS (http://nsis.sourceforge.net) or ensure that it is on your PATH'
-        raw_input('Press enter to exit.')
+        if pause:raw_input('Press enter to exit.')
         sys.exit(1)
 
-    if len(sys.argv)>1:
-        vers=sys.argv[1]
-    else:
+    if not vers:
         try:vers = raw_input('Enter the version to build, options are \n1.N (eg. 1.1), curr (latest release),  trunk (unstable development):  ')
         except:sys.exit(0)#vers = 'trunk'
         if vers in ['curr','']:
@@ -48,7 +56,7 @@ def main():
     exit_code,stdout,stderr=runcmd(cmd)
     if exit_code != 0:
         print stderr
-        raw_input('Press enter to exit.')
+        if pause:raw_input('Press enter to exit.')
         cleanup(tmp)
         sys.exit(exit_code)
         
@@ -60,14 +68,15 @@ def main():
 
     if vers == 'trunk':
         outfile='trunk-rev'+rev
-        vers='0.0.0.'+rev
+        #vers='0.0.0.'+rev
     else:
-        outfile=vers
+        #outfile=vers
         vers=vers+'.0.'+rev
+        outfile=vers
 
     ##########################################################
     print 'Cleaning up compiled objects'
-    for pyco in rglob(td,'*.py[c|o]'):
+    for pyco in rglob(td+'\\bin','*.py[c|o]'):
         os.remove(pyco)
 
     ##########################################################
@@ -79,7 +88,7 @@ def main():
         elif stdout:  print stdout
         else :        print 'SVN export failed'
         cleanup(tmp)
-        raw_input('Press enter to exit.')
+        if pause:raw_input('Press enter to exit.')
         sys.exit(exit_code)
 
     ##########################################################
@@ -90,7 +99,8 @@ def main():
     ##########################################################
     print 'Compiling NSIS installer'
     setup=r'..\downloads\metageta-%s-setup.exe'%outfile
-    cmd=r'makensis /V2 /DAPP_DIR=%s /DOUTPATH=%s /DVERSION=%s buildmetageta.nsi'%(tmp,setup,vers)
+    if vers == 'trunk':cmd=r'makensis /V2 /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s buildmetageta.nsi'%(tmp,BIN_DIR,setup)
+    else:              cmd=r'makensis /V2 /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s buildmetageta.nsi'%(tmp,BIN_DIR,setup,vers)
     exit_code,stdout,stderr=runcmd(cmd)
     if exit_code != 0:
         if stderr and stdout:
@@ -117,7 +127,7 @@ def main():
     #No installer
     shutil.copyfile(fout,fout.replace('.zip','_pygdal.zip'))
     zout=zip.ZipFile(fout.replace('.zip','_pygdal.zip'),'a',zip.ZIP_DEFLATED)
-    for f in rglob('../OSGeo4W'):
+    for f in rglob('../bin'):
         f=os.path.abspath(f)
         zout.write(f,f.replace(td,'metageta/'))
     zout.close()
@@ -128,7 +138,7 @@ def main():
     zout.close()
 
     cleanup(tmp)
-    raw_input('Press enter to exit.')
+    if pause:raw_input('Press enter to exit.')
 
 def cleanup(*args):
     for arg in args:

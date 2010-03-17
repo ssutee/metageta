@@ -7,11 +7,12 @@
     #       by the buildmetageta.py script:
     #       
     #       APP_DIR  Relative path to the MetaGETA code
+    #       BIN_DIR  Relative path to the GDAL & Python directory
     #       VERSION  N.N.N.N format version number
     #       OUTPATH  installer filepath
     #       
     #       Example:
-    #       makensis /DVERSION=1.2.0.123 /DOUTPATH=..\downloads\metageta-1.2-setup.exe /DAPP_DIR=tmp buildmetageta.nsi
+    #       makensis /DVERSION=1.2.0.123 /DOUTPATH=..\downloads\metageta-1.2-setup.exe /DBIN_DIR=..\bin /DAPP_DIR=tmp buildmetageta.nsi
     #       
     ######################################################################
     !define /date YEAR "%Y"
@@ -51,6 +52,8 @@
     ;!define REG_ROOT "HKCU"
     !define REG_ROOT "SHCTX"
 
+    !include "FileFunc.nsh"
+    
     !include MultiUser.nsh
     !include "MUI.nsh"
 
@@ -59,12 +62,14 @@
 
     ######################################################################
 
-    VIProductVersion  "${VERSION}"
-    VIAddVersionKey "ProductName"  "${APP_NAME}"
-    VIAddVersionKey "CompanyName"  "${COMP_NAME}"
-    VIAddVersionKey "LegalCopyright"  "${COPYRIGHT}"
-    VIAddVersionKey "FileDescription"  "${DESCRIPTION}"
-    VIAddVersionKey "FileVersion"  "${VERSION}"
+    !ifdef VERSION
+        VIProductVersion  "${VERSION}"
+        VIAddVersionKey "FileVersion"  "${VERSION}"
+        VIAddVersionKey "ProductName"  "${APP_NAME}"
+        VIAddVersionKey "CompanyName"  "${COMP_NAME}"
+        VIAddVersionKey "LegalCopyright"  "${COPYRIGHT}"
+        VIAddVersionKey "FileDescription"  "${DESCRIPTION}"
+    !endif
 
     ######################################################################
     
@@ -94,9 +99,10 @@
         ;${INSTALL_TYPE}
         SetOverwrite ifnewer
         SetOutPath $INSTDIR
-        File /r "${APP_DIR}\*"
-        SetOutPath $INSTDIR
-        File /r /x *.pyc /x *.pyo /x pythonwin "..\OSGeo4W"
+        File /r /x *.pyc /x *.pyo /x *.sh "${APP_DIR}\*"
+        ${GetFileName} "${BIN_DIR}" $R0
+        SetOutPath $INSTDIR\$R0
+        File /r /x *.pyc /x *.pyo /x pythonwin "${BIN_DIR}\*"
     SectionEnd
 
     
