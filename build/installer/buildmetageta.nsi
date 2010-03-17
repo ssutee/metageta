@@ -102,7 +102,7 @@
         File /r /x *.pyc /x *.pyo /x *.sh "${APP_DIR}\*"
         ${GetFileName} "${BIN_DIR}" $R0
         SetOutPath $INSTDIR\$R0
-        File /r /x *.pyc /x *.pyo /x pythonwin "${BIN_DIR}\*"
+        File /r /x *.zip /x *.pyc /x *.pyo /x pythonwin "${BIN_DIR}\*"
     SectionEnd
 
     
