@@ -5,8 +5,8 @@
   * [Usage Usage]
     * [http://metageta.googlecode.com/svn/trunk/doc/index.html Advanced usage]
   * [Developers]
-    * [ Building the Windows Installer]
+    * [BuildingPrequisites Building the Windows Installer]
         * [BuildingGDAL Building GDAL from source]
-        * [PreparingPython How to slim down and modify Python]
+        * [BuildingPython How to slim down and modify Python]
         * [BuildingMetaGETAinstaller Building the MetaGETA installer]
         
