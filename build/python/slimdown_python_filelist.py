@@ -28,12 +28,11 @@ if ok:
     for f in utilities.rglob(setenv.PY_DIR,'*'):
         if os.path.isdir(f):
             if not os.listdir(f):
-                #pass
                 os.removedirs(f)
         else:
             if f[-3:] not in ['pyc','pyo']:
                 n=f.replace(setenv.BIN_DIR+'\\','')
                 if not n in pylist:
                     bak.write(f,n)
-                    #os.remove(f)
+                    os.remove(f)
     bak.close()
