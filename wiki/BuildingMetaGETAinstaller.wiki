@@ -1,0 +1,9 @@
+#summary How to build the MetaGETA installer
+#labels Phase-Implementation
+
+= Installing required software =
+  * Install an SVN command line client (e.g. http://www.sliksvn.com) or ensure that it is on your PATH
+  * Install the Nullsoft Scriptable Install System (NSIS - http://nsis.sourceforge.net) or ensure that it is on your PATH
+
+= Building the NSIS installer =
+  * Run [http://code.google.com/p/metageta/source/browse/build/installer/buildmetageta.py buildmetageta.py]
