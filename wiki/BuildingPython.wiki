@@ -50,7 +50,7 @@ Modify appropriate files either by:
         del os
     }}}
 
-To slim it down, initially I just deleted all the doc/test/example/script type directories, removed any existing pyc/pyo compiled file ([http://code.google.com/p/metageta/source/browse/build/python/cleanup_compiled_files.py cleanup_compiled_files.py]) then ran docgen, runcrawler, runtransform, pythonwin (inc. debug and tabnanny).  I then deleted any *.py files that didn't have a corresponding pyc/pyo compiled file ([http://code.google.com/p/metageta/source/browse/build/python/slimdown_python_pyco.py slimdown_python_pyco.py]) and finally went around deleting non *.py files manually till something broke.
+To slim it down, initially I just deleted all the doc/test/example/script type directories, removed any existing pyc/pyo compiled file ([http://code.google.com/p/metageta/source/browse/build/python/cleanup_compiled_files.py cleanup_compiled_files.py]) then ran docgen, runcrawler, runtransform, pythonwin (inc. debug and tabnanny).  I then deleted any `*.py` files that didn't have a corresponding pyc/pyo compiled file ([http://code.google.com/p/metageta/source/browse/build/python/slimdown_python_pyco.py slimdown_python_pyco.py]) and finally went around deleting non `*.py` files manually till something broke.
 
 The final filelist is [http://code.google.com/p/metageta/source/browse/build/python/python_filelist.txt python_filelist.txt] which was created with [http://code.google.com/p/metageta/source/browse/build/python/create_python_filelist.py create_python_filelist.py].  
 
