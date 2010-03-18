@@ -71,7 +71,7 @@ Note: Make that 4, cos unfortunately this process is a pain in the @rse.
         {{{
         SET GDALDIR=<unpacked gdal dir>
         SET HDFDIR=<unpacked hdf dir>
-        SET APPDIR=<some directory>\gdal
+        SET APPDIR=<some directory>\bin\gdal
         IF exist %APPDIR% RMDIR /S /Q %APPDIR%
         MKDIR %APPDIR%
 
@@ -83,3 +83,5 @@ Note: Make that 4, cos unfortunately this process is a pain in the @rse.
         XCOPY /I /Y %GDALDIR%\release-1500\bin\proj\share %APPDIR%\share\proj
         XCOPY /I /Y %HDFDIR%\hdf4lib\release\dll\*.dll %APPDIR%\bin
         }}}
+        
+    * Finally, edit %APPDIR%\bin\gdal\share\gdal-data\ecw_cs.wkt (ecw_cs.dat no longer seems to be in GDAL trunk...) and append the contents of http://code.google.com/p/metageta/source/browse/build/gdal/gdal_data/ecw_cs.wkt

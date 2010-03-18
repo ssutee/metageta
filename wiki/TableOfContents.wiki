@@ -4,3 +4,6 @@
   * [Installation Installation]
   * [Usage Usage]
     * [http://metageta.googlecode.com/svn/trunk/doc/index.html Advanced usage]
+  * [Developers]
+    * [BuildingGDAL Building GDAL from source]
+    * [PreparingPython How to slim down and modify Python]
