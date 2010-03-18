@@ -21,7 +21,7 @@ Then copy the Python26 directory to <your metageta development dir>\bin.
 Modify appropriate files either by:
   * using [http://code.google.com/p/metageta/source/browse/build/python/modify_python.py modify_python.py]
   * or 
-    * Locate pythoncom26.dll and pywintypes26.dll, usually in C:\Windows\System32, and copy them to the <metageta dir>\bin\Python26 directory (and to <metageta dir>\bin\Python26\Lib\site-packages\pythonwin if you wish to use Pythonwin for developing, testing etc...).  
+    * Locate python26.dll, pythoncom26.dll and pywintypes26.dll, usually in C:\Windows\System32, and copy them to the <metageta dir>\bin\Python26 directory (and copy pythoncom26.dll and pywintypes26.dll to <metageta dir>\bin\Python26\Lib\site-packages\pythonwin if you wish to use Pythonwin for developing, testing etc...).  
     * Edit <metageta dir>\bin\Python26\Lib\site-packages\Ft\__config__.py and change:
     {{{
         # standard distutils installation directories
