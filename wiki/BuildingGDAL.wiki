@@ -84,4 +84,4 @@ Note: Make that 4, cos unfortunately this process is a pain in the @rse.
         XCOPY /I /Y %HDFDIR%\hdf4lib\release\dll\*.dll %APPDIR%\bin
         }}}
         
-    * Finally, edit %APPDIR%\bin\gdal\share\gdal-data\ecw_cs.wkt (ecw_cs.dat no longer seems to be in GDAL trunk...) and append the contents of http://code.google.com/p/metageta/source/browse/build/gdal/gdal_data/ecw_cs.wkt
+    * Finally, edit %APPDIR%\bin\gdal\share\gdal-data\ecw_cs.wkt (ecw_cs.dat no longer seems to be in GDAL trunk...) and append the contents of the custom [http://code.google.com/p/metageta/source/browse/build/gdal/gdal_data/ecw_cs.wkt ecw_cs.wkt]
