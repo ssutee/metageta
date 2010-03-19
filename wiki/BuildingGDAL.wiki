@@ -3,7 +3,7 @@
 
 = Introduction =
 
-OSGeo4W is the easiest gdal distribution to incorporate into MetaGETA, unfortunately it contains libraries that (according to DEWHA Legal) we may not redistribute. To get around this, we could use the prebuilt binaries at http://vbkto.dyndns.org/sdk, unfortunately this build does not include HDF4 support. So we must build from source to get HDF4 support.   Unfortunately, the HDF4 prebuilt binaries are linked against szip, a not completely open source library.  So we must also build HDF4 from source and remove szip completely.
+OSGeo4W is the easiest gdal distribution to incorporate into MetaGETA, unfortunately it contains libraries that (according to legal advice) we may not redistribute. To get around this, we could use the prebuilt binaries at http://vbkto.dyndns.org/sdk, unfortunately this build does not include HDF4 support. So we must build from source to get HDF4 support.   Unfortunately, the HDF4 prebuilt binaries are linked against szip, a not completely open source library.  So we must also build HDF4 from source and remove szip completely.
 
 That's 3 unfortunatelys...
 
