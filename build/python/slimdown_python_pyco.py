@@ -1,6 +1,7 @@
 # -*- coding: latin-1 -*-
 import glob,os,sys,zipfile as zip
 sys.path.append('..')
+sys.path.append(os.path.dirname(os.path.dirname(sys.argv[0])))
 import setenv,utilities
 
 prompt='''This will delete any *.py file from %s

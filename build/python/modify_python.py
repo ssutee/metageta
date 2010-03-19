@@ -1,5 +1,6 @@
 import sys, os, shutil
 sys.path.append('..')
+sys.path.append(os.path.dirname(os.path.dirname(sys.argv[0])))
 from setenv import *
 from utilities import rglob
 

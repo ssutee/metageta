@@ -6,6 +6,7 @@
     #       defined via the /D commandline switch. It is usually run
     #       by the buildmetageta.py script:
     #       
+    #       EXCLUDE  Relative path to the MetaGETA code
     #       APP_DIR  Relative path to the MetaGETA code
     #       BIN_DIR  Relative path to the GDAL & Python directory
     #       VERSION  N.N.N.N format version number
@@ -99,10 +100,12 @@
         ;${INSTALL_TYPE}
         SetOverwrite ifnewer
         SetOutPath $INSTDIR
-        File /r /x *.pyc /x *.pyo /x *.sh "${APP_DIR}\*"
+        ;File /r /x *.pyc /x *.pyo /x *.sh /x docgen.* "${APP_DIR}\*"
+        File /r ${EXCLUDE} "${APP_DIR}\*"
         ${GetFileName} "${BIN_DIR}" $R0
         SetOutPath $INSTDIR\$R0
-        File /r /x *.zip /x *.pyc /x *.pyo /x pythonwin "${BIN_DIR}\*"
+        ;File /r /x *.zip /x *.pyc /x *.pyo /x pythonwin /x epydoc /x *.chm "${BIN_DIR}\*"
+        File /r  ${EXCLUDE} "${BIN_DIR}\*"
     SectionEnd
 
     
