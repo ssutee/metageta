@@ -927,12 +927,12 @@ class ShapeWriter:
             self.__error__(err)
 
     def UpdateRecord(self,where_clause,attributes):
-        '''Update record
+        '''Update record/s
 
-            @type extent:      C{list}
-            @param extent:     [[ulx,uly],[urx,ury],[lrx,lry],[llx,lly]]
-            @type attributes:  C{dict}
-            @param attributes: Must match field names passed to __init__()
+            @type where_clause:  C{str}
+            @param where_clause: Shapefile supported SQL where clause
+            @type attributes:    C{dict}
+            @param attributes:   Must match field names passed to __init__()
         '''        
         try:
             lyr=self._shape.GetLayer()
@@ -948,12 +948,10 @@ class ShapeWriter:
             self.__error__(err)
 
     def DeleteRecord(self,where_clause):
-        '''Update record
+        '''Delete record/s
 
-            @type extent:      C{list}
-            @param extent:     [[ulx,uly],[urx,ury],[lrx,lry],[llx,lly]]
-            @type attributes:  C{dict}
-            @param attributes: Must match field names passed to __init__()
+            @type where_clause:  C{str}
+            @param where_clause: Shapefile supported SQL where clause
         '''        
         try:
             lyr=self._shape.GetLayer()

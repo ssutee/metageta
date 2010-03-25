@@ -399,6 +399,7 @@ class ExcelWriter:
             self._cols=dict(zip(self._fields,range(len(self._fields))))
             for i in range(0,self._sheets):
                 ws=self._wb.get_sheet(i)
+                if i==0:self._ws=ws
                 ws._cell_overwrite_ok = True
             self._rows=len(ws.rows)-1
             del rb,ws
