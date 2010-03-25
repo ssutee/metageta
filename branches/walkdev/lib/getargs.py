@@ -1,20 +1,66 @@
+# -*- coding: latin-1 -*-
+# Copyright (c) 2009 Australian Government, Department of Environment, Heritage, Water and the Arts
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+'''
+Module to generate a GUI dialog to collect arguments
+'''
 import os,sys,Tkinter,tkFileDialog
 from icons import *
 
 class GetArgs(object):
-    '''Pop up a GUI dialog to gather arguments'''
+    ''' Build and show a GUI dialog to collect arguments
+        @type  args:    C{U{Option<http://docs.python.org/library/optparse.html>}}
+        @param args:    One or more U{Option<http://docs.python.org/library/optparse.html>}s.
+        
+        @return:  C{None}
+
+        @note:  The GetArgs class requires at least one additional custom attribute to be
+                added to the optparse.Option. The required attribute is the argtype to use.
+                Either L{DirArg}, L{FileArg} or L{BoolArg}.  L{DirArg} and L{FileArg} also require
+                additional custom attributes.
+
+                Example::
+                        parser = optparse.OptionParser(description=description)
+                        opt=parser.add_option('-d', dest="dir", metavar="dir",help='The directory to crawl')
+                        opt.icon=icons.dir_img      #Custom icon and argtype attributes
+                        opt.argtype=getargs.DirArg
+                        
+                        opt=parser.add_option("-u", "--update", action="store_true", dest="update",default=False,
+                                          help="Update existing spreadsheet")
+                        opt.argtype=getargs.BoolArg #Custom argtype attribute
+
+                        opt=parser.add_option("-l", dest="log", metavar="log",help="Log file")
+                        opt.argtype=getargs.FileArg #Custom argtype, icon and filter attributes
+                        opt.icon=icons.log_img
+                        opt.filter=[('Log File',('*.txt','*.log'))]
+
+                        #Parse existing command line args
+                        optvals,argvals = parser.parse_args()
+                        #Pop up the GUI
+                        args=getargs.GetArgs(*parser.option_list)
+
+            @see: L{runcrawler} for a more complete example.                  
+    '''
     def __new__(self,*args):
-        ##Initialise the class object
         self=object.__new__(self)
-    #def __init__(self,*args):
-        ''' Build and show a GUI dialog to collect arguments
-            arg={'name'   :name, #
-                 'type'   :type, #
-                 'label'  :label, #
-                 'default':default, #
-                 'options':options
-                }
-        '''
         title='MetaGETA'
         icon=os.environ['CURDIR']+'/lib/wm_icon.ico'
         windowicon=icon
@@ -39,13 +85,14 @@ class GetArgs(object):
         self._args={}
         self._objs=[]
         for i,arg in enumerate(args):
-            argtype=arg.argtype
-            argname=arg.dest
-            arg.lastdir=self._lastdir
-            self._objs.append(argtype(self._root,i, arg))
-            self._args[argname]=self._objs[i].value
+            if 'argtype' in vars(arg):
+                argtype=arg.argtype
+                argname=arg.dest
+                arg.lastdir=self._lastdir
+                self._objs.append(argtype(self._root,i, arg))
+                self._args[argname]=self._objs[i].value
 
-        nargs=len(args)
+        nargs=len(self._objs)
         self._root.bind("<Return>", self._cmdok)
         TkFrame=Tkinter.Frame(self._root)
         TkFrame.grid(row=nargs,columnspan=3,sticky=Tkinter.E)
@@ -76,7 +123,25 @@ class GetArgs(object):
         self._root.destroy()
         self._cancelled =True
 
-class DirArg():
+class DirArg(object):
+    ''' Build a directory browser 
+
+        @type  root: C{Tkinter.Tk}
+        @param root: Root Tk instance.
+        @type  row:  C{int}
+        @param row:  Grid row to place the directory browser in.
+        @type  arg:  C{U{Option<http://docs.python.org/library/optparse.html>}}
+        @param arg:  An U{Option<http://docs.python.org/library/optparse.html>}.
+        
+        @note:  The DirArg class requires an additional custom attribute to be
+                added to the optparse.Option. This is the L{icon<icons>} to display on the button.
+
+                Example::
+                        parser = optparse.OptionParser(description=description)
+                        opt=parser.add_option('-d', dest="dir", metavar="dir",help='The directory to crawl')
+                        opt.argtype=getargs.DirArg
+                        opt.icon=icons.dir_img
+    '''
     def __init__(self,root,row,arg):
         self.TkPhotoImage = Tkinter.PhotoImage(format=arg.icon.format,data=arg.icon.data) # keep a reference! See http://effbot.org/tkinterbook/photoimage.htm
         self.value = Tkinter.StringVar()
@@ -94,7 +159,27 @@ class DirArg():
             var.set(ad)
             dir.set(ad)
             
-class FileArg():
+class FileArg(object):
+    ''' Build a file browser 
+
+        @type  root: C{Tkinter.Tk}
+        @param root: Root Tk instance.
+        @type  row:  C{int}
+        @param row:  Grid row to place the file browser in.
+        @type  arg:  C{U{Option<http://docs.python.org/library/optparse.html>}}
+        @param arg:  An U{Option<http://docs.python.org/library/optparse.html>}.
+        
+        @note:  The FileArg class requires two additional custom attributes to be
+                added to the optparse.Option. These are the L{icon<icons>} to display on the button
+                and filter in U{tkFileDialog.askopenfilename<http://tkinter.unpythonic.net/wiki/tkFileDialog>}
+                filetypes format.
+
+                Example::
+                    opt=parser.add_option("-l", dest="log", metavar="log",help="Log file")
+                    opt.argtype=getargs.FileArg
+                    opt.icon=icons.log_img
+                    opt.filter=[('Log File',('*.txt','*.log'))]
+    '''
     def __init__(self,root,row,arg):
         self.TkPhotoImage = Tkinter.PhotoImage(format=arg.icon.format,data=arg.icon.data) # keep a reference! See http://effbot.org/tkinterbook/photoimage.htm
         self.value = Tkinter.StringVar()
@@ -129,7 +214,16 @@ class FileArg():
             var.set(fd)
             dir.set(os.path.split(fd)[0])
 
-class BoolArg():
+class BoolArg(object):
+    ''' Build a boolean checkbox 
+
+        @type  root: C{Tkinter.Tk}
+        @param root: Root Tk instance.
+        @type  row:  C{int}
+        @param row:  Grid row to place the checkbox in.
+        @type  arg:  C{U{Option<http://docs.python.org/library/optparse.html>}}
+        @param arg:  An U{Option<http://docs.python.org/library/optparse.html>}.
+    '''
     def __init__(self,root,row,arg):
         self.value = Tkinter.BooleanVar()
         self.value.set(arg.default)
@@ -138,7 +232,7 @@ class BoolArg():
         TkLabel.grid(row=row, column=0,sticky=Tkinter.W)
         TkCheckbutton.grid(row=row, column=1,sticky=Tkinter.W)
 
-class Command:
+class Command(object):
     """ A class we can use to avoid using the tricky "Lambda" expression.
     "Python and Tkinter Programming" by John Grayson, introduces this idiom."""
     def __init__(self, func, *args, **kwargs):
