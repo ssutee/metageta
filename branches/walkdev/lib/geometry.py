@@ -927,7 +927,7 @@ class ShapeWriter:
         except Exception, err:
             self.__error__(err)
 
-    def UpdateRecord(self,where_clause,attributes):
+    def UpdateRecord(self,extent,attributes,where_clause):
         '''Update record/s
 
             @type where_clause:  C{str}
@@ -936,9 +936,18 @@ class ShapeWriter:
             @param attributes:   Must match field names passed to __init__()
         '''        
         try:
+            geom=GeomFromExtent(extent,self._srs)
+            if self._srs.IsGeographic(): #basic coordinate bounds test. Can't do for projected though
+                srs=osr.SpatialReference()
+                srs.ImportFromEPSG(4283)#4326)
+                valid = GeomFromExtent([-180,-90,180,90], srs=srs)
+                if not valid.Contains(geom): 
+                    #raise ValueError, 'Invalid extent coordinates'
+                    warnings.warn('Invalid extent coordinates')
             lyr=self._shape.GetLayer()
             lyr.SetAttributeFilter(where_clause)
             feat=lyr.GetNextFeature()
+            feat.SetGeometryDirectly(geom)
             while feat:
                 for a in attributes:
                     if a in self.fields:feat.SetField(self.fields[a], attributes[a])
