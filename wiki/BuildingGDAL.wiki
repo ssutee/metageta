@@ -75,13 +75,21 @@ Note: Make that 4, cos unfortunately this process is a pain in the @rse.
         IF exist %APPDIR% RMDIR /S /Q %APPDIR%
         MKDIR %APPDIR%
 
-        XCOPY /I /Y %GDALDIR%\release-1500\bin\*.dll %APPDIR%\bin
+        ECHO ftgl.dll>%GDALDIR%\excludes.txt
+        ECHO fribidi.dll>>%GDALDIR%\excludes.txt
+        ECHO libfcgi.dll>>%GDALDIR%\excludes.txt
+        ECHO pdflib.dll>>%GDALDIR%\excludes.txt
+        ECHO libmap.dll>>%GDALDIR%\excludes.txt
+        ECHO cfitsio.dll>>%GDALDIR%\excludes.txt
+        XCOPY /EXCLUDE:%GDALDIR%\excludes.txt /I /Y %GDALDIR%\release-1500\bin\*.dll %APPDIR%\bin
         XCOPY /I /Y %GDALDIR%\release-1500\bin\gdal\apps\*info.exe %APPDIR%\bin
+        ECHO gdal_FITS.dll>%GDALDIR%\excludes.txt
         XCOPY /I /Y %GDALDIR%\release-1500\bin\gdal\plugins\gdal_*.dll %APPDIR%\bin\plugins
         XCOPY /I /Y /S %GDALDIR%\release-1500\bin\gdal\python\* %APPDIR%\lib
         XCOPY /I /Y %GDALDIR%\release-1500\bin\gdal-data\* %APPDIR%\share\gdal-data
         XCOPY /I /Y %GDALDIR%\release-1500\bin\proj\share %APPDIR%\share\proj
         XCOPY /I /Y %HDFDIR%\hdf4lib\release\dll\*.dll %APPDIR%\bin
+        DEL %GDALDIR%\excludes.txt
         }}}
         
     * Finally, edit %APPDIR%\bin\gdal\share\gdal-data\ecw_cs.wkt (ecw_cs.dat no longer seems to be in GDAL trunk...) and append the contents of the custom [http://code.google.com/p/metageta/source/browse/build/gdal/gdal_data/ecw_cs.wkt ecw_cs.wkt]
