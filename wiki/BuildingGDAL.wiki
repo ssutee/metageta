@@ -84,7 +84,7 @@ Note: Make that 4, cos unfortunately this process is a pain in the @rse.
         XCOPY /EXCLUDE:%GDALDIR%\excludes.txt /I /Y %GDALDIR%\release-1500\bin\*.dll %APPDIR%\bin
         XCOPY /I /Y %GDALDIR%\release-1500\bin\gdal\apps\*info.exe %APPDIR%\bin
         ECHO gdal_FITS.dll>%GDALDIR%\excludes.txt
-        XCOPY /I /Y %GDALDIR%\release-1500\bin\gdal\plugins\gdal_*.dll %APPDIR%\bin\plugins
+        XCOPY /EXCLUDE:%GDALDIR%\excludes.txt /I /Y %GDALDIR%\release-1500\bin\gdal\plugins\gdal_*.dll %APPDIR%\bin\plugins
         XCOPY /I /Y /S %GDALDIR%\release-1500\bin\gdal\python\* %APPDIR%\lib
         XCOPY /I /Y %GDALDIR%\release-1500\bin\gdal-data\* %APPDIR%\share\gdal-data
         XCOPY /I /Y %GDALDIR%\release-1500\bin\proj\share %APPDIR%\share\proj
