@@ -80,7 +80,7 @@ Note: Make that 4, cos unfortunately this process is a pain in the @rse.
         ECHO libfcgi.dll>>%GDALDIR%\excludes.txt
         ECHO pdflib.dll>>%GDALDIR%\excludes.txt
         ECHO libmap.dll>>%GDALDIR%\excludes.txt
-        ECHO cfitsio.dll>>%GDALDIR%\excludes.txt
+        ECHO cairo.dll>>%GDALDIR%\excludes.txt        ECHO cfitsio.dll>>%GDALDIR%\excludes.txt
         XCOPY /EXCLUDE:%GDALDIR%\excludes.txt /I /Y %GDALDIR%\release-1500\bin\*.dll %APPDIR%\bin
         XCOPY /I /Y %GDALDIR%\release-1500\bin\gdal\apps\*info.exe %APPDIR%\bin
         ECHO gdal_FITS.dll>%GDALDIR%\excludes.txt
