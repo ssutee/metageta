@@ -156,6 +156,7 @@ class DirArg(object):
     def cmd(self,root,label,dir,var):
         ad = tkFileDialog.askdirectory(parent=root,initialdir=dir.get(),title=label)
         if ad:
+            ad=os.path.normpath(ad)
             var.set(ad)
             dir.set(ad)
             
@@ -211,6 +212,7 @@ class FileArg(object):
         else:
             fd = tkFileDialog.asksaveasfilename(parent=root,filetypes=filter,initialdir=dir.get(),title=label)
         if fd:
+            fd=os.path.normpath(fd)
             var.set(fd)
             dir.set(os.path.split(fd)[0])
 
