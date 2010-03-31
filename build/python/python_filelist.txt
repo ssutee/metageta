@@ -166,6 +166,7 @@ Python26\Lib\site-packages\Ft\Xml\Xslt\GenericVariable.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\HtmlWriter.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\IfElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\LiteralElement.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\MessageElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\MessageSource.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\NullWriter.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\OtherXslElement.py
@@ -441,6 +442,7 @@ Python26\Lib\xml\__init__.py
 Python26\Lib\xml\dom\NodeFilter.py
 Python26\Lib\xml\dom\__init__.py
 Python26\Lib\xml\dom\domreg.py
+Python26\Lib\xml\dom\expatbuilder.py
 Python26\Lib\xml\dom\minicompat.py
 Python26\Lib\xml\dom\minidom.py
 Python26\Lib\xml\dom\xmlbuilder.py
