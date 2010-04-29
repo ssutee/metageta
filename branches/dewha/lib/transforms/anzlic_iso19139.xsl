@@ -460,6 +460,9 @@
                 <xsl:when test="abstract">
                   <!--xsl:value-of select="normalize-space(abstract)"/-->
                   <xsl:value-of select="str:replaceNewLine(abstract)"/>
+                    <xsl:if test="normalize-space(mediaid)">
+                        <gco:CharacterString>MEDIA ID:<xsl:value-of select="normalize-space(mediaid)"/></gco:CharacterString>
+                    </xsl:if>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:value-of select="'PLEASE ENTER AN ABSTRACT!'"/>
