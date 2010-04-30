@@ -39,7 +39,7 @@ def main():
             sys.exit(1)
 
         if not vers:
-            try:vers = raw_input('Enter the version to build, options are \n1.N (eg. 1.1), curr (latest release),  trunk (unstable development):  ')
+            try:vers = raw_input('Enter the version to build, options are: \n1.N (eg. 1.1 release) \ncurr (latest release) \nbranches/<branch> \ntrunk (unstable development) \nVersion:  ')
             except:sys.exit(0)#vers = 'trunk'
             if vers in ['curr','']:
                 cmd='svn ls http://metageta.googlecode.com/svn/tags'
@@ -62,6 +62,7 @@ def main():
         ##########################################################
         ##Get revision
         if vers == 'trunk':repo='trunk'
+        elif 'branches/'in vers:repo=vers
         else:repo='tags/'+vers
             
         cmd='svn info http://metageta.googlecode.com/svn/%s'%repo
@@ -80,9 +81,9 @@ def main():
 
         if vers == 'trunk':
             outfile='trunk-rev'+rev
-            #vers='0.0.0.'+rev
+        elif 'branches/'in vers:
+            outfile='%s-rev%s'%(vers.replace('/','-'),rev)
         else:
-            #outfile=vers
             vers=vers+'.0.'+rev
             outfile=vers
 
@@ -117,8 +118,10 @@ def main():
         ##########################################################
         print 'Compiling NSIS installer'
         setup=DOWNLOAD_DIR+r'\metageta-%s-setup.exe'%outfile
-        if vers == 'trunk':cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup)
-        else:              cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup,vers)
+        if vers == 'trunk' or 'branches/'in vers:
+            cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup)
+        else:
+            cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup,vers)
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
             if stderr and stdout:
