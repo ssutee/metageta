@@ -106,8 +106,7 @@ def main():
 
         ##########################################################
         f=open('%s\\version.txt'%tmp,'w').write('Version: %s'%vers)
-        for f in glob.glob('include\\*'):
-            if os.path.basename(f) != 'license.rtf': shutil.copy(f,tmp)
+        for f in glob.glob('include\\*'):shutil.copy(f,tmp)
             
         ##########################################################
         excluded_files=[]
@@ -119,9 +118,9 @@ def main():
         print 'Compiling NSIS installer'
         setup=DOWNLOAD_DIR+r'\metageta-%s-setup.exe'%outfile
         if vers == 'trunk' or 'branches/'in vers:
-            cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup)
+            cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s  /DDISPLAY_VERSION=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup,outfile)
         else:
-            cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup,vers)
+            cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s /DDISPLAY_VERSION=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup,vers,vers)
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
             if stderr and stdout:
@@ -130,6 +129,23 @@ def main():
             elif stderr:  sys.stderr.write(stderr)
             elif stdout:  sys.stdout.write(stdout)
             else :        sys.stderr.write('NSIS installer compile failed')
+            cleanup(tmp)
+            raw_input('Press enter to exit.')
+            sys.exit(exit_code)
+
+        setup=DOWNLOAD_DIR+r'\metageta-%s-plugins-setup.exe'%outfile
+        if vers == 'trunk' or 'branches/'in vers:
+            cmd=r'makensis /V2 /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s  /DDISPLAY_VERSION=%s buildmetageta-plugins.nsi'%(tmp,BIN_DIR,setup,outfile)
+        else:
+            cmd=r'makensis /V2 /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s /DDISPLAY_VERSION=%s buildmetageta-plugins.nsi'%(tmp,BIN_DIR,setup,vers,vers)
+        exit_code,stdout,stderr=runcmd(cmd)
+        if exit_code != 0:
+            if stderr and stdout:
+                sys.stderr.write(stderr)
+                sys.stdout.write(stdout)
+            elif stderr:  sys.stderr.write(stderr)
+            elif stdout:  sys.stdout.write(stdout)
+            else :        sys.stderr.write('NSIS plugin installer compile failed')
             cleanup(tmp)
             raw_input('Press enter to exit.')
             sys.exit(exit_code)
@@ -152,22 +168,22 @@ def main():
         zout.close()
 
         #No installer
-        shutil.copyfile(fout,fout.replace('.zip','-pygdal.zip'))
-        zout=zip.ZipFile(fout.replace('.zip','-pygdal.zip'),'a',zip.ZIP_DEFLATED)
-        for f in rglob(BIN_DIR):
-            if not os.path.isdir(f):
-                inc=True
-                for exc in excluded_files:
-                    if fnmatch.filter(f.split(os.path.sep), exc):
-                        inc=False
-                        break
-                if inc:
-                    f=os.path.abspath(f)
-                    zout.write(f,f.replace(TOPDIR,'metageta'))
-        zout.close()
+        #shutil.copyfile(fout,fout.replace('.zip','-pygdal.zip'))
+        #zout=zip.ZipFile(fout.replace('.zip','-pygdal.zip'),'a',zip.ZIP_DEFLATED)
+        #for f in rglob(BIN_DIR):
+        #    if not os.path.isdir(f):
+        #        inc=True
+        #        for exc in excluded_files:
+        #            if fnmatch.filter(f.split(os.path.sep), exc):
+        #                inc=False
+        #                break
+        #        if inc:
+        #            f=os.path.abspath(f)
+        #            zout.write(f,f.replace(TOPDIR,'metageta'))
+        #zout.close()
 
         #With installer
-        zout=zip.ZipFile(fout.replace('.zip','-pygdal-installer.zip'),'w',zip.ZIP_DEFLATED)
+        zout=zip.ZipFile(fout.replace('.zip','-setup.zip'),'w',zip.ZIP_DEFLATED)
         zout.write(setup, os.path.basename(setup))
         zout.close()
     
