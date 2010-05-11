@@ -24,7 +24,7 @@ Options:
   -u, --update     Update existing crawl results
   -o, --overviews  Generate overview images
   --debug          Turn debug output on
-  --nogui          Don't show the GUI progress dialog
+  --nogui          Don\'t show the GUI progress dialog
   --keep-alive     Keep this dialog box open
 }}}
 
