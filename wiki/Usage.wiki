@@ -11,8 +11,7 @@ You can run the crawler and transform applications by simply double clicking the
 
 You can also run the crawler and transform applications without the directory/files entry GUI popping up by passing arguments to runcrawler/runtransform.[bat|sh]. 
 
-<pre>
-Usage: runcrawler.bat/sh [arguments]
+<pre>Usage: runcrawler.bat/sh [arguments]
 
 Run the metadata crawler. If no arguments are passed, a dialog box pops up.
 
@@ -30,8 +29,7 @@ Options:
 
 The information extracted can then be transformed into XML. Currently only the ANZLIC Profile (ISO 19139) metadata schema is implemented for XML transformation, however more stylesheets can be [http://metageta.googlecode.com/svn/trunk/doc/files/transforms-module.html added easily].
 
-<pre>
-Usage: runtransform.bat/sh [arguments]
+<pre>Usage: runtransform.bat/sh [arguments]
 
 Transform metadata to XML. If no arguments are passed, a dialog box pops up.
 
