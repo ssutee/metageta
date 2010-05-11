@@ -11,7 +11,7 @@ You can run the crawler and transform applications by simply double clicking the
 
 You can also run the crawler and transform applications without the directory/files entry GUI popping up by passing arguments to runcrawler/runtransform.[bat|sh]. 
 
-{{{
+<pre>
 Usage: runcrawler.bat/sh [arguments]
 
 Run the metadata crawler. If no arguments are passed, a dialog box pops up.
@@ -24,13 +24,13 @@ Options:
   -u, --update     Update existing crawl results
   -o, --overviews  Generate overview images
   --debug          Turn debug output on
-  --nogui          Don''t show the GUI progress dialog
+  --nogui          Don't show the GUI progress dialog
   --keep-alive     Keep this dialog box open
-}}}
+</pre>
 
 The information extracted can then be transformed into XML. Currently only the ANZLIC Profile (ISO 19139) metadata schema is implemented for XML transformation, however more stylesheets can be [http://metageta.googlecode.com/svn/trunk/doc/files/transforms-module.html added easily].
 
-{{{
+<pre>
 Usage: runtransform.bat/sh [arguments]
 
 Transform metadata to XML. If no arguments are passed, a dialog box pops up.
@@ -42,6 +42,6 @@ Options:
   -t xsl      XSL transform {*.xsl|"ANZLIC Profile"}
   -m          Create Metadata Exchange Format (MEF) file
   --debug     Turn debug output on
-}}}
+</pre>
 
 Basic API documentation may be found [http://metageta.googlecode.com/svn/trunk/doc/index.html here].
