@@ -55,13 +55,11 @@
     !define REG_ROOT "SHCTX"
 
     !include "FileFunc.nsh"
-
     !include "MultiUser.nsh"
     !include "MUI.nsh"
 
     !define MUI_ABORTWARNING
     !define MUI_UNABORTWARNING
-
     ######################################################################
 
     !ifdef VERSION
@@ -88,7 +86,9 @@
         !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
     !endif
 
+    !define MUI_PAGE_CUSTOMFUNCTION_PRE UninstallPrevious
     !insertmacro MUI_PAGE_INSTFILES
+    !define MUI_FINISHPAGE_NOAUTOCLOSE
     !insertmacro MUI_PAGE_FINISH
     !insertmacro MUI_UNPAGE_CONFIRM
     !insertmacro MUI_UNPAGE_INSTFILES
@@ -96,11 +96,6 @@
     !insertmacro MUI_LANGUAGE "English"
 
     ######################################################################
-    ; The "" makes the section hidden.
-    Section "" SecUninstallPrevious
-        Call UninstallPrevious
-    SectionEnd
-
     Section -MainProgram
         ;${INSTALL_TYPE}
         SetOverwrite ifnewer
@@ -169,10 +164,14 @@
         ; Check for uninstaller.
         ReadRegStr $R0 ${REG_ROOT} "${UNINSTALL_PATH}" "UninstallString"
         ${If} $R0 != ""
-            DetailPrint "Removing previous installation."
-            messageBox MB_OK "Removing previous installation."
-            ; Run the uninstaller silently.
-            ExecWait '"$R0 /S"'
+            MessageBox MB_YESNO "An existing ${APP_NAME} has been detected and will be uninstalled. Do you wish to continue?" IDYES uninstallit
+                Quit
+            uninstallit:
+                DetailPrint "Removing previous installation."
+                ; Run the uninstaller silently.
+                ;ExecWait '"$R0" /S' #http://nsis.sourceforge.net/When_I_use_ExecWait_uninstaller.exe_it_doesn't_wait_for_the_uninstaller
+                ExecWait '"$R0" /S _?=$INSTDIR'
+            #MessageBox MB_OK "${APP_NAME} has been uninstalled"
         ${EndIf}
     FunctionEnd
 
