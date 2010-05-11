@@ -17,7 +17,3 @@
 
     == GUI and IDE access ==
     This project's Subversion repository may be accessed using many different client programs and plug-ins. See your client's documentation for more information.  I use [http://tortoisesvn.tigris.org TortoiseSVN] on Windows or [http://rabbitvcs.org RabbitVCS] on Linux.
-
-    
-= Building the NSIS installer =
-  * Run [http://code.google.com/p/metageta/source/browse/build/installer/buildmetageta.py buildmetageta.py]
