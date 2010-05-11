@@ -7,6 +7,6 @@
 
 = Building the NSIS installer =
   * Run [http://code.google.com/p/metageta/source/browse/build/installer/buildmetageta.py buildmetageta.py]. 
-  * Note: This script relies on the following svn properties being set (and kept up to date) on the svn directories - tags/N.N, trunk, branches/*
+  * Note: This script relies on the following svn properties being set (and kept up to date) on the svn directories - tags/N.N, trunk, branches/<*>
       * version (N.N.N.N format)
       * displayversion (free text, e.g 1.4 RC1)
