@@ -49,6 +49,7 @@ Python26\Lib\encodings\cp1251.py
 Python26\Lib\encodings\cp1252.py
 Python26\Lib\encodings\cp850.py
 Python26\Lib\encodings\latin_1.py
+Python26\Lib\encodings\mcbs.py
 Python26\Lib\encodings\string_escape.py
 Python26\Lib\encodings\utf_16_le.py
 Python26\Lib\encodings\utf_8.py
