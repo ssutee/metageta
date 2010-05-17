@@ -2,7 +2,7 @@
 #labels Featured,Phase-Deploy
 
 = System =
-Runs on Windows XP or Vista (only tested on 32 bit OS). 
+Runs on Windows XP, Vista and Windows 7 (only tested on 32 bit OS). 
 
 It has also been tested and mostly runs on 64 bit Linux (Ubuntu 9.04). 
 However, there are issues with segfaults and read errors on HDF and NetCDF files on Ubuntu <=9.10. This is a GDAL/HDF4/NetCDF incompatibility - the UbuntuGIS gdal packages are built against a HDF4 library (libhdf4g) which includes an implementation of the netcdf api that is incompatible with the NetCDF library. See http://trac.osgeo.org/gdal/wiki/HDF for more info. The only way around it (currently) is to build your own HDF4 library from source and then link to that when building gdal from source. This should not be a problem on current versions of Debian or Ubuntu > 10.04 (lucid lynx) where gdal is/will be built against the new libhdf4-alt library
