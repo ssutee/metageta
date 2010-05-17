@@ -8,7 +8,7 @@ Bugfixes:
 
 Enhancements:
   * Enhanced the check that tests whether a dataset has been updated (Issue 26)
-  * Renabled the reading of ERS files associated with ECW datasets to extract extra metadata. This was originally disabled when MetaGETA used GDAL 1.6x and NCS_*.dll ECW redistributables as GDAL would segfault on certain ERS/ECW files. GDAL 1.7 with libecwj2.dll appears to be much more stable.
+  * Renabled the reading of ERS files associated with ECW datasets to extract extra metadata. This was originally disabled when MetaGETA used GDAL 1.6x and NCS`_*`.dll ECW redistributables as GDAL would segfault on certain ERS/ECW files. GDAL 1.7 with libecwj2.dll appears to be much more stable.
   * Updated README.txt
 
 10/05/2010
