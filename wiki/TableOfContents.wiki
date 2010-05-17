@@ -4,6 +4,7 @@
   * [Installation Installation]
   * [Usage Usage]
     * [http://metageta.googlecode.com/svn/trunk/doc/index.html API Documentation]
+  * [Changelog Changelog]
   * [Developers]
     * [BuildingPrequisites Building the Windows Installer]
         * [BuildingGDAL Building GDAL from source]
