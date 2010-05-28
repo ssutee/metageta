@@ -21,6 +21,7 @@ You will need the following libraries:
 
   * Python 2.5 or 2.6 and the following non-standard Python libraries: (if you wish to use Python 3.0+, you will need to port the application)
     * [http://epydoc.sourceforge.net epydoc]
+    * [http://tix.sourceforge.net Tix]
     * [http://4suite.org 4Suite XML]
     * [http://pypi.python.org/pypi/xlutils xlutils] 1.41+
     * [http://pypi.python.org/pypi/xlrd xlrd] 0.71+
