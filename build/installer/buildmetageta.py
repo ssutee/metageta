@@ -145,7 +145,7 @@ def main(vers=None):
         ##########################################################
         print 'Compiling NSIS installer'
         setup=DOWNLOAD_DIR+r'\metageta-%s-x86-setup.exe'%outfile
-        cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s /DDISPLAY_VERSION=%s buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup,version,displayversion)
+        cmd=r'makensis /V2 /DEXCLUDE=%s /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s /DDISPLAY_VERSION="%s" buildmetageta.nsi'%('"/x %s"'%' /x '.join(excluded_files),tmp,BIN_DIR,setup,version,displayversion)
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
             if stderr and stdout:
@@ -159,7 +159,7 @@ def main(vers=None):
             sys.exit(exit_code)
 
         pluginsetup=DOWNLOAD_DIR+r'\metageta-%s-plugins-x86-setup.exe'%outfile
-        cmd=r'makensis /V2 /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s /DDISPLAY_VERSION=%s buildmetageta-plugins.nsi'%(tmp,BIN_DIR,pluginsetup,version,displayversion)
+        cmd=r'makensis /V2 /DAPP_DIR=%s /DBIN_DIR=%s /DOUTPATH=%s /DVERSION=%s /DDISPLAY_VERSION="%s" buildmetageta-plugins.nsi'%(tmp,BIN_DIR,pluginsetup,version,displayversion)
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
             if stderr and stdout:
