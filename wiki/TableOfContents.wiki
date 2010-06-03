@@ -2,6 +2,7 @@
   
   * [http://code.google.com/p/metageta/downloads/list Downloads]
   * [Installation Installation]
+  * [CustomConfig Customising MetaGETA]
   * [Usage Usage]
     * [http://metageta.googlecode.com/svn/trunk/doc/index.html API Documentation]
   * [Changelog Changelog]
