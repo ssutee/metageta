@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <defaultcontact>
+      <organisation>Australian Government Department of the Environment, Water, Heritage and the Arts</organisation>
+      <position>Remote Sensing Coordinator</position>
+      <telephone>+61 2 6275 9332</telephone>
+      <facsimile>+ 61 2 6274 1333</facsimile>
+      <address>
+        <deliveryPoint>GPO Box 787</deliveryPoint>
+        <city>Canberra</city>
+        <administrativeArea>Australian Captital Territory</administrativeArea>
+        <postalCode>2601</postalCode>
+        <country>Australia</country>
+      </address>
+      <emailAddress>satellite.metadata@environment.gov.au</emailAddress>
+      <onlineResource>
+        <URL>http://www.environment.gov.au</URL>
+        <description>Department of the Environment, Water, Heritage and the Arts homepage</description>
+      </onlineResource>
+    </defaultcontact>
+</config>
+

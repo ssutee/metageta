@@ -186,61 +186,70 @@
   </xsl:template><!--contact-->
   <xsl:template name="default_contact">
     <xsl:param name="contact">custodian</xsl:param> <!--default-->
+    <!--xsl:variable name="defaultcontact">
+        <xsl:copy-of select="exsl:node-set(document('../../config/config.xml'))/config/defaultcontact"/>
+    </xsl:variable-->
+    <xsl:variable 
+      name="defaultcontact"
+      select="document('../../config/config.xml')/config/defaultcontact"
+    >
+        
+    </xsl:variable>
     <gmd:CI_ResponsibleParty>
       <gmd:individualName gco:nilReason="withheld">
         <gco:CharacterString>
         </gco:CharacterString>
       </gmd:individualName>
       <gmd:organisationName>
-        <gco:CharacterString>Australian Government Department of the Environment, Water, Heritage and the Arts</gco:CharacterString>
+        <gco:CharacterString><xsl:value-of select="$defaultcontact/organisation"/></gco:CharacterString>
       </gmd:organisationName>
       <gmd:positionName>
-        <gco:CharacterString>Remote Sensing Coordinator</gco:CharacterString>
+        <gco:CharacterString><xsl:value-of select="$defaultcontact/position"/></gco:CharacterString>
       </gmd:positionName>
       <gmd:contactInfo>
         <gmd:CI_Contact>
              <gmd:phone>
                 <gmd:CI_Telephone>
                    <gmd:voice>
-                      <gco:CharacterString>+61 2 6275 9332</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/telephone"/></gco:CharacterString>
                    </gmd:voice>
                    <gmd:facsimile>
-                      <gco:CharacterString>+ 61 2 6274 1333</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/facsimile"/></gco:CharacterString>
                    </gmd:facsimile>
                 </gmd:CI_Telephone>
              </gmd:phone>
              <gmd:address>
                 <gmd:CI_Address>
                    <gmd:deliveryPoint>
-                      <gco:CharacterString>GPO Box 787</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/address/deliveryPoint"/></gco:CharacterString>
                    </gmd:deliveryPoint>
                    <gmd:city>
-                      <gco:CharacterString>Canberra</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/address/city"/></gco:CharacterString>
                    </gmd:city>
                    <gmd:administrativeArea>
-                      <gco:CharacterString>Australian Captital Territory</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/address/administrativeArea"/></gco:CharacterString>
                    </gmd:administrativeArea>
                    <gmd:postalCode>
-                      <gco:CharacterString>2601</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/address/postalCode"/></gco:CharacterString>
                    </gmd:postalCode>
                    <gmd:country>
-                      <gco:CharacterString>Australia</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/address/country"/></gco:CharacterString>
                    </gmd:country>
                    <gmd:electronicMailAddress>
-                      <gco:CharacterString>metadata@environment.gov.au</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/emailAddress"/></gco:CharacterString>
                    </gmd:electronicMailAddress>
                 </gmd:CI_Address>
              </gmd:address>
              <gmd:onlineResource> <!--ANZMet Lite strips this out...-->
                 <gmd:CI_OnlineResource>
                    <gmd:linkage>
-                      <gmd:URL>http://intranet.environment.gov.au/business/mapsdata/Pages/RemoteSensing.aspx</gmd:URL>
+                      <gmd:URL><xsl:value-of select="$defaultcontact/onlineResource/URL"/></gmd:URL>
                    </gmd:linkage>
                    <gmd:protocol>
                       <gco:CharacterString>HTTP</gco:CharacterString>
                    </gmd:protocol>
                    <gmd:description>
-                      <gco:CharacterString>image acquisitions</gco:CharacterString>
+                      <gco:CharacterString><xsl:value-of select="$defaultcontact/onlineResource/description"/></gco:CharacterString>
                    </gmd:description>
                 </gmd:CI_OnlineResource>
              </gmd:onlineResource>
@@ -252,8 +261,9 @@
           <xsl:attribute name="codeListValue"><xsl:value-of select="$contact"/></xsl:attribute>
           <xsl:value-of select="$contact"/>
         </gmd:CI_RoleCode>
-      </gmd:role>    </gmd:CI_ResponsibleParty>
-  </xsl:template><!--default_custodian-->
+      </gmd:role>    
+    </gmd:CI_ResponsibleParty>
+  </xsl:template><!--default_contact-->
   <xsl:template name="other_contact">
     <xsl:param name="contactinfo"/>
     <xsl:variable name="contact" select="str:toNode($contactinfo)"/>
@@ -921,6 +931,25 @@
               </gmd:geographicElement>
             </gmd:EX_Extent>
           </gmd:extent>
+          <xsl:for-each select="*[starts-with(name(),'GeographicDescription')]">
+            <xsl:if test="normalize-space(.)">
+              <gmd:extent>
+                <gmd:EX_Extent>
+                  <gmd:geographicElement>
+                    <gmd:EX_GeographicDescription>
+                      <gmd:geographicIdentifier>
+                        <gmd:MD_Identifier>
+                          <gmd:code>
+                            <gco:CharacterString><xsl:value-of select="."/></gco:CharacterString>
+                          </gmd:code>
+                        </gmd:MD_Identifier>
+                      </gmd:geographicIdentifier>
+                    </gmd:EX_GeographicDescription>
+                  </gmd:geographicElement>
+                </gmd:EX_Extent>
+              </gmd:extent>
+            </xsl:if>
+          </xsl:for-each>
           <gmd:extent>
             <gmd:EX_Extent>
               <gmd:temporalElement>
@@ -956,9 +985,11 @@
           <gmd:supplementalInformation>
             <gco:CharacterString>
               <xsl:for-each select="*[not(self::quicklook)][not(self::thumbnail)][not(self::abstract)]">
+                <xsl:if test="normalize-space(.)">
                   <xsl:value-of select="local-name(.)"/>: <xsl:value-of select="."/>
                   <!--xsl:if test="position() != last()">  |  </xsl:if-->
                   <xsl:if test="position() != last()"><xsl:text>&#xA;</xsl:text></xsl:if><!--insert line break-->
+                </xsl:if>
               </xsl:for-each>
             </gco:CharacterString>
           </gmd:supplementalInformation>
