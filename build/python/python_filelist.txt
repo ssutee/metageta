@@ -49,7 +49,7 @@ Python26\Lib\encodings\cp1251.py
 Python26\Lib\encodings\cp1252.py
 Python26\Lib\encodings\cp850.py
 Python26\Lib\encodings\latin_1.py
-Python26\Lib\encodings\mcbs.py
+Python26\Lib\encodings\mbcs.py
 Python26\Lib\encodings\string_escape.py
 Python26\Lib\encodings\utf_16_le.py
 Python26\Lib\encodings\utf_8.py
@@ -65,6 +65,7 @@ Python26\Lib\inspect.py
 Python26\Lib\keyword.py
 Python26\Lib\lib-tk\FixTk.py
 Python26\Lib\lib-tk\ScrolledText.py
+Python26\Lib\lib-tk\Tix.py
 Python26\Lib\lib-tk\Tkconstants.py
 Python26\Lib\lib-tk\Tkinter.py
 Python26\Lib\lib-tk\tkCommonDialog.py
@@ -91,6 +92,7 @@ Python26\Lib\re.py
 Python26\Lib\repr.py
 Python26\Lib\rfc822.py
 Python26\Lib\shutil.py
+Python26\Lib\site-packages\Ft\Lib\DbUtil.py
 Python26\Lib\site-packages\Ft\Lib\EscapeQuotesc.pyd
 Python26\Lib\site-packages\Ft\Lib\Gettext.py
 Python26\Lib\site-packages\Ft\Lib\ImportUtil.py
@@ -124,6 +126,7 @@ Python26\Lib\site-packages\Ft\Xml\XPath\Context.py
 Python26\Lib\site-packages\Ft\Xml\XPath\Conversions.py
 Python26\Lib\site-packages\Ft\Xml\XPath\CoreFunctions.py
 Python26\Lib\site-packages\Ft\Xml\XPath\MathFunctions.py
+Python26\Lib\site-packages\Ft\Xml\XPath\MessageSource.py
 Python26\Lib\site-packages\Ft\Xml\XPath\ParsedAbbreviatedAbsoluteLocationPath.py
 Python26\Lib\site-packages\Ft\Xml\XPath\ParsedAbbreviatedRelativeLocationPath.py
 Python26\Lib\site-packages\Ft\Xml\XPath\ParsedAbsoluteLocationPath.py
@@ -143,14 +146,24 @@ Python26\Lib\site-packages\Ft\Xml\Xslt\ApplyImportsElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\ApplyTemplatesElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\AttributeElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\AttributeInfo.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\AttributeSetElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\AttributeValueTemplate.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\AvtParserc.pyd
 Python26\Lib\site-packages\Ft\Xml\Xslt\BuiltInExtElements.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\BuiltInExtFunctions.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\CallTemplateElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\ChooseElement.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\CommentElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\ContentInfo.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\CopyElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\CopyOfElement.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\Debugger\DebugCommands.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\Debugger\DebugController.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\Debugger\DebugWriter.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\Debugger\TerminalInput.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\Debugger\TerminalOutput.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\Debugger\__init__.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\DomWriter.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\ElementElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\Exslt\Common.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\Exslt\DateTime.py
@@ -176,6 +189,7 @@ Python26\Lib\site-packages\Ft\Xml\Xslt\OutputParameters.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\ParamElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\PlainTextWriter.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\Processor.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\Roman.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\RtfWriter.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\SortElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\StringWriter.py
@@ -188,6 +202,7 @@ Python26\Lib\site-packages\Ft\Xml\Xslt\TextElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\UndefinedElements.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\ValueOfElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\VariableElement.py
+Python26\Lib\site-packages\Ft\Xml\Xslt\WhitespaceElements.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\WithParamElement.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\XPathExtensions.py
 Python26\Lib\site-packages\Ft\Xml\Xslt\XPatternParserc.pyd
@@ -388,6 +403,8 @@ Python26\Lib\site-packages\xlutils\filter.py
 Python26\Lib\site-packages\xlutils\license.txt
 Python26\Lib\site-packages\xlutils\margins.py
 Python26\Lib\site-packages\xlutils\readme.txt
+Python26\Lib\site-packages\xlutils\save.py
+Python26\Lib\site-packages\xlutils\styles.py
 Python26\Lib\site-packages\xlutils\version.txt
 Python26\Lib\site-packages\xlutils\xlrd\__init__.py
 Python26\Lib\site-packages\xlutils\xlrd\biffh.py
