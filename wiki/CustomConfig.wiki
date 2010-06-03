@@ -2,6 +2,6 @@
 #Config
 
 = Config file =
-Support for customised MetaGETA settings/preferences is being implemented. Currently only settings values for the default contact is supported.
+Support for customised MetaGETA settings/preferences is being implemented. As of version 1.3.2 setting values for the default contact will be supported.
 
 The [http://code.google.com/p/metageta/source/browse/trunk/config/config.xml MetaGETA config file] can be found at: {install directory}/metageta/config
