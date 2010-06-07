@@ -29,7 +29,8 @@
     !define REG_START_MENU "Start Menu Folder"
     !define MUI_ICON "graphics\metageta.ico"
 
-    var StartMenuFolder
+    var /GLOBAL StartMenuFolder
+    var /GLOBAL ConfigFile
 
     ######################################################################
 
@@ -89,6 +90,7 @@
     !define MUI_PAGE_CUSTOMFUNCTION_PRE UninstallPrevious
     !insertmacro MUI_PAGE_INSTFILES
     !define MUI_FINISHPAGE_NOAUTOCLOSE
+    !define MUI_PAGE_CUSTOMFUNCTION_PRE ExistingConfig
     !insertmacro MUI_PAGE_FINISH
     !insertmacro MUI_UNPAGE_CONFIRM
     !insertmacro MUI_UNPAGE_INSTFILES
@@ -164,14 +166,32 @@
         ; Check for uninstaller.
         ReadRegStr $R0 ${REG_ROOT} "${UNINSTALL_PATH}" "UninstallString"
         ${If} $R0 != ""
-            MessageBox MB_YESNO "An existing ${APP_NAME} has been detected and will be uninstalled. Do you wish to continue?" IDYES uninstallit
-                Quit
+            IfFileExists $INSTDIR\metageta\config\config.xml uninstallit_config uninstallit
+            uninstallit_config:
+                MessageBox MB_YESNO "An existing ${APP_NAME} has been detected and will be uninstalled.$\r$\nYour config.xml file will be backed up to $INSTDIR\metageta\config\config-previous.xml.$\r$\nDo you wish to continue?" IDYES +2
+                    Quit
+                DetailPrint "Removing previous installation and backing up config file."
+                GetTempFileName $ConfigFile
+                ;CreateDirectory $ConfigFile
+                CopyFiles /SILENT $INSTDIR\metageta\config\config.xml $ConfigFile
+                Goto rununinstaller
+                
             uninstallit:
+                MessageBox MB_YESNO "An existing ${APP_NAME} has been detected and will be uninstalled.$\r$\nDo you wish to continue?" IDYES +2
+                    Quit
                 DetailPrint "Removing previous installation."
+                Goto rununinstaller
+                
+            rununinstaller:
                 ; Run the uninstaller silently.
-                ;ExecWait '"$R0" /S' #http://nsis.sourceforge.net/When_I_use_ExecWait_uninstaller.exe_it_doesn't_wait_for_the_uninstaller
                 ExecWait '"$R0" /S _?=$INSTDIR'
-            #MessageBox MB_OK "${APP_NAME} has been uninstalled"
+        ${EndIf}
+    FunctionEnd
+
+    Function ExistingConfig
+        ${If} $ConfigFile != ""
+                CopyFiles /SILENT $ConfigFile $INSTDIR\metageta\config\config-previous.xml
+                Delete $ConfigFile
         ${EndIf}
     FunctionEnd
 
