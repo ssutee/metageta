@@ -1,7 +1,18 @@
 #summary Changelog for releases
 =MetaGETA Change Log=
 
-==17/05.2010==
+==07/06/2010==
+MetaGETA 1.3.1 released
+
+_Bugfixes:_
+  * Removed DEWHA contact details from ANLIC Profile XSL stylesheet.
+
+_Enhancements:_
+  * Removed Quickbird driver and replaced with Digitalglobe driver to handle Worldview 1 & 2 formats in addition to Quickbird.
+  * Added simple config file which allows customisation of the default metadata contact.
+  * Manually adding one or more geographicIdentifier columns to the spreadsheet is now supported by the ANLIC Profile XSL stylesheet.
+
+==17/05/2010==
 MetaGETA 1.3.1 released
 
 _Bugfixes:_
