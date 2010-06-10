@@ -92,10 +92,12 @@ Python26\Lib\re.py
 Python26\Lib\repr.py
 Python26\Lib\rfc822.py
 Python26\Lib\shutil.py
+Python26\Lib\site-packages\Ft.zip
 Python26\Lib\site-packages\Ft\Lib\DbUtil.py
 Python26\Lib\site-packages\Ft\Lib\EscapeQuotesc.pyd
 Python26\Lib\site-packages\Ft\Lib\Gettext.py
 Python26\Lib\site-packages\Ft\Lib\ImportUtil.py
+Python26\Lib\site-packages\Ft\Lib\MessageSource.py
 Python26\Lib\site-packages\Ft\Lib\Random.py
 Python26\Lib\site-packages\Ft\Lib\Set.pyd
 Python26\Lib\site-packages\Ft\Lib\Uri.py
