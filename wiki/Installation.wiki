@@ -36,4 +36,25 @@ You will need the following libraries:
     * You will also have to download and build appropriate libraries for other non-standard GDAL formats. 
     * See http://trac.osgeo.org/gdal/wiki/BuildHints for more info
 
- 
+
+*Step by step on Ubuntu 10.04 32 bit*:
+  * Installed the following packages from the repositories:
+    * libgdal1-1.6.0
+    * gdal-bin
+    * python-gdal # NB I didn't mess around trying to get the latest gdal version from source/ubuntugis etc, nor did I install ECW/JP2 support.
+    * libproj0
+    * proj-data
+    * python-pip
+    * tix
+    * python-4suite-xml
+    * Made a sym link (ln -s) from /usr/lib/libproj.so.0.6.6 named /usr/lib/libproj.so 
+      * NB there is a symlink named /usr/lib/libproj.so.0 created during install, but gdal was complaining it couldn't find "libproj.so"
+    * Used python-pip (you can also use easy_install) to install the following packages from http://pypi.python.org (NB python-pip executable is called "pip" e.g. sudo pip install somepackagename
+      * xlutils
+      * xlrd
+      * xlwt
+    * unzipped the metageta-1.N.N.zip 
+    * Set GDAL_DATA, GEOTIFF_CSV and LD_LIBRARY_PATH env vars to appropriate locations (in my case /usr/share/gdal16 and /usr/lib). I did this in my bash profile so I could use the gdal utilities on their own. I could  have edited "setenv.sh" in the metageta dir instead.
+    * Made runcrawler.sh and runtransform.sh executable (chmod +x etc.)
+
+  I _think_ that's all... :)
