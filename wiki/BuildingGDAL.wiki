@@ -7,7 +7,7 @@ OSGeo4W is the easiest gdal distribution to incorporate into MetaGETA, unfortuna
 
 That's 3 unfortunatelys...
 
-Note: Make that 4, cos unfortunately this process is a pain in the @rse.
+Note: Make that 4, cos unfortunately this process is a pain in the proverbial.
 
 
 = Details =
