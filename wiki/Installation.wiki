@@ -57,4 +57,6 @@ You will need the following libraries:
     * Set GDAL_DATA, GEOTIFF_CSV and LD_LIBRARY_PATH env vars to appropriate locations (in my case /usr/share/gdal16 and /usr/lib). I did this in my bash profile so I could use the gdal utilities on their own. I could  have edited "setenv.sh" in the metageta dir instead.
     * Made runcrawler.sh and runtransform.sh executable (chmod +x etc.)
 
+    * Update: the Tix ComboBox no worky in Ubuntu 9.04-10.04, https://bugs.launchpad.net/ubuntu/+source/tix/+bug/371720. The workaround is to install Tix 8.4.3 from https://launchpad.net/~portis25/+archive/science
+
   I _think_ that's all... :)
