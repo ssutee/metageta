@@ -118,13 +118,13 @@
         !ifdef REG_START_MENU
             !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
                 CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Run Crawler.lnk" "$INSTDIR\metageta\runcrawler.bat" "" "$INSTDIR\metageta\lib\wm_icon.ico" 0 SW_SHOWMINIMIZED
-                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Run Transform.lnk" "$INSTDIR\metageta\runtransform.bat" "" "$INSTDIR\metageta\lib\wm_icon.ico" 0 SW_SHOWNORMAL
-                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\MetaGETA Shell.lnk" "$INSTDIR\metageta\metageta-shell.bat" "" "$SYSDIR\cmd.exe" 0 SW_SHOWNORMAL
-                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\${APP_NAME} API Documentation.lnk" "$INSTDIR\${APP_NAME}\doc\index.html" "" "$SYSDIR\SHELL32.dll" 23 SW_SHOWMAXIMIZED
-                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Uninstall ${APP_NAME}.lnk" "$INSTDIR\uninstall.exe"
+                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Run Crawler (${DISPLAY_VERSION}).lnk" "$INSTDIR\metageta\runcrawler.bat" "" "$INSTDIR\metageta\lib\wm_icon.ico" 0 SW_SHOWMINIMIZED
+                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Run Transform (${DISPLAY_VERSION}).lnk" "$INSTDIR\metageta\runtransform.bat" "" "$INSTDIR\metageta\lib\wm_icon.ico" 0 SW_SHOWNORMAL
+                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\MetaGETA Shell (${DISPLAY_VERSION}).lnk" "$INSTDIR\metageta\metageta-shell.bat" "" "$SYSDIR\cmd.exe" 0 SW_SHOWNORMAL
+                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\${APP_NAME} API Documentation (${DISPLAY_VERSION}).lnk" "$INSTDIR\${APP_NAME}\doc\index.html" "" "$SYSDIR\SHELL32.dll" 23 SW_SHOWMAXIMIZED
+                CreateShortCut  "$SMPROGRAMS\$StartMenuFolder\Uninstall ${APP_NAME} (${DISPLAY_VERSION}).lnk" "$INSTDIR\uninstall.exe"
                 WriteIniStr "$INSTDIR\${APP_NAME} website.url" "InternetShortcut" "URL" "${WEB_SITE}"
-                CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APP_NAME} Website.lnk" "$INSTDIR\${APP_NAME} website.url" "" "$SYSDIR\SHELL32.dll" 13 SW_SHOWMAXIMIZED
+                CreateShortCut "$SMPROGRAMS\$StartMenuFolder\${APP_NAME} (${DISPLAY_VERSION}) Website.lnk" "$INSTDIR\${APP_NAME} website.url" "" "$SYSDIR\SHELL32.dll" 13 SW_SHOWMAXIMIZED
             !insertmacro MUI_STARTMENU_WRITE_END
         !endif
 
