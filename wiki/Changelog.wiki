@@ -12,7 +12,7 @@ _Bugfixes:_
 A number of bugfixes, including working around a segfault crash in OGR.
 
 Full list of changes:
-http://code.google.com/p/metageta/source/list?num=34&start=436
+http://code.google.com/p/metageta/source/list?num=54&start=456
 
 
 ==07/06/2010==
