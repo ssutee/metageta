@@ -55,7 +55,7 @@ def main(site,username,password,directory):
                 print 'MEF upload failed!'
                 print resultxml
             else:
-                id=str(resultdom.firstChild.firstChild.data)
+                id=str(resultdom.firstChild.firstChild.data).strip(';')
                 print 'Upload succeeded'
                 print 'http://%s/geonetwork/srv/en/metadata.show?id=%s&currTab=simple' % (site,id)
             fo.close()
