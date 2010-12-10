@@ -48,13 +48,14 @@ def main(site,username,password,directory):
             request = urllib2.Request('http://%s/%s/%s'%(site,url,service), data, headers)
             opener = urllib2.build_opener(handler,proxy,urllib2.HTTPCookieProcessor(cj))
             try:
-                result=dom.parseString(opener.open(request).read())
-                assert(str(result.firstChild.localName) == 'ok')
+                resultxml=opener.open(request).read()
+                resultdom=dom.parseString(resultxml)
+                assert(str(resultdom.firstChild.localName) in ['ok','id'])
             except:
                 print 'MEF upload failed!'
-                print result
+                print resultxml
             else:
-                id=str(result.firstChild.firstChild.data)
+                id=str(resultdom.firstChild.firstChild.data)
                 print 'Upload succeeded'
                 print 'http://%s/geonetwork/srv/en/metadata.show?id=%s&currTab=simple' % (site,id)
             fo.close()
