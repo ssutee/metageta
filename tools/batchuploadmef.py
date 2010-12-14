@@ -1,5 +1,6 @@
+import sys
 def main(site,username,password,directory):
-    import sys, urllib2, urllib, cookielib, glob
+    import urllib2, urllib, cookielib, glob
     import xml.dom.minidom as dom
     #Import multipart encode from the poster library - http://atlee.ca/software/poster
     from poster.encode import multipart_encode
@@ -16,11 +17,16 @@ def main(site,username,password,directory):
     data = urllib.urlencode({'username':username,'password':password})
     request = urllib2.Request('http://%s/%s/%s?'%(site,url,service), data)
     opener = urllib2.build_opener(handler,proxy,urllib2.HTTPCookieProcessor(cj))
-    result=dom.parseString(opener.open(request).read())
     try:
         result=dom.parseString(opener.open(request).read())
+    except Exception,err:
+        print err
+        exit(1)
+    try:
         assert(str(result.firstChild.localName) == 'ok')
-    except:raise Exception, 'Login failed!'
+    except:
+        print 'Login failed!'
+        exit(1)
     else:
         print 'Login successfull!'
         #Set up the MEF import form values
@@ -54,12 +60,18 @@ def main(site,username,password,directory):
             except:
                 print 'MEF upload failed!'
                 print resultxml
+                exit(1)
             else:
                 id=str(resultdom.firstChild.firstChild.data).strip(';')
                 print 'Upload succeeded'
                 print 'http://%s/geonetwork/srv/en/metadata.show?id=%s&currTab=simple' % (site,id)
             fo.close()
 
+def exit(status=0):
+    try:usr = raw_input("Press <Enter> to exit")
+    except:pass
+    sys.exit(status)
+    
 if __name__ == '__main__':
 
     import optparse
