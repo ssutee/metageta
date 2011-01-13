@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
     <defaultcontact>
-      <organisation>Australian Government Department of the Environment, Water, Heritage and the Arts</organisation>
+      <organisation>Australian Government Department of Sustainability, Environment, Water, Population and Communities</organisation>
       <position>Remote Sensing Coordinator</position>
       <telephone>+61 2 6275 9332</telephone>
       <facsimile>+ 61 2 6274 1333</facsimile>
@@ -15,7 +15,7 @@
       <emailAddress>satellite.metadata@environment.gov.au</emailAddress>
       <onlineResource>
         <URL>http://www.environment.gov.au</URL>
-        <description>Department of the Environment, Water, Heritage and the Arts homepage</description>
+        <description>Department of the Sustainability, Environment, Water, Population and Communities homepage</description>
       </onlineResource>
     </defaultcontact>
 </config>
