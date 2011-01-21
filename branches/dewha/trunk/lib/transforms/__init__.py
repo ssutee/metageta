@@ -136,16 +136,20 @@ Additional metadata elements
     |----------------------------------|-----------------------------|------------------------
     |distributor                       |As per custodian             |                           
     |----------------------------------|-----------------------------|------------------------
-    |originator                        |As per custodian             |                           
-    |----------------------------------|-----------------------------|------------------------
-    |publisher                         |As per custodian             |                           
-    |----------------------------------|-----------------------------|------------------------
-    |resourceProvider                  |As per custodian             |                           
-    |----------------------------------|-----------------------------|------------------------
     |GeographicDescription             |Text describing the          |Kakadu
     |                                  |geographic location of the   |
     |                                  |image. More than one column  |
     |                                  |is permitted.                |
+    |----------------------------------|-----------------------------|------------------------
+    |mediaid                           |An ID code for the offline   |RSA0000001
+    |                                  |media                        |
+    |----------------------------------|-----------------------------|------------------------
+    |mediatype                         |Must be one of:              |digitalLinearTape
+    |                                  | - cdRom                     |
+    |                                  | - dvd                       |
+    |                                  | - digitalLinearTape         |
+    |                                  |Or others listed at:         |
+    |                                  |http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_MediumNameCode
     |----------------------------------|-----------------------------|------------------------
     |OnlineResource                    |More than one                |URL|http://pandora:81/ecwp/ecw_wms.dll?nautical_charts?Request=GetCapabilities
     |                                  |OnlineResource column is     |protocol|OGC:WMS-1.1.1-http-get-map
@@ -159,6 +163,12 @@ Additional metadata elements
     |                                  |name|text\n                  |
     |                                  |description|text\n           |
     |                                  |function|text                |
+    |----------------------------------|-----------------------------|------------------------
+    |originator                        |As per custodian             |                           
+    |----------------------------------|-----------------------------|------------------------
+    |publisher                         |As per custodian             |                           
+    |----------------------------------|-----------------------------|------------------------
+    |resourceProvider                  |As per custodian             |                           
     |----------------------------------|-----------------------------|------------------------
     |scale                             |representative fraction      |25000 (represents 1:25,000)
     |                                  |denominator                  |
