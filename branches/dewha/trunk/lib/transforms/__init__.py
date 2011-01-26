@@ -222,7 +222,9 @@ categories={'default':str(config.xpath('string(/config/geonetwork/categories/@de
 if not categories['default'] and not categories['categories']:categories={'default': 'datasets', 'categories': ['datasets']}
 site={}
 for _key in ['name','organization','siteId']:
-    site[_key]=str(config.xpath('string(/config/geonetwork/site/%s)'%_key))
+    s=str(config.xpath('string(/config/geonetwork/site/%s)'%_key))
+    if s:site[_key]=s
+    else:site[_key]='dummy'
 
 #++++++++++++++++++++++++
 #Public methods    
@@ -340,11 +342,17 @@ def _CreateInfo(uid,overviews=[],cat=categories['default']):
     if overviews:format='partial'
     else:format='simple'
 
-    general={'createDate':now,'changeDate':now,
-             'schema':'iso19139','isTemplate':'false',
-             'format':format,'uuid':uid,
-             'siteId':site['siteId'],'siteName':site['name'],
-             'localId':'','rating':'0','popularity':'2'}
+    #general={'createDate':now,'changeDate':now,
+    #         'schema':'iso19139','isTemplate':'false',
+    #         'format':format,'uuid':uid,
+    #         'siteId':site['siteId'],'siteName':site['name'],
+    #         'localId':'','rating':'0','popularity':'2'}
+
+    general=[('createDate',now),('changeDate',now),
+             ('schema','iso19139'),('isTemplate','false'),
+             ('localId',''),('format',format),
+             ('rating','0'),('popularity','2'),
+             ('uuid',uid),('siteId',site['siteId']),('siteName',site['name'])]
 
     privileges = ['view','editing','dynamic','featured']
 
@@ -355,8 +363,10 @@ def _CreateInfo(uid,overviews=[],cat=categories['default']):
     #General
     parent=doc.createElementNS(None, 'general')
     for key in general:
-        child=doc.createElementNS(None, key)
-        text=doc.createTextNode(general[key])
+        #child=doc.createElementNS(None, key)
+        #text=doc.createTextNode(general[key])
+        child=doc.createElementNS(None, key[0])
+        text=doc.createTextNode(key[1])
         child.appendChild(text)
         parent.appendChild(child)
     root.appendChild(parent)
