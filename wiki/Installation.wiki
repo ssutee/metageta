@@ -30,7 +30,7 @@ You will need the following libraries:
     * GDAL python bindings (see below)
 
   * GDAL 1.6+ http://www.gdal.org
-    * On Windows, use [http://trac.osgeo.org/osgeo4w OSGeo4W] or the prebuilt binaries at [http://vbkto.dyndns.org/sdk] to get GDAL 1.6+ and the appropriate python bindings (Don't use FWTools, it only supports python 2.3.)
+    * On Windows, use [http://trac.osgeo.org/osgeo4w OSGeo4W] or the prebuilt binaries at [http://www.gisinternals.com/sdk] to get GDAL 1.6+ and the appropriate python bindings (Don't use FWTools, it only supports python 2.3.)
     * On Ubuntu, try the [https://wiki.ubuntu.com/UbuntuGIS UbuntuGIS] packages (or build from source if you prefer)
     * If you want to read ECW/JPEG2000/MrSID files, you'll need to install and link to the appropriate SDK (if building from source) or the OSGeo4W plugins [http://trac.osgeo.org/osgeo4w/wiki/pkg-gdal-mrsid gdal-mrsid] & [http://trac.osgeo.org/osgeo4w/wiki/pkg-gdal-ecw gdal-ecw]) or the see the UbuntuGIS scripts - gdal-mrsid-build gdal-ecw-build (located in /usr/bin by default if installed from the repos) and see - http://lists.osgeo.org/pipermail/ubuntu/2009-June/000054.html and http://trac.osgeo.org/ubuntugis/wiki/TutorialMrSid
     * You will also have to download and build appropriate libraries for other non-standard GDAL formats. 
