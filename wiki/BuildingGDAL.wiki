@@ -26,7 +26,7 @@ Note: Make that 4, cos unfortunately this process is a pain in the proverbial.
     http://www.hdfgroup.org/release4/obtain.html
 
     GDAL MSVC2008 (Win32) SDK
-    http://vbkto.dyndns.org/sdk/release-1500-dev.zip
+    http://www.gisinternals.com/sdk/release-1500-dev.zip
         
 == BUILD ==
     === HDF ===
