@@ -35,11 +35,13 @@ Transform metadata to XML. If no arguments are passed, a dialog box pops up.
 
 Options:
   -h, --help  show this help message and exit
-  -d dir      The directory to output metadata XML to
-  -x xls      Excel spreadsheet to read metadata from
-  -t xsl      XSL transform {`*`.xsl|"ANZLIC Profile"}
-  -m          Create Metadata Exchange Format (MEF) file
-  --debug     Turn debug output on
+  -d dir       The directory to output metadata XML to
+  -x xls       Excel spreadsheet to read metadata from
+  -t xsl       XSL transform {`*`.xsl|"ANZLIC Profile"}
+  -m           Create Metadata Exchange Format (MEF) file
+  --nogui      Don't show the GUI progress dialog
+  --keep-alive Keep this dialog box open
+  --debug      Turn debug output on
 </pre>
 
 Basic API documentation may be found [http://metageta.googlecode.com/svn/trunk/doc/index.html here].
