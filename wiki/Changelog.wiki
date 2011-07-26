@@ -1,7 +1,14 @@
 #summary Changelog for releases
 =MetaGETA Change Log=
 
-==08/02/2010==
+==27/07/2011==
+MetaGETA 1.3.5 released
+
+Fixed issue with runtransform not opening, for some reason the SVN repo reverted it to an earlier version and no amount of committing the updated file would change the repo.
+
+Quicklooks paths are now relative to xls output - [http://code.google.com/p/metageta/issues/detail?id=42 Issue 42]
+
+==08/02/2011==
 MetaGETA 1.3.4 released
 
 A number of minor improvements and bugfixes.
