@@ -1,5 +1,10 @@
+==Changes in MetaGETA 1.3.5==
+Fixed issue with runtransform not opening, for some reason the SVN repo reverted it to an earlier version and no amount of committing the updated file would change the repo.
+
+Quicklooks paths are now relative to xls output - [http://code.google.com/p/metageta/issues/detail?id=42 Issue 42]
+
 ==Changes in MetaGETA 1.3.4==
-Fixed bug which causes Python to hang on n  
+Fixed bug which causes Python to hang  
 
 Resolved [http://code.google.com/p/metageta/issues/detail?id=41 Issue 41]
 
