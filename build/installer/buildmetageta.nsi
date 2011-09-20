@@ -126,9 +126,9 @@
     # Optional sections
     section "Explorer Integration" sec_shell
         WriteRegStr ${REG_ROOT} "Software\Classes\Folder\shell\metageta" "" "MetaGETA Crawler..."
-        WriteRegStr ${REG_ROOT} "Software\Classes\Folder\shell\metageta\command" "" '"$INSTDIR\metageta\runcrawler.bat" -d "%1"'
+        WriteRegStr ${REG_ROOT} "Software\Classes\Folder\shell\metageta\command" "" 'cmd.exe /s /c ""$INSTDIR\metageta\runcrawler.bat" -d "%1""'
         WriteRegStr ${REG_ROOT} "Software\Classes\Excel.Sheet.8\shell\metageta" "" "MetaGETA Transform..."
-        WriteRegStr ${REG_ROOT} "Software\Classes\Excel.Sheet.8\shell\metageta\command" "" '"$INSTDIR\metageta\runtransform.bat" -x "%1"'
+        WriteRegStr ${REG_ROOT} "Software\Classes\Excel.Sheet.8\shell\metageta\command" "" 'cmd.exe /s /c ""$INSTDIR\metageta\runtransform.bat" -x "%1""'
     sectionEnd
     
     Section "Start Menu shortcuts" sec_startmenu

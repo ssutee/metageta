@@ -48,6 +48,8 @@ Python26\Lib\encodings\mbcs.py
 Python26\Lib\encodings\string_escape.py
 Python26\Lib\encodings\utf_16_le.py
 Python26\Lib\encodings\utf_8.py
+Python26\Lib\encodings\raw_unicode_escape.py
+Python26\Lib\encodings\unicode_escape.py
 Python26\Lib\fnmatch.py
 Python26\Lib\functools.py
 Python26\Lib\genericpath.py

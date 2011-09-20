@@ -11,7 +11,7 @@
         * This script relies on the following svn properties being set (and kept up to date)
             version (N.N.N.N format)
             displayversion (free text, e.g 1.4 RC1)
-            
+
 '''
 import os,sys,shutil,glob,tempfile,zipfile as zip, fnmatch, optparse
 
@@ -25,7 +25,7 @@ def main(vers=None):
     try:
         if vers:pause=False
         else:pause=True
-            
+
         svn=which('svn')
         makensis=which('makensis')
 
@@ -65,7 +65,7 @@ def main(vers=None):
         ##Get revision
         if 'branches' in vers or 'trunk' in vers :repo=vers
         else:repo='tags/'+vers
-            
+
         cmd='svn info http://metageta.googlecode.com/svn/%s'%repo
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
@@ -73,7 +73,7 @@ def main(vers=None):
             if pause:raw_input('Press enter to exit.')
             cleanup(tmp)
             sys.exit(exit_code)
-            
+
         for line in stdout.split('\n'):
             line=line.split(':')
             if line[0].strip()=='Last Changed Rev':
@@ -122,7 +122,7 @@ def main(vers=None):
 
         ##########################################################
         print 'Exporting from SVN repo'
-        cmd='svn export -q --force http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
+        cmd='svn export -q --force https://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
             if stderr:    print stderr
@@ -135,13 +135,13 @@ def main(vers=None):
         ##########################################################
         f=open('%s\\version.txt'%tmp,'w').write('Version: %s'%displayversion)
         for f in glob.glob('include\\*'):shutil.copy(f,tmp)
-            
+
         ##########################################################
         excluded_files=[]
         for f in open('excluded_files.txt'):
             f=f.split('#')[0].strip() #Handle comments
             if f:excluded_files.append(f)
-            
+
         ##########################################################
         print 'Compiling NSIS installer'
         setup=DOWNLOAD_DIR+r'\metageta-%s-x86-setup.exe'%outfile
@@ -177,7 +177,7 @@ def main(vers=None):
         fout=DOWNLOAD_DIR+'\\metageta-%s.zip'%outfile
         zout=zip.ZipFile(fout,'w',zip.ZIP_DEFLATED)
 
-        #Code only    
+        #Code only
         for f in rglob(tmp):
             if not os.path.isdir(f):
                 zout.write(f,f.replace(tmp,'metageta'))
@@ -197,8 +197,8 @@ def main(vers=None):
         zout=zip.ZipFile(fout.replace('.zip','-plugins-x86-setup.zip'),'w',zip.ZIP_DEFLATED)
         zout.write(pluginsetup, os.path.basename(pluginsetup))
         zout.close()
-        
-    
+
+
     except Exception,err:
         print err
 
