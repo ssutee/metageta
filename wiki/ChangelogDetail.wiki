@@ -4,11 +4,11 @@ Fixed issue with runtransform not opening, for some reason the SVN repo reverted
 Quicklooks paths are now relative to xls output - [http://code.google.com/p/metageta/issues/detail?id=42 Issue 42]
 
 ==Changes in MetaGETA 1.3.4==
-Fixed bug which causes Python to hang  
+Fixed bug which causes Python to hang  on exit.
 
 Resolved [http://code.google.com/p/metageta/issues/detail?id=41 Issue 41]
 
-Log the number of records to transform
+Log the number of records to transform.
 
 Plugging the progresslogger GUI into runtransform.
 
