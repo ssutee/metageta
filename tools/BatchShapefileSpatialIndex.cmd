@@ -1,0 +1,1 @@
+FOR %F IN (*.shp) DO ogrinfo -sql "CREATE SPATIAL INDEX ON %~nF" %F
