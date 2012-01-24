@@ -31,8 +31,7 @@
 #Imports
 import os,sys
 from osgeo import ogr
-#sys.path.insert(0,r'C:\Program Files (x86)\MetaGETA\metageta\lib')
-sys.path.insert(0,r'C:\metageta_development\metageta-trunk')
+sys.path.insert(0,r'C:\Program Files (x86)\MetaGETA\metageta')
 from metageta import utilities, geometry
 config = __import__('%s_config'%(os.path.splitext(os.path.basename(__file__))[0]))
 ogr.UseExceptions()
