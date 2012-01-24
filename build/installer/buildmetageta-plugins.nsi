@@ -122,12 +122,13 @@
     # default section
     section /o "ECW/JPEG2000" SEC01
 
-        setOutPath "$INSTDIR\metageta\lib\formats"
-        File  "${APP_DIR}\metageta\lib\formats\ecw.py"
-        File  "${APP_DIR}\metageta\lib\formats\ecwp.py"
-        File  "${APP_DIR}\metageta\lib\formats\jp2.py"
+        setOutPath "$INSTDIR\metageta\metageta\formats"
+        File  "${APP_DIR}\metageta\metageta\formats\ecw.py"
+        File  "${APP_DIR}\metageta\metageta\formats\ecwp.py"
+        File  "${APP_DIR}\metageta\metageta\formats\jp2.py"
         setOutPath "$INSTDIR\bin\gdal"
-        File  "${BIN_DIR}\gdal\ecw-eula.txt"
+        #File  "${BIN_DIR}\gdal\ecw-eula.txt"
+        File  "licenses\ecw-eula.txt"
         setOutPath "$INSTDIR\bin\gdal\bin"
         File  "${BIN_DIR}\gdal\bin\libecwj2.dll"
         setOutPath "$INSTDIR\bin\gdal\bin\plugins"
@@ -137,9 +138,10 @@
     section /o "MrSID" SEC02
 
         setOutPath "$INSTDIR\bin\gdal"
-        File  "${BIN_DIR}\gdal\mrsid-eula.txt"
+        #File  "${BIN_DIR}\gdal\mrsid-eula.txt"
+        File  "licenses\mrsid-eula.txt"
         setOutPath "$INSTDIR\bin\gdal\bin"
-        File  "${BIN_DIR}\gdal\bin\lti_dsdk_dll.dll"
+        File  "${BIN_DIR}\gdal\bin\lti_dsdk.dll"
         setOutPath "$INSTDIR\bin\gdal\bin\plugins"
         File  "${BIN_DIR}\gdal\bin\plugins\gdal_MrSID.dll"
 
