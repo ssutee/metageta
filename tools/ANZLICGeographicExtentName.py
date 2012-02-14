@@ -220,11 +220,6 @@ def createANZLICDataSource(uri,config=[]):
     return mem_ds
 
 if __name__ == '__main__':
-    ##################################
-    #for testing only...
-    sys.argv=[__file__,r'C:\WorkSpace\testcrawler\iwsimages.xls',r'C:\WorkSpace\testcrawler\iwsimages_anzlic.xls']
-    ##################################
-
     import csv, optparse #optparse deprecated in py2.7, will need to switch to argparse
 
     #Defaults
@@ -260,6 +255,15 @@ if __name__ == '__main__':
     optvals,argvals = parser.parse_args()
 
     #Check required positional args
+    if len(argvals)!=2:
+        argvals=[]
+        try:
+            arg=raw_input("Enter the input XLS: ")
+            if arg:argvals.append(arg)
+            arg=raw_input("Enter the output XLS: ")
+            if arg:argvals.append(arg)
+        except:pass
+
     if len(argvals)!=2 or not os.path.exists(argvals[0]):
         parser.print_help()
         sys.exit(1)
