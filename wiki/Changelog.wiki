@@ -1,5 +1,15 @@
 #summary Changelog for releases
 =MetaGETA Change Log=
+==14/03/2012==
+MetaGETA 1.3.6 released
+
+Added IKONOS/GeoEye format driver
+Enabled metadata extraction from zip/tar archives for generic gdal supported formats. 
+Updated GDAL to v. 1.9.0 in the Windows installer
+A number of minor improvements and bugfixes.
+
+Full list of changes: [ChangelogDetail detailed changelog]
+
 
 ==27/07/2011==
 MetaGETA 1.3.5 released

@@ -1,3 +1,26 @@
+==Changes in MetaGETA 1.3.6==
+Added IKONOS/GeoEye format driver
+
+Update ANZLIC metadata stylesheet to remove hardcoded GeographicDescription and include use one or more if defined in the crawler result spreadsheet.
+
+Remove NoDataValue from stretched VRT as it doesn't really make a difference and can massively increase overview creation time on large tiffs with BLOCKYSIZE > 1.
+
+Enabled metadata extraction from zip/tar archives for generic gdal supported formats. Untested on custom formats yet. No handling of errors trying to read such formats other than the usual logging.
+
+Fix ExcelWriter not handling dict inputs, regression from adding list handling functionality.
+
+Add license elements to ANZLIC XSLT
+
+Don't inform user that a dataset has been marked as deleted if it was already marked as deleted in the spreadsheet.
+
+Handle DigitalGlobe NITF format - get the geotransform and projection info from the GCPs
+
+Fixes for PCI Geomatics ('.pix') datasets
+
+Fix incorrect extent ordering. Better ERS checking 
+
+Fix "Failed to compute min/max, no valid pixels found in sampling" error when generating approximate statistics.
+
 ==Changes in MetaGETA 1.3.5==
 Fixed issue with runtransform not opening, for some reason the SVN repo reverted it to an earlier version and no amount of committing the updated file would change the repo.
 
