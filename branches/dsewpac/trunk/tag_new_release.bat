@@ -16,7 +16,7 @@ SET DST=https://metageta.googlecode.com/svn/branches/dsewpac/tags/%version%
 svn copy %SRC% %DST% -m "Tagging version %version%"
 svn checkout --depth=empty %DST% %TEMP%\metageta-%version%
 cd %TEMP%\metageta-%version%
-svn propset displayversion %version% .
+svn propset displayversion dsewpac-%version% .
 svn propset version %version%.$Revision$ .
 svn commit -m "Updating version properties %version%"
 cd %CURDIR%
