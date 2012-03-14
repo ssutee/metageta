@@ -99,7 +99,7 @@ def main(vers=None):
         displayversion=stdout.strip().replace('$Revision$',rev)
 
         if not version: #Just in case the svn props are not set
-            if 'branches' in vers or 'trunk' in vers :
+            if 'trunk' in vers :
                 version='0.0.0.%s'%(vers.replace('/','-'),rev)
             else:
                 if vers.count('.')==0:
@@ -110,7 +110,7 @@ def main(vers=None):
                     vers=vers+'.'+rev
                 outfile=vers
         if not displayversion:
-            if 'branches' in vers or 'trunk' in vers :
+            if 'trunk' in vers :
                 displayversion='%s-%s'%(vers.replace('/','-'),rev)
             else:
                 displayversion=vers
