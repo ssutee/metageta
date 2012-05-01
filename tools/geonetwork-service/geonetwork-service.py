@@ -1,24 +1,3 @@
-# -*- coding: latin-1 -*-
-# Copyright (c) 2011 Australian Government, Department of Sustainability, Environment, Water, Population and Communities
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
-
 import os,sys,time,subprocess,glob,ConfigParser,pythoncom,win32serviceutil,win32service,win32event,servicemanager,shutil
 
 class AppServerSvc (win32serviceutil.ServiceFramework):
@@ -44,6 +23,7 @@ class AppServerSvc (win32serviceutil.ServiceFramework):
         config.read(self._configfile_)
 
         self.geonetworkdir = config.get('defaults','geonetworkdir')
+        self.logdir = config.get('defaults','logdir')
         self.geonetworkstart=config.get('defaults','geonetworkstart')
         self.geonetworkstop = config.get('defaults','geonetworkstop')
 
@@ -59,9 +39,9 @@ class AppServerSvc (win32serviceutil.ServiceFramework):
             try:
                 #Start GeoNetwork
                 self.resetlogs()
-                self.proc = subprocess.Popen(self.geonetworkstart, cwd=os.path.join(self.geonetworkdir, 'jetty'), shell=True)
-            except Exception,err:
-                servicemanager.LogErrorMsg('The %s service failed to start:\n%s'%(self._svc_display_name_,err))
+                self.proc = subprocess.Popen(self.geonetworkstart, cwd=os.path.join(self.geonetworkdir, 'jetty'))#, shell=True)
+            except Exception,(err):
+                servicemanager.LogErrorMsg('The %s service failed to start:\n%s'%(self._svc_display_name_,str(err)))
                 sys.exit(1)
             while True:
                 rc=win32event.WaitForSingleObject(self.hWaitStop, interval)
@@ -75,21 +55,21 @@ class AppServerSvc (win32serviceutil.ServiceFramework):
                     break
 
     def stop(self):
-        subprocess.Popen(self.geonetworkstop, cwd=os.path.join(self.geonetworkdir, 'jetty'), shell=True)
+        subprocess.Popen(self.geonetworkstop, cwd=os.path.join(self.geonetworkdir, 'jetty'))#, shell=True)
         for i in range(0,30):
             time.sleep(1)
             retcode=self.proc.poll()
             if retcode is not None:return
         #GN didn't shutdown in 30 secs, kill it.
-        servicemanager.LogErrorMsg('The %s service failed to shutdown gracefully:\n%s'%(self._svc_display_name_,err))
-        proc.kill()
+        self.proc.kill()
+        servicemanager.LogErrorMsg('The %s service failed to shutdown gracefully.'%(self._svc_display_name_))
         
     def resetlogs(self):
-        self.unlink('logs/*request.log*')
-        self.unlink('logs/output.log')
-        self.move('logs/geonetwork.log.*', 'logs/archive/')
-        self.move('logs/intermap.log.*', 'logs/archive/')
-        self.move('logs/geoserver.log.*', 'logs/archive/')
+        self.unlink(os.path.join(self.logdir,'*request.log*'))
+        self.unlink(os.path.join(self.logdir,'output.log'))
+        self.move(os.path.join(self.logdir,'geonetwork.log.*'), os.path.join(self.logdir,'archive/'))
+        self.move(os.path.join(self.logdir,'intermap.log.*'), os.path.join(self.logdir,'archive/'))
+        self.move(os.path.join(self.logdir,'geoserver.log.*'), os.path.join(self.logdir,'archive/'))
 
     def move(self,pat,dir):
         for path in glob.iglob(pat):
