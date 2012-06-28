@@ -25,7 +25,7 @@ batchuploadmef.py [options]
 Options:
   -h, --help  show this help message and exit
   -d dir      The directory to search for MEF files
-  -s site     Geonetwork site eg. firefly:8080
+  -s site     Geonetwork site eg. http://firefly:8080
   -u user     Geonetwork username
   -p pass     Geonetwork password
 '''
@@ -46,7 +46,7 @@ def main(site,username,password,directory):
     service='xml.user.login'
 
     data = urllib.urlencode({'username':username,'password':password})
-    request = urllib2.Request('http://%s/%s/%s?'%(site,url,service), data)
+    request = urllib2.Request('%s/%s/%s?'%(site,url,service), data)
     opener = urllib2.build_opener(handler,proxy,urllib2.HTTPCookieProcessor(cj))
     try:
         result=dom.parseString(opener.open(request).read())
@@ -76,33 +76,33 @@ def main(site,username,password,directory):
         #Loop through the MEFs and upload them
         for mef in glob.glob('%s/*.mef'%directory):
             print 'Uploading '+mef
-            fo=open(mef,'rb')   
+            fo=open(mef,'rb')
             formvalues['mefFile']=fo
             datagen, headers = multipart_encode(formvalues)
             data=''
             for f in datagen:data+=f
             handler=urllib2.HTTPHandler()
-            request = urllib2.Request('http://%s/%s/%s'%(site,url,service), data, headers)
+            request = urllib2.Request('%s/%s/%s'%(site,url,service), data, headers)
             opener = urllib2.build_opener(handler,proxy,urllib2.HTTPCookieProcessor(cj))
             try:
                 resultxml=opener.open(request).read()
                 resultdom=dom.parseString(resultxml)
                 assert(str(resultdom.firstChild.localName) in ['ok','id'])
-            except:
+            except Exception,err:
                 print 'MEF upload failed!'
-                print resultxml
+                print str(err)#resultxml
                 exit(1)
             else:
                 id=str(resultdom.firstChild.firstChild.data).strip(';')
                 print 'Upload succeeded'
-                print 'http://%s/geonetwork/srv/en/metadata.show?id=%s&currTab=simple' % (site,id)
+                print '%s/geonetwork/srv/en/metadata.show?id=%s&currTab=simple' % (site,id)
             fo.close()
 
 def exit(status=0):
     try:usr = raw_input("Press <Enter> to exit")
     except:pass
     sys.exit(status)
-    
+
 if __name__ == '__main__':
 
     import optparse
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     parser.add_option('-d', dest="directory", metavar="dir",
                       help='The directory to search for MEF files')
     parser.add_option("-s", dest="site", metavar="site",
-                      help="Geonetwork site eg. firefly:8080")
+                      help="Geonetwork site eg. http://firefly:8080")
     parser.add_option("-u", dest="username", metavar="user",
                       help="Geonetwork username")
     parser.add_option("-p", dest="password", metavar="pass",
@@ -142,6 +142,6 @@ if __name__ == '__main__':
         parser.print_help()
     else:
         main(**kwargs)
-        
+
     try:usr = raw_input("Press <Enter> to exit")
     except:pass

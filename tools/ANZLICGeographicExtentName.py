@@ -108,8 +108,10 @@ def main(url,config,maxintersects,minoverlap,force,inxls,outxls):
 
     #Loop through each record and intersect with the defined layers
     for row,hdr_rec in enumerate(xlr):
+        
         hdr,rec=map(list,zip(*hdr_rec)) #Unzip tuples and convert to lists
-
+        print row, rec[hdr.index('filename')]
+        
         while True:#Don't try and update existing results, just redo them.
             try:
                 i=hdr.index('GeographicDescription')
