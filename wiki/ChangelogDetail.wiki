@@ -1,8 +1,6 @@
 ==Changes in MetaGETA 1.3.7==
 Add ULA and update DIMAP drivers
 
-New setup.py for (fairly;) easy *nix installs.
-
 Fix bug with generating colour tables from raster attribute tables. 
 
 Better checks for file/dir/zip types in recursive glob.
