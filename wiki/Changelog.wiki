@@ -8,6 +8,8 @@ Update DIMAP driver to handle DCMii format.
 
 Fixed the Windows installer so Metageta actually runs on Windows...
 
+New setup.py for (fairly;) easy *nix installs.
+
 Remove dependency on old/unmaintained 4Suite XML library and port to the lxml library
 
 Remove dependency on Tkinter/Tix so Metageta can run without requiring a GUI.
