@@ -1,6 +1,12 @@
 ==Changes in MetaGETA 1.3.7==
 Add ULA and update DIMAP drivers
 
+Fix bug with generating colour tables from raster attribute tables. 
+
+Better checks for file/dir/zip types in recursive glob.
+
+A few tweaks to allow running without Tkinter/Tix installed.
+
 Resolve issues 45, 46 and 47
 
 Clean out the PATH env var to hopefully avoid more missing/extra dependencies
