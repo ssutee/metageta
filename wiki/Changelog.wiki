@@ -10,6 +10,8 @@ Fixed the Windows installer so Metageta actually runs on Windows...
 
 Remove dependency on old/unmaintained 4Suite XML library and port to the lxml library
 
+Remove dependency on Tkinter/Tix so Metageta can run without requiring a GUI.
+
 Add support for setting Geonetwork MEF operations privileges from the runtransform script or the metadata crawl spreadsheet
 
 A number of minor improvements and bugfixes.
