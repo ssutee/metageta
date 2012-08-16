@@ -20,7 +20,7 @@ svn propset displayversion dsewpac-%version% .
 svn propset version %version%.$Revision$ .
 svn commit -m "Updating version properties %version%"
 cd %CURDIR%
-del /f /q %TEMP%\metageta-%version%
+del /f /q %TEMP%\metageta-dsewpac-%version%
 
 :end
 pause
