@@ -42,7 +42,7 @@ if __name__=='__main__':
                        'Topic :: Scientific/Engineering :: GIS'],
           'packages':['metageta','metageta.formats','metageta.transforms'],
           'requires':['osgeo.gdal','lxml','xlutils','xlwt','xlrd'],          
-          'scripts':['runcrawler.py','runtransform.py'],
+          'scripts':['runcrawler.py','runtransform.py','runcrawler','runtransform'],
           'package_data':{'metageta': ['config/config.xml']}
         }
 
@@ -95,6 +95,8 @@ if __name__=='__main__':
 
     if 'install' in sys.argv and ('linux' in sys.platform or 'darwin' in sys.platform):
         import stat
-        print 'Changing mode of %s/bin/runcrawler.py|runtransform.py to 755'%data
+        print 'Changing mode of %s/bin/runcrawler|runtransform to 755'%data
         os.chmod(os.path.join(data,'bin/runcrawler.py'),stat.S_IRUSR|stat.S_IWUSR|stat.S_IXUSR|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH)
         os.chmod(os.path.join(data,'bin/runtransform.py'),stat.S_IRUSR|stat.S_IWUSR|stat.S_IXUSR|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH)
+        os.link(os.path.join(data,'bin/runcrawler.py'),os.path.join(data,'bin/runcrawler')
+        os.link(os.path.join(data,'bin/runtransform.py'),os.path.join(data,'bin/runtransform')

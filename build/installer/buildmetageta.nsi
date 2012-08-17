@@ -180,14 +180,14 @@
         ; Check for uninstaller.
         ReadRegStr $R0 ${REG_ROOT} "${UNINSTALL_PATH}" "UninstallString"
         ${If} $R0 != ""
-            IfFileExists $INSTDIR\metageta\config\config.xml uninstallit_config uninstallit
+            IfFileExists $INSTDIR\metageta\metageta\config.xml uninstallit_config uninstallit
             uninstallit_config:
-                MessageBox MB_YESNO "An existing ${APP_NAME} has been detected and will be uninstalled.$\r$\nYour config.xml file will be backed up to $INSTDIR\metageta\config\config-previous.xml.$\r$\nDo you wish to continue?" IDYES +2
+                MessageBox MB_YESNO "An existing ${APP_NAME} has been detected and will be uninstalled.$\r$\nYour config.xml file will be backed up to $INSTDIR\metageta\metageta\config-previous.xml.$\r$\nDo you wish to continue?" IDYES +2
                     Quit
                 DetailPrint "Removing previous installation and backing up config file."
                 GetTempFileName $ConfigFile
                 ;CreateDirectory $ConfigFile
-                CopyFiles /SILENT $INSTDIR\metageta\config\config.xml $ConfigFile
+                CopyFiles /SILENT $INSTDIR\metageta\metageta\config.xml $ConfigFile
                 Goto rununinstaller
                 
             uninstallit:
@@ -204,7 +204,7 @@
 
     Function ExistingConfig
         ${If} $ConfigFile != ""
-                CopyFiles /SILENT $ConfigFile $INSTDIR\metageta\config\config-previous.xml
+                CopyFiles /SILENT $ConfigFile $INSTDIR\metageta\metageta\config-previous.xml
                 Delete $ConfigFile
         ${EndIf}
     FunctionEnd
