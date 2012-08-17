@@ -98,5 +98,7 @@ if __name__=='__main__':
         print 'Changing mode of %s/bin/runcrawler|runtransform to 755'%data
         os.chmod(os.path.join(data,'bin/runcrawler.py'),stat.S_IRUSR|stat.S_IWUSR|stat.S_IXUSR|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH)
         os.chmod(os.path.join(data,'bin/runtransform.py'),stat.S_IRUSR|stat.S_IWUSR|stat.S_IXUSR|stat.S_IRGRP|stat.S_IXGRP|stat.S_IROTH|stat.S_IXOTH)
-        os.link(os.path.join(data,'bin/runcrawler.py'),os.path.join(data,'bin/runcrawler'))
-        os.link(os.path.join(data,'bin/runtransform.py'),os.path.join(data,'bin/runtransform'))
+        try:
+            os.link(os.path.join(data,'bin/runcrawler.py'),os.path.join(data,'bin/runcrawler'))
+            os.link(os.path.join(data,'bin/runtransform.py'),os.path.join(data,'bin/runtransform'))
+        except:pass
