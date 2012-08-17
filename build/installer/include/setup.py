@@ -90,6 +90,14 @@ if __name__=='__main__':
 
         if 'linux' in sys.platform or 'darwin' in sys.platform:
             setupargs['data_files']=[('bin',['runcrawler.py','runtransform.py'])]
+            try:
+	        shutil.rmtree(os.path.join(lib,'metageta'))
+                os.unlink(os.path.join(data,'bin/runcrawler.py'))
+                os.unlink(os.path.join(data,'bin/runtransform.py'))
+                os.unlink(os.path.join(data,'bin/runcrawler'))
+                os.unlink(os.path.join(data,'bin/runtransform'))
+            except:pass
+            
 
     s=setup(**setupargs)
 
