@@ -43,7 +43,7 @@ if __name__=='__main__':
           'packages':['metageta','metageta.formats','metageta.transforms'],
           'requires':['osgeo.gdal','lxml','xlutils','xlwt','xlrd'],          
           'scripts':['runcrawler.py','runtransform.py'],
-          'package_data':{'metageta': ['config/config.xml']}
+          'package_data':{'metageta': ['config/config.xml'],'metageta.transforms': ['*.xml']}
         }
 
     if 'install' in sys.argv:
