@@ -14,6 +14,8 @@ Remove dependency on Tkinter/Tix so Metageta can run without requiring a GUI.
 
 Add support for setting Geonetwork MEF operations privileges from the runtransform script or the metadata crawl spreadsheet
 
+Add setup.py script for easier install on Linux
+
 A number of minor improvements and bugfixes.
 
 Full list of changes: [ChangelogDetail detailed changelog]
