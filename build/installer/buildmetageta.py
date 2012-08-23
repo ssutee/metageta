@@ -56,6 +56,19 @@ def main(vers=None):
                 vers=stdout.strip().split()[-1][:-1]
                 print 'Latest release is %s'%vers
 
+        elif vers[-4:]=='curr':  #i.e. branches/dsewpac/curr
+            cmd='svn ls http://metageta.googlecode.com/svn/%s/tags'%vers[:-5]
+            exit_code,stdout,stderr=runcmd(cmd)
+            if exit_code != 0:
+                if stderr:    print stderr
+                elif stdout:  print stdout
+                else :        print 'SVN command failed'
+                if pause:raw_input('Press enter to exit.')
+                sys.exit(exit_code)
+            else:
+                vers=stdout.strip().split()[-1][:-1]
+                print 'Latest release is %s'%vers
+
         cd = os.path.abspath(os.path.dirname(sys.argv[0]))
 
         os.chdir(cd)
