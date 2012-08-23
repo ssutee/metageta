@@ -20,7 +20,7 @@
     !define /date YEAR "%Y"
 
     !define APP_NAME "MetaGETA"
-    !define COMP_NAME "Department of Environment, Heritage, Water and the Arts"
+    !define COMP_NAME "Department of Sustainability, Environment, Water, Population and Communities"
     !define WEB_SITE "http://code.google.com/p/metageta"
     !define COPYRIGHT "${COMP_NAME} © ${YEAR}"
     !define DESCRIPTION "MetaGETA installer (Metadata Gathering, Extraction and Transformation Application)"
