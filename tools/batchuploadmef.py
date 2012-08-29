@@ -28,6 +28,7 @@ Options:
   -s site     Geonetwork site eg. http://someserver:8080
   -u user     Geonetwork username
   -p pass     Geonetwork password
+  -r          Run recursively
 '''
 import os,sys
 import urllib2, urllib, cookielib, fnmatch
