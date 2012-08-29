@@ -25,16 +25,19 @@ batchuploadmef.py [options]
 Options:
   -h, --help  show this help message and exit
   -d dir      The directory to search for MEF files
-  -s site     Geonetwork site eg. http://firefly:8080
+  -s site     Geonetwork site eg. http://someserver:8080
   -u user     Geonetwork username
   -p pass     Geonetwork password
 '''
-import sys
-def main(site,username,password,directory):
-    import urllib2, urllib, cookielib, glob
-    import xml.dom.minidom as dom
-    #Import multipart encode from the poster library - http://atlee.ca/software/poster
-    from poster.encode import multipart_encode
+import os,sys
+import urllib2, urllib, cookielib, fnmatch
+import xml.dom.minidom as dom
+try:from poster.encode import multipart_encode
+except ImportError:
+    print 'Error: unable to import the poster package.\nInstall it from http://atlee.ca/software/poster'
+    sys.exit(1)
+
+def main(site,username,password,directory,recurse):
 
     url='geonetwork/srv/en'
 
@@ -74,29 +77,63 @@ def main(site,username,password,directory):
                   }
 
         #Loop through the MEFs and upload them
-        for mef in glob.glob('%s/*.mef'%directory):
-            print 'Uploading '+mef
-            fo=open(mef,'rb')
-            formvalues['mefFile']=fo
-            datagen, headers = multipart_encode(formvalues)
-            data=''
-            for f in datagen:data+=f
-            handler=urllib2.HTTPHandler()
-            request = urllib2.Request('%s/%s/%s'%(site,url,service), data, headers)
-            opener = urllib2.build_opener(handler,proxy,urllib2.HTTPCookieProcessor(cj))
+        for mef in rglob(directory,'*.mef',recurse=recurse):
+            uploadmef(mef,handler,proxy,cj)
+
+def uploadmef(mef,handler,proxy,cj):
+    print 'Uploading '+mef
+    fo=open(mef,'rb')
+    formvalues['mefFile']=fo
+    datagen, headers = multipart_encode(formvalues)
+    data=''
+    for f in datagen:data+=f
+    handler=urllib2.HTTPHandler()
+    request = urllib2.Request('%s/%s/%s'%(site,url,service), data, headers)
+    opener = urllib2.build_opener(handler,proxy,urllib2.HTTPCookieProcessor(cj))
+    try:
+        resultxml=opener.open(request).read()
+        resultdom=dom.parseString(resultxml)
+        assert(str(resultdom.firstChild.localName) in ['ok','id'])
+    except Exception,err:
+        print 'MEF upload failed!'
+        print str(err)#resultxml
+        exit(1)
+    else:
+        id=str(resultdom.firstChild.firstChild.data).strip(';')
+        print 'Upload succeeded'
+        print '%s/geonetwork/srv/en/metadata.show?id=%s&currTab=simple' % (site,id)
+    fo.close()
+
+class rglob:
+    ''' A recursive glob adapted from
+        os-path-walk-example-3.py - http://effbot.org/librarybook/os-path.htm
+    '''
+    def __init__(self, directory, pattern='*', recurse=False):
+        self.stack = [directory]
+        self.pattern = pattern
+        self.files = []
+        self.index = 0
+        self.recurse = recurse
+
+    def __getitem__(self, index):
+        while 1:
             try:
-                resultxml=opener.open(request).read()
-                resultdom=dom.parseString(resultxml)
-                assert(str(resultdom.firstChild.localName) in ['ok','id'])
-            except Exception,err:
-                print 'MEF upload failed!'
-                print str(err)#resultxml
-                exit(1)
+                file = self.files[self.index]
+                self.index = self.index + 1
+            except IndexError:
+                # pop next directory from stack
+                self.directory = self.stack.pop()
+                try:
+                    self.files = os.listdir(self.directory)
+                    self.index = 0
+                except:pass
             else:
-                id=str(resultdom.firstChild.firstChild.data).strip(';')
-                print 'Upload succeeded'
-                print '%s/geonetwork/srv/en/metadata.show?id=%s&currTab=simple' % (site,id)
-            fo.close()
+                # got a filename
+                fullname = os.path.join(self.directory, file)
+                if os.path.isdir(fullname) and self.recurse:
+                    self.stack.append(fullname)
+                if fnmatch.fnmatch(file, self.pattern):
+                    return fullname
 
 def exit(status=0):
     try:usr = raw_input("Press <Enter> to exit")
@@ -111,15 +148,17 @@ if __name__ == '__main__':
     parser.add_option('-d', dest="directory", metavar="dir",
                       help='The directory to search for MEF files')
     parser.add_option("-s", dest="site", metavar="site",
-                      help="Geonetwork site eg. http://firefly:8080")
+                      help="Geonetwork site eg. http://someserver:8080")
     parser.add_option("-u", dest="username", metavar="user",
                       help="Geonetwork username")
     parser.add_option("-p", dest="password", metavar="pass",
                       help="Geonetwork password")
+    opt=parser.add_option("-r", "--recurse", action="store_true", dest="recurse",default=False,
+                      help="Search directory recursively")
     opts,args = parser.parse_args()
-    kwargs={}
+    kwargs={'recurse':opts.recurse}
     if not opts.site:
-        try:kwargs['site'] = raw_input("Please enter the Geonetwork site eg. firefly:8080: ")
+        try:kwargs['site'] = raw_input("Please enter the Geonetwork site eg. http://someserver:8080: ")
         except:pass
     else:kwargs['site']=opts.site
     if not opts.directory:
@@ -137,7 +176,7 @@ if __name__ == '__main__':
         except:pass
     else:kwargs['password']=opts.password
 
-    if not kwargs['site'] or not kwargs['directory'] or not kwargs['username'] or not kwargs['password']:
+    if not 'site' in kwargs or not 'directory' in kwargs or not 'username' in kwargs or not 'password' in kwargs:
         print
         parser.print_help()
     else:
