@@ -64,24 +64,25 @@ def main(site,username,password,directory,recurse):
         exit(1)
     else:
         print 'Login successfull!'
-        #Set up the MEF import form values
-        service='mef.import'
-        formvalues={'insert_mode':'1',
-                  'file_type':'mef',
-                  'data':'',
-                  'template':'n',
-                  'title':'',
-                  'uuidAction':'overwrite',
-                  'styleSheet':'_none_',
-                  'group':'2',
-                  'category':'_none_'
-                  }
 
         #Loop through the MEFs and upload them
         for mef in rglob(directory,'*.mef',recurse=recurse):
             uploadmef(mef,handler,proxy,cj)
 
 def uploadmef(mef,handler,proxy,cj):
+    #Set up the MEF import form values
+    service='mef.import'
+    formvalues={'insert_mode':'1',
+              'file_type':'mef',
+              'data':'',
+              'template':'n',
+              'title':'',
+              'uuidAction':'overwrite',
+              'styleSheet':'_none_',
+              'group':'2',
+              'category':'_none_'
+              }
+
     print 'Uploading '+mef
     fo=open(mef,'rb')
     formvalues['mefFile']=fo
