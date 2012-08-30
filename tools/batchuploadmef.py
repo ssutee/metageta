@@ -67,9 +67,9 @@ def main(site,username,password,directory,recurse):
 
         #Loop through the MEFs and upload them
         for mef in rglob(directory,'*.mef',recurse=recurse):
-            uploadmef(mef,site,handler,proxy,cj)
+            uploadmef(mef,site,url,handler,proxy,cj)
 
-def uploadmef(mef,site,handler,proxy,cj):
+def uploadmef(mef,site,url,handler,proxy,cj):
     #Set up the MEF import form values
     service='mef.import'
     formvalues={'insert_mode':'1',
