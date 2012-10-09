@@ -17,7 +17,7 @@
 
         Save it somewhere in your python path and use it as follows:
 
-        import arcobjectscom, arcpy
+        import os, arcobjectscom, arcpy
         arcpy.SetProduct('arcview')
         filepath='c:/temp/testing123.sde'
         if os.path.exists(filepath):os.unlink(filepath)
