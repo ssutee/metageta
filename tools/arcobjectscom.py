@@ -1,7 +1,7 @@
 '''     Beginnings of a module to work with ArcObjects
 
         Based on python code from: http://www.pierssen.com/arcgis/upload/misc/python_arcobjects.zip and http://www.pierssen.com/arcgis/upload/misc/python_arcobjects.pdf
-        Also on an old VB6 project of mine - http://arcscripts.esri.com/details.asp?dbid=14989
+        Also on an old VB6 project - http://arcscripts.esri.com/details.asp?dbid=14989
         See also: http://gis.stackexchange.com/questions/80/how-do-i-access-arcobjects-from-python
 
         Requires comtypes: http://sourceforge.net/projects/comtypes/
@@ -15,7 +15,19 @@
         ArcSDE connections that could be used in ArcView 10 as the standard CreateArcSDEConnectionFile
         tool is ArcEditor+ license level only.
 
-        Luke Pinner 2012
+        Save it somewhere in your python path and use it as follows:
+
+        import arcobjectscom, arcpy
+        arcpy.SetProduct('arcview')
+        filepath='c:/temp/testing123.sde'
+        if os.path.exists(filepath):os.unlink(filepath)
+
+        sdecon_file=CreateArcSDEConnection('someuser', 'somepassword',
+                                           'someserver','5152',
+                                            filepath=filepath)
+        arcpy.env.workspace=filepath
+        print arcpy.ListFeatureClasses()
+        del filepath
 
 '''
 import comtypes,os
