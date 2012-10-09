@@ -22,7 +22,7 @@
         filepath='c:/temp/testing123.sde'
         if os.path.exists(filepath):os.unlink(filepath)
 
-        sdecon_file=CreateArcSDEConnection('someuser', 'somepassword',
+        sdecon_file=arcobjectscom.CreateArcSDEConnection('someuser', 'somepassword',
                                            'someserver','5152',
                                             filepath=filepath)
         arcpy.env.workspace=filepath
