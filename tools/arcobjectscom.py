@@ -102,22 +102,6 @@ def SetProduct(product):
             licenseStatus = pInit.Initialize(pCode)
             return (licenseStatus == esriSystem.esriLicenseCheckedOut)
 
-def InitStandalone():
-    """Init standalone ArcGIS license"""
-    GetModule('esriSystem.olb')
-    import comtypes.gen.esriSystem as esriSystem
-    pInit = CreateObject(esriSystem.AoInitialize, \
-                   esriSystem.IAoInitialize)
-    ProductList = [esriSystem.esriLicenseProductCodeArcEditor, \
-                   esriSystem.esriLicenseProductCodeArcView]
-    for eProduct in ProductList:
-        licenseStatus = pInit.IsProductCodeAvailable(eProduct)
-        if licenseStatus != esriSystem.esriLicenseAvailable:
-            continue
-        licenseStatus = pInit.Initialize(eProduct)
-        return (licenseStatus == esriSystem.esriLicenseCheckedOut)
-    return False
-
 def GetLibPath():
     """ Get the ArcObjects library path
 
