@@ -6,7 +6,7 @@ TOPDIR=os.path.dirname(CURDIR)
 DOWNLOAD_DIR=TOPDIR+'\\downloads'
 
 #Default vars
-PY_VER='Python26'
+PY_VER='Python27'
 BIN_DIR=TOPDIR+'\\bin'
 PY_DIR=BIN_DIR+'\\'+PY_VER #Don't mess with PYTHONHOME
 

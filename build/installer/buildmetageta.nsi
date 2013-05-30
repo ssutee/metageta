@@ -110,7 +110,7 @@
         ${GetFileName} "${BIN_DIR}" $R0
         SetOutPath $INSTDIR\$R0
         File /r  ${EXCLUDE} "${BIN_DIR}\gdal"
-        File /r  ${EXCLUDE} "${BIN_DIR}\Python26"
+        File /r  ${EXCLUDE} "${BIN_DIR}\Python27"
         SetOutPath "$INSTDIR"
         WriteUninstaller "$INSTDIR\Uninstall.exe"
         WriteRegStr ${REG_ROOT} "${INSTALL_PATH}"  "InstallPath" "$INSTDIR"
