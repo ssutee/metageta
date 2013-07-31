@@ -11,6 +11,7 @@
 # or look into getting NSIS to read directly from this file...
 #
 #----------------------------------------------------
+.svn
 *.chm
 *.pyc
 *.pyo
@@ -19,13 +20,18 @@
 docgen.*
 epydoc
 pythonwin
+gdallocationinfo.exe
+gdalsrsinfo.exe
+gdal_translate.exe
+setup.py
 
 #ECW/JP2/MrSID distributed separately
-gdal_ECW_JP2ECW.dll
-libecwj2.dll
+gdal_ECW_JP2ECW.dll*
+NCSEcw.dll
 *-eula.txt
 ecw*.py
 ecw*.py
-lti_dsdk_dll.dll
+lti_dsdk.dll
+lti_lidar_dsdk.dll
 gdal_MrSID.dll
 jp2.py

@@ -73,6 +73,7 @@ def main(vers=None):
 
         os.chdir(cd)
         tmp=tempfile.mkdtemp(dir=cd)
+        if not os.path.exists(DOWNLOAD_DIR):os.mkdir(DOWNLOAD_DIR)
 
         ##########################################################
         ##Get revision
@@ -135,7 +136,10 @@ def main(vers=None):
 
         ##########################################################
         print 'Exporting from SVN repo'
-        cmd='svn export -q --force https://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
+        #cmd='svn export -q --force http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
+        #DSEWPaC web filter blocks svn:external .bat files with svn export, use checkout
+        #instead and add .svn to excluded files list.
+        cmd='svn checkout http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
             if stderr:    print stderr

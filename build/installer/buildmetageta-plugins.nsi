@@ -20,7 +20,7 @@
     !define /date YEAR "%Y"
 
     !define APP_NAME "MetaGETA Plugins"
-    !define COMP_NAME "Department of Environment, Heritage, Water and the Arts"
+    !define COMP_NAME "Department of Sustainability, Environment, Water, Population and Communities"
     !define WEB_SITE "http://code.google.com/p/metageta"
     !define COPYRIGHT "${COMP_NAME} © ${YEAR}"
     !define DESCRIPTION "MetaGETA plugin installer"
@@ -46,7 +46,7 @@
     !define MULTIUSER_INSTALLMODEPAGE_TEXT_TOP "MetaGETA is currently installed in two locations - for any one using this computer and just for you. \
                                                 Please select which of these MetaGETA locations you wish to install the plugins to:"
 
-    !define ECW_DESCRIPTION_TEXT "Uses the ERDAS ECW JPEG2000 Codec SDK v3.3"
+    !define ECW_DESCRIPTION_TEXT "Uses the Intergraph ECW JPEG2000 Codec SDK v5.0"
 
     !define SID_DESCRIPTION_TEXT "Uses the LizardTech GeoExpress 7 DSDK"
 
@@ -130,7 +130,8 @@
         #File  "${BIN_DIR}\gdal\ecw-eula.txt"
         File  "licenses\ecw-eula.txt"
         setOutPath "$INSTDIR\bin\gdal\bin"
-        File  "${BIN_DIR}\gdal\bin\libecwj2.dll"
+        #File  "${BIN_DIR}\gdal\bin\libecwj2.dll"
+        File  "${BIN_DIR}\gdal\bin\NCSEcw.dll"
         setOutPath "$INSTDIR\bin\gdal\bin\plugins"
         File  "${BIN_DIR}\gdal\bin\plugins\gdal_ECW_JP2ECW.dll"
 

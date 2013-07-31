@@ -20,6 +20,6 @@ if len(ok)>0 and ok[0].upper() == 'Y':
     for py in utilities.rglob(setenv.PY_DIR, '*.py'):
         if not glob.glob(py+'[c|o]') and 'pythonwin' not in py:
             bak.write(py,py.replace(setenv.BIN_DIR,''))
-            #os.remove(py)
+            os.remove(py)
             print py
     bak.close()
