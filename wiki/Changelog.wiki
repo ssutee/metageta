@@ -1,6 +1,46 @@
 #summary Changelog for releases
 #labels Featured
 =MetaGETA Change Log=
+==01/08/2013==
+MetaGETA 1.3.8 released
+
+Upgrade python to 2.7 and ECW/JP2 SDK to 5.0
+
+Fix updating existing spreadsheet when crawling zip/tar/gzip files.
+
+Nicer CSS for API docs
+
+Fix bugs in zip/tar archive handling
+
+Fix userid/username lookup on Windows 7
+
+Fix ECW crashes 
+
+Fix gdal version checking 
+
+Fix update/overwrite spreadsheet when passed in as argument
+
+Fix aster row/col order bug
+
+Fix ncols/nrows bug
+
+Basic Pleiades HR support in dimap.py 
+
+Hack for SKM mosaiced datasets for SSD.
+
+Deprecate the GUI progress logger. Isn't working properly with Python 2.7. Code is left in in case someone wants to use it. 
+
+Add L1GST hyperion support (ali_hyperion.py) 
+
+Add new USGS Landsat metadata format support. 
+
+Add Landsat 8/LCDM support
+
+Use new GDAL_API_PROXY (gdal 1.10+) for remote datasets in ECW/JP2 so driver crashes don't crash the python process. 
+
+Fix the digitalglobe regex so it doesn't pick up Landsat images.
+
+
 ==16/08/2012==
 MetaGETA 1.3.7 released
 
