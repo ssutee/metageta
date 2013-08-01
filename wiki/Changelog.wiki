@@ -4,7 +4,7 @@
 ==01/08/2013==
 MetaGETA 1.3.8 released
 
-Upgrade python to 2.7 and ECW/JP2 SDK to 5.0
+Upgrade python to 2.7, GDAL to 1.10 and ECW/JP2 SDK to 5.0
 
 Fix updating existing spreadsheet when crawling zip/tar/gzip files.
 
