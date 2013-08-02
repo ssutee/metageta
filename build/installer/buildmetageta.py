@@ -43,6 +43,7 @@ def main(vers=None):
             try:vers = raw_input('Enter the version to build, options are: \n1.N (eg. 1.1 release) \ncurr (latest release) \nbranches/<branch> \ntrunk (unstable development) \nVersion:  ')
             except:sys.exit(0)#vers = 'trunk'
 
+        repo=''
         if vers in ['curr','']:
             cmd='svn ls http://metageta.googlecode.com/svn/tags'
             exit_code,stdout,stderr=runcmd(cmd)
@@ -54,6 +55,7 @@ def main(vers=None):
                 sys.exit(exit_code)
             else:
                 vers=stdout.strip().split()[-1][:-1]
+                'tags/%s'%vers
                 print 'Latest release is %s'%vers
 
         elif vers[-4:]=='curr':  #i.e. branches/dsewpac/curr
@@ -66,7 +68,9 @@ def main(vers=None):
                 if pause:raw_input('Press enter to exit.')
                 sys.exit(exit_code)
             else:
+                repo='%s/tags/'%vers[:-5]
                 vers=stdout.strip().split()[-1][:-1]
+                repo+=vers
                 print 'Latest release is %s'%vers
 
         cd = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -77,8 +81,9 @@ def main(vers=None):
 
         ##########################################################
         ##Get revision
-        if 'branches' in vers or 'trunk' in vers :repo=vers
-        else:repo='tags/'+vers
+        if not repo:
+            if 'branches' in vers or 'trunk' in vers :repo=vers
+            else:repo='tags/'+vers
 
         cmd='svn info http://metageta.googlecode.com/svn/%s'%repo
         exit_code,stdout,stderr=runcmd(cmd)
