@@ -13,7 +13,7 @@
             displayversion (free text, e.g 1.4 RC1)
 
 '''
-import os,sys,shutil,glob,tempfile,zipfile as zip, fnmatch, optparse
+import os,sys,shutil,glob,tempfile,zipfile as zip, fnmatch, optparse,time
 
 sys.path.append('..')
 sys.path.append(os.path.dirname(os.path.dirname(sys.argv[0])))
@@ -141,10 +141,11 @@ def main(vers=None):
 
         ##########################################################
         print 'Exporting from SVN repo'
-        cmd='svn export -q --force http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
-        #DSEWPaC web filter blocks svn:external .bat files with svn export (Tortoise SVN 1.8+), use checkout
-        #instead and add .svn to excluded files list.
-        #cmd='svn checkout http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
+        #cmd='svn export -q --force http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
+
+        #DSEWPaC web filter blocks svn:external .bat files with svn export, use checkout
+        #instead, then export from the local copy and remove it after
+        cmd='svn checkout http://metageta.googlecode.com/svn/%s %s/metageta-svn'%(repo,tmp)
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
             if stderr:    print stderr
@@ -153,6 +154,19 @@ def main(vers=None):
             cleanup(tmp)
             if pause:raw_input('Press enter to exit.')
             sys.exit(exit_code)
+
+        cmd='svn export %s/metageta-svn %s/metageta'%(tmp,tmp)
+        exit_code,stdout,stderr=runcmd(cmd)
+        if exit_code != 0:
+            if stderr:    print stderr
+            elif stdout:  print stdout
+            else :        print 'SVN export failed'
+            cleanup(tmp)
+            if pause:raw_input('Press enter to exit.')
+            sys.exit(exit_code)
+
+        #Clean up the .svn dirs
+        shutil.rmtree('%s/metageta-svn'%tmp)
 
         ##########################################################
         f=open('%s\\version.txt'%tmp,'w').write('Version: %s'%displayversion)
