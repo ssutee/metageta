@@ -141,10 +141,10 @@ def main(vers=None):
 
         ##########################################################
         print 'Exporting from SVN repo'
-        #cmd='svn export -q --force http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
-        #DSEWPaC web filter blocks svn:external .bat files with svn export, use checkout
+        cmd='svn export -q --force http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
+        #DSEWPaC web filter blocks svn:external .bat files with svn export (Tortoise SVN 1.8+), use checkout
         #instead and add .svn to excluded files list.
-        cmd='svn checkout http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
+        #cmd='svn checkout http://metageta.googlecode.com/svn/%s %s/metageta'%(repo,tmp)
         exit_code,stdout,stderr=runcmd(cmd)
         if exit_code != 0:
             if stderr:    print stderr
