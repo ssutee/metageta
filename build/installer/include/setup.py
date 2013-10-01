@@ -27,7 +27,6 @@ if __name__=='__main__':
           'long_description':'MetaGETA is a python application for discovering and extracting metadata from spatial raster datasets (metadata crawler) and transforming it into xml (metadata transformation). A number of generic and specialised imagery formats are supported. The format support has a plugin architecture and more formats can easily be added.',
           'platforms':['linux','windows','darwin'],
           'author':'Luke Pinner and Simon Oliver',
-          'author_email':'pinner [dot] luke [at] removethistext gmail [dot] com',
           'url':'http://code.google.com/p/metageta',
           'license':'MIT License',
           'classifiers':['Development Status :: 4 - Beta',
