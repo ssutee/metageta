@@ -24,10 +24,10 @@ batchdeleterecords.py [options]
 Options:
   -h, --help  show this help message and exit
   -x xls      The crawler result spreadsheet containing images marked as deleted
-  -s site     Geonetwork site eg. pandora:8079
+  -s site     Geonetwork site eg. http://pvac01mult01.internal.govt:8080
   -u user     Geonetwork username
   -p pass     Geonetwork password
-  --protocol  Protocol to connect to Geonetwork, default=http
+  --all       Delete ALL records, not just those marked as deleted in the XLS
 
 Note: This script requires the "xml.metadata.get" "skipInfo" parameter to be set to "n"
 in <GeoNetwork install dir>/web/geonetwork/WEB-INF/config.xml
@@ -45,10 +45,13 @@ from lxml import etree
 from metageta import utilities  as mgutils
 
 class Deleter(object):
-    def __init__(self,site,username,password, protocol):
+    def __init__(self,site,username,password):
 
         self.username,self.password=username,password
-        self.url='%s://%s/geonetwork/srv/en'%(protocol,site)
+        if site.startswith(('http://','https://')):
+            self.url='%s/geonetwork/srv/en'%(site)
+        else:
+            self.url='http://%s/geonetwork/srv/en'%(site)
 
         self.handler=urllib2.HTTPHandler()
         self.proxy = urllib2.ProxyHandler({}) #This is so we avoid our proxy as urllib2 picks up the systemwide settings
@@ -77,15 +80,16 @@ class Deleter(object):
         request = urllib2.Request('%s/%s'%(self.url,delservice), data)
         try:result=self.opener.open(request)
         except Exception as err:
-            print RuntimeError('Metadata delete failed!\n%s'%str(err))
+            raise RuntimeError('Metadata delete failed!\n%s'%str(err))
         if result.code!=200:
             raise RuntimeError('%s: %s'%(result.code,result.read()))
+        else:print '%s: %s'%(result.code,result.read())
 
-def main(xls,site,username,password, protocol='http'):
+def main(xls,site,username,password, all=False):
     xlrdr = mgutils.ExcelReader(xls)
-    deleter = Deleter(site,username,password, protocol)
+    deleter = Deleter(site,username,password)
     for rec in xlrdr:
-        if rec.get('DELETED',0) in [1,'1']:
+        if all or rec.get('DELETED',0) in [1,'1']:
             try:deleter.delete(rec['guid'])
             except Exception as err:
                 print err
@@ -96,19 +100,19 @@ if __name__ == '__main__':
     description='Batch delete crawl results marked as deleted from Geonetwork'
     parser = optparse.OptionParser(description=description)
     parser.add_option('-x', dest="xls", metavar="xls",
-                      help='The crawler result spreadsheet containing images marked as deleted')
+                      help='The crawler result spreadsheet containing records marked as deleted')
     parser.add_option("-s", dest="site", metavar="site",
-                      help="Geonetwork site eg. pandora:8079")
+                      help="Geonetwork site eg. http://pvac01mult01.internal.govt:8080")
     parser.add_option("-u", dest="username", metavar="user",
                       help="Geonetwork username")
     parser.add_option("-p", dest="password", metavar="pass",
                       help="Geonetwork password")
-    parser.add_option("--protocol", dest="protocol", metavar="protocol",
-                      help="Geonetwork password")
+    parser.add_option("--all", dest="all", metavar="all", action="store_true", default=False,
+                      help="Delete ALL records, not just those marked deleted")
     opts,args = parser.parse_args()
     kwargs={}
     if not opts.site:
-        try:kwargs['site'] = raw_input("Please enter the Geonetwork site eg. pandora:8079: ")
+        try:kwargs['site'] = raw_input("Please enter the Geonetwork site eg. http://pvac01mult01.internal.govt:8080: ")
         except:pass
     else:kwargs['site']=opts.site
     if not opts.xls:
@@ -125,7 +129,7 @@ if __name__ == '__main__':
             kwargs['password'] = getpass.getpass(prompt="Please enter your Geonetwork password: ")
         except:pass
     else:kwargs['password']=opts.password
-    if opts.protocol:kwargs['protocol']=opts.protocol
+    if opts.all:kwargs['all']=opts.all
 
     if not kwargs['site'] or not kwargs['xls'] or not kwargs['username'] or not kwargs['password']:
         print
