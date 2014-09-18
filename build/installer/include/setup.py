@@ -75,6 +75,11 @@ if __name__=='__main__':
         try:
             import lxml
             print 'Found lxml Ok.'
+            from lxml.etree import LXML_VERSION
+            assert LXML_VERSION >= (3, 3, 1, 0)
+        except AssertionError:
+            msg='lxml version %s is too old to be used with openpyxl, you may wish to upgrade.'%LXML_VERSION
+            warnings.warn(msg)
         except ImportError:
             error='lxml is not installed.'
             errors.append(error)
