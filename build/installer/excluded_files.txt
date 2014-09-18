@@ -20,10 +20,12 @@
 docgen.*
 epydoc
 pythonwin
+pyscripter*
 gdallocationinfo.exe
 gdalsrsinfo.exe
 gdal_translate.exe
 setup.py
+tag_new_release.bat
 
 #ECW/JP2/MrSID distributed separately
 gdal_ECW_JP2ECW.dll*
@@ -33,5 +35,6 @@ ecw*.py
 ecw*.py
 lti_dsdk.dll
 lti_lidar_dsdk.dll
+lti_dsdk_cdll.dll
 gdal_MrSID.dll
 jp2.py
