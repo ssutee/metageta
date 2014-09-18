@@ -61,10 +61,10 @@ if __name__=='__main__':
             errors.append(error)
         try:
             import openpyxl
-            assert [int(i) for i in openpyxl__version__.split('.')] >= [2,0,5]
+            assert [int(i) for i in openpyxl.__version__.split('.')] >= [2,0,5]
             print 'Found openpyxl Ok.'
         except AssertionError:
-            msg='openpyxl version %s has not been tested, you may wish to upgrade.'%openpyxl__version__
+            msg='openpyxl version %s has not been tested, you may wish to upgrade.'%openpyxl.__version__
             warnings.warn(msg)
         except ImportError:
             error='openpyxl is not installed or not configured correctly.'
@@ -78,7 +78,7 @@ if __name__=='__main__':
             from lxml.etree import LXML_VERSION
             assert LXML_VERSION >= (3, 3, 1, 0)
         except AssertionError:
-            msg='lxml version %s is too old to be used with openpyxl, you may wish to upgrade.'%LXML_VERSION
+            msg='lxml version %s is too old to be used with openpyxl, you may wish to upgrade.'%'.'.join(map(str,LXML_VERSION))
             warnings.warn(msg)
         except ImportError:
             error='lxml is not installed.'
