@@ -143,6 +143,7 @@
         File  "licenses\mrsid-eula.txt"
         setOutPath "$INSTDIR\bin\gdal\bin"
         File  "${BIN_DIR}\gdal\bin\lti_dsdk.dll"
+        File  "${BIN_DIR}\gdal\bin\lti_dsdk_cdll.dll"
         setOutPath "$INSTDIR\bin\gdal\bin\plugins"
         File  "${BIN_DIR}\gdal\bin\plugins\gdal_MrSID.dll"
 
