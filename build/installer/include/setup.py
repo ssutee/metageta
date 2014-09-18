@@ -48,6 +48,7 @@ if __name__=='__main__':
     if 'install' in sys.argv:
         lib,scripts,data,prefix=getpaths()
         errors=[]
+	warns=[]
         try:
             from osgeo import gdal
             v=gdal.VersionInfo("RELEASE_NAME")
@@ -65,21 +66,21 @@ if __name__=='__main__':
             print 'Found openpyxl Ok.'
         except AssertionError:
             msg='openpyxl version %s has not been tested, you may wish to upgrade.'%openpyxl.__version__
-            warnings.warn(msg)
+            warns.append(msg)
         except ImportError:
-            error='openpyxl is not installed or not configured correctly.'
+            error='openpyxl is not installed.'
             errors.append(error)
         except Exception as err:
             error='openpyxl is not configured correctly, error message:\n'+repr(err)
             errors.append(error)
         try:
             import lxml
-            print 'Found lxml Ok.'
             from lxml.etree import LXML_VERSION
             assert LXML_VERSION >= (3, 3, 1, 0)
+            print 'Found lxml Ok.'
         except AssertionError:
             msg='lxml version %s is too old to be used with openpyxl, you may wish to upgrade.'%'.'.join(map(str,LXML_VERSION))
-            warnings.warn(msg)
+            warns.append(msg)
         except ImportError:
             error='lxml is not installed.'
             errors.append(error)
@@ -89,8 +90,8 @@ if __name__=='__main__':
         try:
             import Tix,tkFileDialog,tkMessageBox
         except ImportError:
-            import warnings
-            warnings.warn('Tix, tkFileDialog and/or tkMessageBox are not installed or not configured correctly, you will not be able to use the MetaGETA GUI.')
+            msg='Tix, tkFileDialog and/or tkMessageBox are not installed or not configured correctly, you will not be able to use the MetaGETA GUI.'
+            warns.append(msg)
 
         if errors:
             print 'MetaGETA setup can not continue. Correct the following errors and then try again:'
@@ -107,7 +108,6 @@ if __name__=='__main__':
                 os.unlink(os.path.join(data,'bin/runtransform'))
             except:pass
 
-
     s=setup(**setupargs)
 
     if 'install' in sys.argv and ('linux' in sys.platform or 'darwin' in sys.platform):
@@ -119,3 +119,8 @@ if __name__=='__main__':
             os.link(os.path.join(data,'bin/runcrawler.py'),os.path.join(data,'bin/runcrawler'))
             os.link(os.path.join(data,'bin/runtransform.py'),os.path.join(data,'bin/runtransform'))
         except:pass
+	
+    if 'install' in sys.argv and warns:
+        for msg in warns:
+            warnings.warn(msg)
+
