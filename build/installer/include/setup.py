@@ -40,9 +40,9 @@ if __name__=='__main__':
                        'Programming Language :: Python',
                        'Topic :: Scientific/Engineering :: GIS'],
           'packages':['metageta','metageta.formats','metageta.transforms'],
-          'requires':['osgeo.gdal','lxml','xlutils','xlwt','xlrd'],          
+          'requires':['osgeo.gdal','lxml','openpyxl'],
           'scripts':['runcrawler.py','runtransform.py'],
-          'package_data':{'metageta': ['config/config.xml'],'metageta.transforms': ['*.xml']}
+          'package_data':{'metageta': ['config/config.xml'],'metageta.transforms': ['*.xml','*.xsl']}
         }
 
     if 'install' in sys.argv:
@@ -60,21 +60,26 @@ if __name__=='__main__':
             error='GDAL (www.gdal.org) version %s is not supported, try upgrading.'%v
             errors.append(error)
         try:
-            try:
-                import xlrd, xlwt
-            except:
-                from xlutils import xlrd
-                from xlutils import xlwt
-            from xlutils import copy as xlcp
-            print 'Found xlutils, xlrd and xlwt Ok.'
-        except:
-            error='xlutils, xlrd or xlwt is not installed or not configured correctly.'
+            import openpyxl
+            assert [int(i) for i in openpyxl__version__.split('.')] >= [2,0,5]
+            print 'Found openpyxl Ok.'
+        except AssertionError:
+            msg='openpyxl version %s has not been tested, you may wish to upgrade.'%openpyxl__version__
+            warnings.warn(msg)
+        except ImportError:
+            error='openpyxl is not installed or not configured correctly.'
+            errors.append(error)
+        except Exception as err:
+            error='openpyxl is not configured correctly, error message:\n'+repr(err)
             errors.append(error)
         try:
             import lxml
             print 'Found lxml Ok.'
-        except:
-            error='lxml is not installed or not configured correctly.'
+        except ImportError:
+            error='lxml is not installed.'
+            errors.append(error)
+        except Exception as err:
+            error='lxml is not configured correctly, error message:\n'+repr(err)
             errors.append(error)
         try:
             import Tix,tkFileDialog,tkMessageBox
@@ -96,7 +101,7 @@ if __name__=='__main__':
                 os.unlink(os.path.join(data,'bin/runcrawler'))
                 os.unlink(os.path.join(data,'bin/runtransform'))
             except:pass
-            
+
 
     s=setup(**setupargs)
 
